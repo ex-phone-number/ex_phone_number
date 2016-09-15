@@ -4,7 +4,7 @@ defmodule ExPhoneNumber.Mixfile do
   def project do
     [app: :ex_phone_number,
      version: "0.0.1",
-     elixir: "~> 1.2",
+     elixir: "~> 1.3.2",
      build_embedded: Mix.env == :prod,
      start_permanent: Mix.env == :prod,
      test_coverage: [tool: ExCoveralls],
@@ -18,10 +18,10 @@ defmodule ExPhoneNumber.Mixfile do
 
   defp deps do
     [
-      {:sweet_xml, "~> 0.6"},
-      {:pavlov, git: "https://github.com/sproutapp/pavlov.git", only: :test},
-      {:excoveralls, "~> 0.5", only: :test},
-      {:credo, "~> 0.3", only: [:dev, :test]}
+      {:sweet_xml, "~> 0.6.1"},
+      {:ex_spec, "~> 2.0", only: :test},
+      {:excoveralls, "~> 0.5.6", only: :test},
+      {:credo, "~> 0.4.11", only: [:dev, :test]}
     ]
   end
 end

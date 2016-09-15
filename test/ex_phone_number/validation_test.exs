@@ -1,5 +1,5 @@
-defmodule ExPhoneNumber.ValidationSpec do
-  use Pavlov.Case, async: true
+defmodule ExPhoneNumber.ValidationTest do
+  use ExSpec, async: true
 
   doctest ExPhoneNumber.Validation
   import ExPhoneNumber.Validation
@@ -484,15 +484,15 @@ defmodule ExPhoneNumber.ValidationSpec do
 
   describe ".validate_length" do
     context "length less or equal to Constants.Value.max_input_string_length" do
-      subject do: "1234567890"
       it "returns {:ok, number}" do
+        subject = "1234567890"
         assert {:ok, _} = validate_length(subject)
       end
     end
 
     context "length larger than Constants.Value.max_input_string_length" do
-      subject do: "1234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890x"
       it "returns {:error, message}" do
+        subject = "1234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890x"
         assert {:error, _} = validate_length(subject)
       end
     end

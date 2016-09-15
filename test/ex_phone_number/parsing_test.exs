@@ -1,5 +1,5 @@
-defmodule ExPhoneNumber.ParsingSpec do
-  use Pavlov.Case, async: true
+defmodule ExPhoneNumber.ParsingTest do
+  use ExSpec, async: true
 
   doctest ExPhoneNumber.Parsing
   import ExPhoneNumber.Parsing

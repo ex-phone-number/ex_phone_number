@@ -1,5 +1,5 @@
-defmodule ExPhoneNumber.Model.PhoneNumberSpec do
-  use Pavlov.Case, async: true
+defmodule ExPhoneNumber.Model.PhoneNumberTest do
+  use ExSpec, async: true
 
   doctest ExPhoneNumber.Model.PhoneNumber
   import ExPhoneNumber.Model.PhoneNumber

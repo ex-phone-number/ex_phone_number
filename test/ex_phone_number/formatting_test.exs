@@ -1,5 +1,5 @@
-defmodule ExPhoneNumber.FormattingSpec do
-  use Pavlov.Case, async: true
+defmodule ExPhoneNumber.FormattingTest do
+  use ExSpec, async: true
 
   doctest ExPhoneNumber.Formatting
   import ExPhoneNumber.Formatting

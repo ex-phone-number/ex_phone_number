@@ -1,5 +1,5 @@
-defmodule ExPhoneNumber.ExtractionSpec do
-  use Pavlov.Case, async: true
+defmodule ExPhoneNumber.ExtractionTest do
+  use ExSpec, async: true
 
   doctest ExPhoneNumber.Extraction
   import ExPhoneNumber.Extraction
@@ -51,37 +51,38 @@ defmodule ExPhoneNumber.ExtractionSpec do
 
   describe ".maybe_strip_national_prefix_and_carrier_code/2" do
     context "national prefix" do
-      let :metadata do
-        %ExPhoneNumber.Metadata.PhoneMetadata{
+      setup do
+        metadata = %Metadata.PhoneMetadata{
           national_prefix_for_parsing: "34",
-          general: %ExPhoneNumber.Metadata.PhoneNumberDescription{
+          general: %Metadata.PhoneNumberDescription{
             national_number_pattern: ~r/\d{4,8}/
           }
         }
+        {:ok, metadata: metadata}
       end
 
-      it "should strip national prefix" do
-        {result, _, number} = maybe_strip_national_prefix_and_carrier_code("34356778", metadata)
+      it "should strip national prefix", state do
+        {result, _, number} = maybe_strip_national_prefix_and_carrier_code("34356778", state[:metadata])
         assert result
         assert "356778" == number
       end
 
-      it "should strip national prefix only once" do
-        {_, _, number} = maybe_strip_national_prefix_and_carrier_code("34356778", metadata)
-        {result, _, number} = maybe_strip_national_prefix_and_carrier_code(number, metadata)
+      it "should strip national prefix only once", state do
+        {_, _, number} = maybe_strip_national_prefix_and_carrier_code("34356778", state[:metadata])
+        {result, _, number} = maybe_strip_national_prefix_and_carrier_code(number, state[:metadata])
         refute result
         assert "356778" == number
       end
 
-      it "should not strip if national prefix is empty" do
-        metadata = %{metadata | national_prefix_for_parsing: nil}
+      it "should not strip if national prefix is empty", state do
+        metadata = %{state[:metadata] | national_prefix_for_parsing: nil}
         {result, _, number} = maybe_strip_national_prefix_and_carrier_code("34356778", metadata)
         refute result
         assert "34356778" == number
       end
 
-      it "should not strip if does not match national rule" do
-        metadata = %{metadata | national_prefix_for_parsing: "3"}
+      it "should not strip if does not match national rule", state do
+        metadata = %{state[:metadata] | national_prefix_for_parsing: "3"}
         {result, _, number} = maybe_strip_national_prefix_and_carrier_code("3123", metadata)
         refute result
         assert "3123" == number
@@ -89,16 +90,13 @@ defmodule ExPhoneNumber.ExtractionSpec do
     end
 
     context "carrier code" do
-      let :metadata do
-        %ExPhoneNumber.Metadata.PhoneMetadata{
+      it "should strip carrier code and national prefix" do
+        metadata = %Metadata.PhoneMetadata{
           national_prefix_for_parsing: "0(81)?",
-          general: %ExPhoneNumber.Metadata.PhoneNumberDescription{
+          general: %Metadata.PhoneNumberDescription{
             national_number_pattern: ~r/\d{4,8}/
           }
         }
-      end
-
-      it "should strip carrier code and national prefix" do
         {result, carrier_code, number} = maybe_strip_national_prefix_and_carrier_code("08122123456", metadata)
         assert result
         assert "81"       == carrier_code
@@ -107,17 +105,14 @@ defmodule ExPhoneNumber.ExtractionSpec do
     end
 
     context "tranform rule" do
-      let :metadata do
-        %ExPhoneNumber.Metadata.PhoneMetadata{
+      it "should transform number" do
+        metadata = %Metadata.PhoneMetadata{
           national_prefix_for_parsing: "0(\\d{2})",
           national_prefix_transform_rule: "5\\g{1}5",
-          general: %ExPhoneNumber.Metadata.PhoneNumberDescription{
+          general: %Metadata.PhoneNumberDescription{
             national_number_pattern: ~r/\d{4,8}/
           }
         }
-      end
-
-      it "should transform number" do
         {result, _, number} = maybe_strip_national_prefix_and_carrier_code("031123", metadata)
         assert result
         assert "5315123" == number

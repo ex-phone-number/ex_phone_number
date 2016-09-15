@@ -1,5 +1,5 @@
-defmodule ExPhoneNumber.MetadataSpec do
-  use Pavlov.Case, async: true
+defmodule ExPhoneNumber.MetadataTest do
+  use ExSpec, async: true
 
   doctest ExPhoneNumber.Metadata
   import ExPhoneNumber.Metadata
@@ -10,208 +10,204 @@ defmodule ExPhoneNumber.MetadataSpec do
 
   describe ".get_for_region_code/1" do
     context "US region_code" do
-      subject do: RegionCodeFixture.us
-      let :metadata do
-        ExPhoneNumber.Metadata.get_for_region_code(subject)
+      setup do
+        {:ok, us_metadata: get_for_region_code(RegionCodeFixture.us)}
       end
 
-      it "returns valid id" do
-        assert RegionCodeFixture.us == metadata.id
+      it "returns valid id", state do
+        assert RegionCodeFixture.us == state[:us_metadata].id
       end
 
-      it "returns valid country_code" do
-        assert 1 == metadata.country_code
+      it "returns valid country_code", state do
+        assert 1 == state[:us_metadata].country_code
       end
 
-      it "returns valid international_prefix" do
-        assert "011" == metadata.international_prefix
+      it "returns valid international_prefix", state do
+        assert "011" == state[:us_metadata].international_prefix
       end
 
-      it "returns valid has_national_prefix?" do
-        assert PhoneMetadata.has_national_prefix?(metadata)
+      it "returns valid has_national_prefix?", state do
+        assert PhoneMetadata.has_national_prefix?(state[:us_metadata])
       end
 
-      it "returns valid number_format length" do
-        assert 2 == length(metadata.number_format)
+      it "returns valid number_format length", state do
+        assert 2 == length(state[:us_metadata].number_format)
       end
 
-      it "returns valid number_format(1).pattern" do
-        assert ~r/(\d{3})(\d{3})(\d{4})/ == Enum.at(metadata.number_format, 1).pattern
+      it "returns valid number_format(1).pattern", state do
+        assert ~r/(\d{3})(\d{3})(\d{4})/ == Enum.at(state[:us_metadata].number_format, 1).pattern
       end
 
-      it "returns valid number_format(1).format" do
-        assert "\\g{1} \\g{2} \\g{3}" == Enum.at(metadata.number_format, 1).format
+      it "returns valid number_format(1).format", state do
+        assert "\\g{1} \\g{2} \\g{3}" == Enum.at(state[:us_metadata].number_format, 1).format
       end
 
-      it "returns valid general.national_number_pattern" do
-        assert ~r/[13-689]\d{9}|2[0-35-9]\d{8}/ == metadata.general.national_number_pattern
+      it "returns valid general.national_number_pattern", state do
+        assert ~r/[13-689]\d{9}|2[0-35-9]\d{8}/ == state[:us_metadata].general.national_number_pattern
       end
 
-      it "returns valid general.possible_number_pattern" do
-        assert ~r/\d{7}(?:\d{3})?/ == metadata.general.possible_number_pattern
+      it "returns valid general.possible_number_pattern", state do
+        assert ~r/\d{7}(?:\d{3})?/ == state[:us_metadata].general.possible_number_pattern
       end
 
-      it "returns valid fixed_line" do
-        assert metadata.general == metadata.fixed_line
+      it "returns valid fixed_line", state do
+        assert state[:us_metadata].general == state[:us_metadata].fixed_line
       end
 
-      it "returns valid toll_free.possible_number_pattern" do
-        assert ~r/\d{10}/ == metadata.toll_free.possible_number_pattern
+      it "returns valid toll_free.possible_number_pattern", state do
+        assert ~r/\d{10}/ == state[:us_metadata].toll_free.possible_number_pattern
       end
 
-      it "returns valid premium_rate.national_number_pattern" do
-        assert ~r/900\d{7}/ == metadata.premium_rate.national_number_pattern
+      it "returns valid premium_rate.national_number_pattern", state do
+        assert ~r/900\d{7}/ == state[:us_metadata].premium_rate.national_number_pattern
       end
 
-      it "returns valid shared_cost.national_number_pattern" do
-        assert Values.description_default_pattern == metadata.shared_cost.national_number_pattern
+      it "returns valid shared_cost.national_number_pattern", state do
+        assert Values.description_default_pattern == state[:us_metadata].shared_cost.national_number_pattern
       end
 
-      it "returns valid shared_cost.possible_number_pattern" do
-        assert Values.description_default_pattern == metadata.shared_cost.possible_number_pattern
+      it "returns valid shared_cost.possible_number_pattern", state do
+        assert Values.description_default_pattern == state[:us_metadata].shared_cost.possible_number_pattern
       end
     end
 
     context "DE region_code" do
-      subject do: RegionCodeFixture.de
-      let :metadata do
-        ExPhoneNumber.Metadata.get_for_region_code(subject)
+      setup do
+        {:ok, de_metadata: get_for_region_code(RegionCodeFixture.de)}
       end
 
-      it "returns valid id" do
-        assert RegionCodeFixture.de  == metadata.id
+      it "returns valid id", state do
+        assert RegionCodeFixture.de  == state[:de_metadata].id
       end
 
-      it "returns valid country_code" do
-        assert 49 == metadata.country_code
+      it "returns valid country_code", state do
+        assert 49 == state[:de_metadata].country_code
       end
 
-      it "returns valid international_prefix" do
-        assert "00" == metadata.international_prefix
+      it "returns valid international_prefix", state do
+        assert "00" == state[:de_metadata].international_prefix
       end
 
-      it "returns valid national_prefix" do
-        assert "0" == metadata.national_prefix
+      it "returns valid national_prefix", state do
+        assert "0" == state[:de_metadata].national_prefix
       end
 
-      it "returns valid number_format length" do
-        assert 6 == length(metadata.number_format)
+      it "returns valid number_format length", state do
+        assert 6 == length(state[:de_metadata].number_format)
       end
 
-      it "returns valid number_format(5).leading_digits_pattern length" do
-        assert 1 == length(Enum.at(metadata.number_format, 5).leading_digits_pattern)
+      it "returns valid number_format(5).leading_digits_pattern length", state do
+        assert 1 == length(Enum.at(state[:de_metadata].number_format, 5).leading_digits_pattern)
       end
 
-      it "returns valid number_format(5).leading_digits_pattern(0)" do
-        assert ~r/900/ == Enum.at(Enum.at(metadata.number_format, 5).leading_digits_pattern, 0)
+      it "returns valid number_format(5).leading_digits_pattern(0)", state do
+        assert ~r/900/ == Enum.at(Enum.at(state[:de_metadata].number_format, 5).leading_digits_pattern, 0)
       end
 
-      it "returns valid number_format(5).pattern" do
-        assert ~r/(\d{3})(\d{3,4})(\d{4})/ == Enum.at(metadata.number_format, 5).pattern
+      it "returns valid number_format(5).pattern", state do
+        assert ~r/(\d{3})(\d{3,4})(\d{4})/ == Enum.at(state[:de_metadata].number_format, 5).pattern
       end
 
-      it "returns valid number_format(5).format" do
-        assert "\\g{1} \\g{2} \\g{3}" ==  Enum.at(metadata.number_format, 5).format
+      it "returns valid number_format(5).format", state do
+        assert "\\g{1} \\g{2} \\g{3}" ==  Enum.at(state[:de_metadata].number_format, 5).format
       end
 
-      it "returns valid fixed_line.national_number_pattern" do
-        assert ~r/(?:[24-6]\d{2}|3[03-9]\d|[789](?:[1-9]\d|0[2-9]))\d{1,8}/ == metadata.fixed_line.national_number_pattern
+      it "returns valid fixed_line.national_number_pattern", state do
+        assert ~r/(?:[24-6]\d{2}|3[03-9]\d|[789](?:[1-9]\d|0[2-9]))\d{1,8}/ == state[:de_metadata].fixed_line.national_number_pattern
       end
 
-      it "returns valid fixed_line.possible_number_pattern" do
-        assert ~r/\d{2,14}/ == metadata.fixed_line.possible_number_pattern
+      it "returns valid fixed_line.possible_number_pattern", state do
+        assert ~r/\d{2,14}/ == state[:de_metadata].fixed_line.possible_number_pattern
       end
 
-      it "returns valid fixed_line.example_number" do
-        assert "30123456" == metadata.fixed_line.example_number
+      it "returns valid fixed_line.example_number", state do
+        assert "30123456" == state[:de_metadata].fixed_line.example_number
       end
 
-      it "returns valid toll_free.possible_number_pattern" do
-        assert ~r/\d{10}/ == metadata.toll_free.possible_number_pattern
+      it "returns valid toll_free.possible_number_pattern", state do
+        assert ~r/\d{10}/ == state[:de_metadata].toll_free.possible_number_pattern
       end
 
-      it "returns valid premium_rate.national_number_pattern" do
-        assert ~r/900([135]\d{6}|9\d{7})/ == metadata.premium_rate.national_number_pattern
+      it "returns valid premium_rate.national_number_pattern", state do
+        assert ~r/900([135]\d{6}|9\d{7})/ == state[:de_metadata].premium_rate.national_number_pattern
       end
     end
 
     context "AR region_code" do
-      subject do: "AR"
-      let :metadata do
-        ExPhoneNumber.Metadata.get_for_region_code(subject)
+      setup do
+        {:ok, ar_metadata: get_for_region_code(RegionCodeFixture.ar)}
       end
 
-      it "returns valid id" do
-        assert RegionCodeFixture.ar == metadata.id
+      it "returns valid id", state do
+        assert RegionCodeFixture.ar == state[:ar_metadata].id
       end
 
-      it "returns valid country_code" do
-        assert 54 == metadata.country_code
+      it "returns valid country_code", state do
+        assert 54 == state[:ar_metadata].country_code
       end
 
-      it "returns valid international_prefix" do
-        assert "00" == metadata.international_prefix
+      it "returns valid international_prefix", state do
+        assert "00" == state[:ar_metadata].international_prefix
       end
 
-      it "returns valid national_prefix" do
-        assert "0" == metadata.national_prefix
+      it "returns valid national_prefix", state do
+        assert "0" == state[:ar_metadata].national_prefix
       end
 
-      it "returns valid national_prefix_for_parsing" do
-        assert "0(?:(11|343|3715)15)?" == metadata.national_prefix_for_parsing
+      it "returns valid national_prefix_for_parsing", state do
+        assert "0(?:(11|343|3715)15)?" == state[:ar_metadata].national_prefix_for_parsing
       end
 
-      it "returns valid national_prefix_transform_rule" do
-        assert "9\\g{1}" == metadata.national_prefix_transform_rule
+      it "returns valid national_prefix_transform_rule", state do
+        assert "9\\g{1}" == state[:ar_metadata].national_prefix_transform_rule
       end
 
-      it "returns valid number_format(2).format" do
-        assert "\\g{2} 15 \\g{3}-\\g{4}" == Enum.at(metadata.number_format, 2).format
+      it "returns valid number_format(2).format", state do
+        assert "\\g{2} 15 \\g{3}-\\g{4}" == Enum.at(state[:ar_metadata].number_format, 2).format
       end
 
-      it "returns valid number_format(3).pattern" do
-        assert ~r/(9)(\d{4})(\d{2})(\d{4})/ == Enum.at(metadata.number_format, 3).pattern
+      it "returns valid number_format(3).pattern", state do
+        assert ~r/(9)(\d{4})(\d{2})(\d{4})/ == Enum.at(state[:ar_metadata].number_format, 3).pattern
       end
 
-      it "returns valid intl_number_format(3).pattern" do
-        assert ~r/(9)(\d{4})(\d{2})(\d{4})/ == Enum.at(metadata.intl_number_format, 3).pattern
+      it "returns valid intl_number_format(3).pattern", state do
+        assert ~r/(9)(\d{4})(\d{2})(\d{4})/ == Enum.at(state[:ar_metadata].intl_number_format, 3).pattern
       end
 
-      it "returns valid intl_number_format(3).format" do
-        assert "\\g{1} \\g{2} \\g{3} \\g{4}" == Enum.at(metadata.intl_number_format, 3).format
+      it "returns valid intl_number_format(3).format", state do
+        assert "\\g{1} \\g{2} \\g{3} \\g{4}" == Enum.at(state[:ar_metadata].intl_number_format, 3).format
       end
     end
   end
 
   describe ".get_for_non_geographical_region/1" do
     context "800 calling code" do
-      subject do: 800
-      let :metadata do
-        ExPhoneNumber.Metadata.get_for_non_geographical_region(subject)
+      setup do
+        {:ok, un001_metadata: get_for_non_geographical_region(800)}
       end
 
-      it "returns valid id" do
-        assert RegionCodeFixture.un001 == metadata.id
+      it "returns valid id", state do
+        assert RegionCodeFixture.un001 == state[:un001_metadata].id
       end
 
-      it "returns valid country_code" do
-        assert 800 == metadata.country_code
+      it "returns valid country_code", state do
+        assert 800 == state[:un001_metadata].country_code
       end
 
-      it "returns valid number_format(0).format" do
-        assert "\\g{1} \\g{2}" == Enum.at(metadata.number_format, 0).format
+      it "returns valid number_format(0).format", state do
+        assert "\\g{1} \\g{2}" == Enum.at(state[:un001_metadata].number_format, 0).format
       end
 
-      it "returns valid number_format(0).pattern" do
-        assert ~r/(\d{4})(\d{4})/ == Enum.at(metadata.number_format, 0).pattern
+      it "returns valid number_format(0).pattern", state do
+        assert ~r/(\d{4})(\d{4})/ == Enum.at(state[:un001_metadata].number_format, 0).pattern
       end
 
-      it "returns valid general.example_number" do
-        assert "12345678" == metadata.general.example_number
+      it "returns valid general.example_number", state do
+        assert "12345678" == state[:un001_metadata].general.example_number
       end
 
-      it "returns valid toll_free.example_number" do
-        assert "12345678" == metadata.toll_free.example_number
+      it "returns valid toll_free.example_number", state do
+        assert "12345678" == state[:un001_metadata].toll_free.example_number
       end
     end
   end
