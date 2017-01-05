@@ -67,7 +67,7 @@ defmodule ExPhoneNumber.Parsing do
 
     results_tuple =
       if :ok == elem(results_tuple, 0) do
-        {_, national_number, region_code} = results_tuple
+        {_, national_number, _} = results_tuple
         phone_number = if keep_raw_input, do: %PhoneNumber{raw_input: number_to_parse}, else: %PhoneNumber{}
         {ext, national_number} = maybe_strip_extension(national_number)
         phone_number = if not is_nil_or_empty?(ext), do: %{phone_number | extension: ext}, else: phone_number

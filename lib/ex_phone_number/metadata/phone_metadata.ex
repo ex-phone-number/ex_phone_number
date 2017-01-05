@@ -291,12 +291,11 @@ defmodule ExPhoneNumber.Metadata.PhoneMetadata do
         Map.merge(%NumberFormat{}, number_format)
       else
         intl_number_format = %NumberFormat{pattern: number_format.pattern, leading_digits_pattern: number_format.leading_digits_pattern}
-        intl_number_format =
-          if number_format.intl_format == Values.description_default_pattern do
-            intl_number_format
-          else
-            Map.merge(intl_number_format, %{format: number_format.intl_format})
-          end
+        if number_format.intl_format == Values.description_default_pattern do
+          intl_number_format
+        else
+          Map.merge(intl_number_format, %{format: number_format.intl_format})
+        end
       end
 
     unless is_nil_or_empty?(intl_number_format.format) do

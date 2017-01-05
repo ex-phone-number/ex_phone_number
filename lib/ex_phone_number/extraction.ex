@@ -91,7 +91,7 @@ defmodule ExPhoneNumber.Extraction do
   def maybe_strip_extension(number) do
     case Regex.run(Patterns.extn_pattern, number, return: :index) do
       [{index, _} | tail] ->
-        {phone_number_head, phone_number_tail} = String.split_at(number, index)
+        {phone_number_head, _} = String.split_at(number, index)
         if is_viable_phone_number?(phone_number_head) do
           {match_index, match_length} = Enum.find(tail, fn {match_index, match_length} ->
             if match_index > 0 do
@@ -169,7 +169,7 @@ defmodule ExPhoneNumber.Extraction do
     case Regex.run(pattern, number, return: :index) do
       [{index, match_length} | _tail] ->
         if index == 0 do
-          {number_head, number_tail} = String.split_at(number, match_length)
+          {_, number_tail} = String.split_at(number, match_length)
           matches = Regex.run(Patterns.capturing_digit_pattern, number_tail)
           match_is_nil = is_nil(matches)
           capture = if match_is_nil, do: "", else: Enum.at(matches, 1)
