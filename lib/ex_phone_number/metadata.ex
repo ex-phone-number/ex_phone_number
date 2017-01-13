@@ -77,7 +77,7 @@ defmodule ExPhoneNumber.Metadata do
 
   def get_for_region_code(nil), do: nil
   def get_for_region_code(region_code) do
-    region_code_to_metadata_map[String.upcase(region_code)]
+    region_code_to_metadata_map()[String.upcase(region_code)]
   end
 
   def get_for_region_code_or_calling_code(calling_code, region_code) do
@@ -105,12 +105,12 @@ defmodule ExPhoneNumber.Metadata do
   end
 
   def get_region_code_for_country_code(country_code) when is_number(country_code) do
-    region_codes = country_code_to_region_code_map[country_code]
+    region_codes = country_code_to_region_code_map()[country_code]
    if is_nil(region_codes) do
       Values.unknown_region
     else
       main_country = Enum.find(region_codes, fn(region_code) ->
-        metadata = region_code_to_metadata_map[region_code]
+        metadata = region_code_to_metadata_map()[region_code]
         if is_nil(metadata) do
           false
         else
@@ -127,7 +127,7 @@ defmodule ExPhoneNumber.Metadata do
 
   def get_region_code_for_number(nil), do: nil
   def get_region_code_for_number(%PhoneNumber{} = phone_number) do
-    regions = country_code_to_region_code_map[phone_number.country_code]
+    regions = country_code_to_region_code_map()[phone_number.country_code]
     if is_nil(regions) do
       nil
     else
@@ -145,15 +145,15 @@ defmodule ExPhoneNumber.Metadata do
   end
 
   def get_region_codes_for_country_code(country_code) when is_number(country_code) do
-    List.wrap(country_code_to_region_code_map[country_code])
+    List.wrap(country_code_to_region_code_map()[country_code])
   end
 
   def get_supported_regions() do
-    Enum.filter(Map.keys(region_code_to_metadata_map), fn(key) -> Integer.parse(key) == :error end)
+    Enum.filter(Map.keys(region_code_to_metadata_map()), fn(key) -> Integer.parse(key) == :error end)
   end
 
   def get_supported_global_network_calling_codes() do
-    region_codes_as_strings = Enum.filter(Map.keys(region_code_to_metadata_map), fn(key) -> Integer.parse(key) != :error end)
+    region_codes_as_strings = Enum.filter(Map.keys(region_code_to_metadata_map()), fn(key) -> Integer.parse(key) != :error end)
     Enum.map(region_codes_as_strings, fn(calling_code) ->
       {number, _} = Integer.parse(calling_code)
       number
@@ -167,27 +167,27 @@ defmodule ExPhoneNumber.Metadata do
 
   def is_nanpa_country?(nil), do: false
   def is_nanpa_country?(region_code) when is_binary(region_code) do
-    String.upcase(region_code) in country_code_to_region_code_map[Values.nanpa_country_code]
+    String.upcase(region_code) in country_code_to_region_code_map()[Values.nanpa_country_code]
   end
 
   def is_supported_global_network_calling_code?(calling_code) when is_number(calling_code) do
-    not is_nil(region_code_to_metadata_map[Integer.to_string(calling_code)])
+    not is_nil(region_code_to_metadata_map()[Integer.to_string(calling_code)])
   end
   def is_supported_global_network_calling_code?(_), do: false
 
   def is_supported_region?(region_code) when is_binary(region_code) do
-    not is_nil(region_code_to_metadata_map[String.upcase(region_code)])
+    not is_nil(region_code_to_metadata_map()[String.upcase(region_code)])
   end
   def is_supported_region?(_), do: false
 
   def is_valid_country_code?(nil), do: false
   def is_valid_country_code?(country_code) when is_number(country_code) do
-    not is_nil(country_code_to_region_code_map[country_code])
+    not is_nil(country_code_to_region_code_map()[country_code])
   end
 
   def is_valid_region_code?(nil), do: false
   def is_valid_region_code?(region_code) when is_binary(region_code) do
-    Integer.parse(region_code) == :error and not is_nil(region_code_to_metadata_map[String.upcase(region_code)])
+    Integer.parse(region_code) == :error and not is_nil(region_code_to_metadata_map()[String.upcase(region_code)])
   end
 
   defp find_matching_region_code([], _), do: nil

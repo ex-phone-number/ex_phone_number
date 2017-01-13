@@ -18,54 +18,54 @@ defmodule ExPhoneNumber.Constants.Patterns do
 
   def plus_chars(), do: "+\uFF0B"
 
-  def plus_chars_pattern(), do: ~r/[#{plus_chars}]+/u
+  def plus_chars_pattern(), do: ~r/[#{plus_chars()}]+/u
 
-  def leading_plus_chars_pattern(), do: ~r/^[#{plus_chars}]+/u
+  def leading_plus_chars_pattern(), do: ~r/^[#{plus_chars()}]+/u
 
-  def separator_pattern(), do: ~r/[#{valid_punctuation}]+/u
+  def separator_pattern(), do: ~r/[#{valid_punctuation()}]+/u
 
-  def capturing_digit_pattern(), do: ~r/([#{valid_digits}])/u
+  def capturing_digit_pattern(), do: ~r/([#{valid_digits()}])/u
 
-  def valid_start_char_pattern(), do: ~r/[#{plus_chars}#{valid_digits}]/u
+  def valid_start_char_pattern(), do: ~r/[#{plus_chars()}#{valid_digits()}]/u
 
   def second_number_start_pattern(), do: ~r/[\\\/] *x/u
 
-  def unwanted_end_char_pattern(), do: ~r/[^#{valid_digits}#{valid_alpha}#]+$/u
+  def unwanted_end_char_pattern(), do: ~r/[^#{valid_digits()}#{valid_alpha()}#]+$/u
 
   def valid_alpha_phone_pattern(), do: ~r/(?:.*?[A-Za-z]){3}.*/u
 
-  def min_length_phone_number_pattern(), do: "[" <> valid_digits <> "]{" <> Integer.to_string(Values.min_length_for_nsn) <> "}"
+  def min_length_phone_number_pattern(), do: "[" <> valid_digits() <> "]{" <> Integer.to_string(Values.min_length_for_nsn) <> "}"
 
   def valid_phone_number() do
-    "[" <> plus_chars <> "]*(?:[" <>
-      valid_punctuation <>
+    "[" <> plus_chars() <> "]*(?:[" <>
+      valid_punctuation() <>
       Values.star_sign <> "]*[" <>
-      valid_digits <> "]){3,}[" <>
-      valid_punctuation <>
+      valid_digits() <> "]){3,}[" <>
+      valid_punctuation() <>
       Values.star_sign <>
-      valid_alpha <>
-      valid_digits <> "]*"
+      valid_alpha() <>
+      valid_digits() <> "]*"
   end
 
   def default_extn_prefix(), do: " ext. "
 
-  def capturing_extn_digits(), do: "([" <> valid_digits <> "]{1,7})"
+  def capturing_extn_digits(), do: "([" <> valid_digits() <> "]{1,7})"
 
   def extn_patterns_for_parsing() do
     Values.rfc3966_extn_prefix <>
-    capturing_extn_digits <> "|" <>
+    capturing_extn_digits() <> "|" <>
     "[ \u00A0\\t,]*" <>
     "(?:e?xt(?:ensi(?:o\u0301?|\u00F3))?n?|\uFF45?\uFF58\uFF54\uFF4E?|" <>
     "[,x\uFF58#\uFF03~\uFF5E]|int|anexo|\uFF49\uFF4E\uFF54)" <>
     "[:\\.\uFF0E]?[ \u00A0\\t,-]*" <>
-    capturing_extn_digits <> "#?|" <>
-    "[- ]+([" <> valid_digits <> "]{1,5})#"
+    capturing_extn_digits() <> "#?|" <>
+    "[- ]+([" <> valid_digits() <> "]{1,5})#"
   end
 
-  def extn_pattern(), do: ~r/(?:#{extn_patterns_for_parsing})$/iu
+  def extn_pattern(), do: ~r/(?:#{extn_patterns_for_parsing()})$/iu
 
   def valid_phone_number_pattern() do
-    ~r/^#{min_length_phone_number_pattern}$|^#{valid_phone_number}(?:#{extn_patterns_for_parsing})?$/iu
+    ~r/^#{min_length_phone_number_pattern()}$|^#{valid_phone_number()}(?:#{extn_patterns_for_parsing()})?$/iu
   end
 
   def non_digits_pattern(), do: ~r/\D+/u
