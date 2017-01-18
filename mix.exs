@@ -4,7 +4,7 @@ defmodule ExPhoneNumber.Mixfile do
   def project do
     [app: :ex_phone_number,
      version: "0.0.1",
-     elixir: "~> 1.3.2",
+     elixir: "~> 1.3",
      build_embedded: Mix.env == :prod,
      start_permanent: Mix.env == :prod,
      test_coverage: [tool: ExCoveralls],
