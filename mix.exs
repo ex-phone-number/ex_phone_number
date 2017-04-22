@@ -18,10 +18,10 @@ defmodule ExPhoneNumber.Mixfile do
 
   defp deps do
     [
-      {:sweet_xml, "~> 0.6.1"},
+      {:sweet_xml, "~> 0.6.5"},
       {:ex_spec, "~> 2.0", only: :test},
-      {:excoveralls, "~> 0.5.6", only: :test},
-      {:credo, "~> 0.4.11", only: [:dev, :test]}
+      {:excoveralls, "~> 0.6", only: :test},
+      {:credo, "~> 0.7", only: [:dev, :test]}
     ]
   end
 end
