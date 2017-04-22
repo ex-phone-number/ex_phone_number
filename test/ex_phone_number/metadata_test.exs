@@ -215,7 +215,7 @@ defmodule ExPhoneNumber.MetadataTest do
   describe ".get_supported_regions/1" do
     context "get a list of supported regions" do
       it "should contain at least one element" do
-        assert 0 < length(get_supported_regions)
+        assert 0 < length(get_supported_regions())
       end
     end
   end
@@ -233,7 +233,7 @@ defmodule ExPhoneNumber.MetadataTest do
       end
 
       it "returns false for calling code" do
-        refute Enum.any?(get_supported_regions, fn(region_code) -> region_code == "800" end)
+        refute Enum.any?(get_supported_regions(), fn(region_code) -> region_code == "800" end)
       end
     end
   end
@@ -241,13 +241,13 @@ defmodule ExPhoneNumber.MetadataTest do
   describe ".get_supported_global_network_calling_codes/1" do
     context "get a list of supported global network calling codes" do
       it "contains at least one element" do
-        assert 0 < length(get_supported_global_network_calling_codes)
+        assert 0 < length(get_supported_global_network_calling_codes())
       end
     end
 
     context "test all the calling codes" do
       it "contains all the calling codes" do
-        assert Enum.all?(get_supported_global_network_calling_codes, fn(calling_code) -> get_region_code_for_country_code(calling_code) == RegionCodeFixture.un001 end)
+        assert Enum.all?(get_supported_global_network_calling_codes(), fn(calling_code) -> get_region_code_for_country_code(calling_code) == RegionCodeFixture.un001 end)
       end
     end
   end
