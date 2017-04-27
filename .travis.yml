@@ -1,5 +1,21 @@
 language: elixir
-elixir: 1.3.4
-otp_release:
-  - 18.3
-sudo: false
+
+env:
+  global:
+    - MIX_ENV=test
+
+matrix:
+  include:
+    - elixir:      1.3.4
+      env:         TRAVIS_COVERAGE=true
+      otp_release: 18.3
+    - elixir:      1.4.2
+      otp_release: 18.3
+    - elixir:      1.4.2
+      otp_release: 19.3
+
+after_success: |
+  if [ ! -z "${TRAVIS_COVERAGE}" ]; then
+    mix coveralls.travis
+  fi
+
