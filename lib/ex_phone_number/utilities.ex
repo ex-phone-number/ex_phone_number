@@ -6,7 +6,7 @@ defmodule ExPhoneNumber.Utilities do
   def is_nil_or_empty?(string) when is_binary(string), do: String.length(string) == 0
   def is_nil_or_empty?(_), do: false
 
-  def is_number_matching_description?(number, %PhoneNumberDescription{} = description) when is_binary(number) do
+  def is_number_matching_description?(number, description = %PhoneNumberDescription{}) when is_binary(number) do
     if description.possible_number_pattern == Values.description_default_pattern or description.national_number_pattern == Values.description_default_pattern do
       false
     else

@@ -1,7 +1,6 @@
 defmodule ExPhoneNumber.Normalization do
   import ExPhoneNumber.Utilities
-  alias ExPhoneNumber.Constants.Mappings
-  alias ExPhoneNumber.Constants.Patterns
+  alias ExPhoneNumber.Constants.{Mappings, Patterns}
 
   def convert_alpha_chars_in_number(number) do
     normalize_helper(number, Mappings.all_normalization_mappings, false)

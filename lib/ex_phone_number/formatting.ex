@@ -1,8 +1,10 @@
 defmodule ExPhoneNumber.Formatting do
   import ExPhoneNumber.Utilities
-  alias ExPhoneNumber.Constants.Patterns
-  alias ExPhoneNumber.Constants.PhoneNumberFormats
-  alias ExPhoneNumber.Constants.Values
+  alias ExPhoneNumber.Constants.{
+    Patterns,
+    PhoneNumberFormats,
+    Values
+  }
   alias ExPhoneNumber.Metadata
   alias ExPhoneNumber.Metadata.PhoneMetadata
   alias ExPhoneNumber.Model.PhoneNumber
@@ -25,7 +27,7 @@ defmodule ExPhoneNumber.Formatting do
     end)
   end
 
-  def format(%PhoneNumber{} = phone_number, phone_number_format) when is_atom(phone_number_format) do
+  def format(phone_number = %PhoneNumber{}, phone_number_format) when is_atom(phone_number_format) do
     if phone_number.national_number == 0 and not is_nil_or_empty?(phone_number.raw_input) do
       phone_number.raw_input
     else
@@ -46,11 +48,11 @@ defmodule ExPhoneNumber.Formatting do
     end
   end
 
-  def format_nsn(number, %PhoneMetadata{} = metadata, number_format, carrier_code \\ nil) do
-    available_formats = if length(metadata.intl_number_format) == 0 or PhoneNumberFormats.national == number_format do
-      metadata.number_format
+  def format_nsn(number, phone_metadata = %PhoneMetadata{}, number_format, carrier_code \\ nil) do
+    available_formats = if length(phone_metadata.intl_number_format) == 0 or PhoneNumberFormats.national == number_format do
+      phone_metadata.number_format
     else
-      metadata.intl_number_format
+      phone_metadata.intl_number_format
     end
     formatting_pattern = choose_formatting_pattern_for_number(available_formats, number)
     if is_nil(formatting_pattern) do
@@ -83,15 +85,15 @@ defmodule ExPhoneNumber.Formatting do
     end
   end
 
-  def maybe_get_formatted_extension(%PhoneNumber{} = phone_number, %PhoneMetadata{} = metadata, phone_number_format) when is_atom(phone_number_format) do
+  def maybe_get_formatted_extension(phone_number = %PhoneNumber{}, phone_metadata = %PhoneMetadata{}, phone_number_format) when is_atom(phone_number_format) do
     if not PhoneNumber.has_extension?(phone_number) or String.length(phone_number.extension) == 0 do
       ""
     else
       if PhoneNumberFormats.rfc3966 == phone_number_format do
         Values.rfc3966_extn_prefix <> phone_number.extension
       else
-        if PhoneMetadata.has_preferred_extn_prefix?(metadata) do
-          metadata.preferred_extn_prefix <> phone_number.extension
+        if PhoneMetadata.has_preferred_extn_prefix?(phone_metadata) do
+          phone_metadata.preferred_extn_prefix <> phone_number.extension
         else
           Values.default_extn_prefix <> phone_number.extension
         end

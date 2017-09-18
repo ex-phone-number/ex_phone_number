@@ -1,9 +1,7 @@
 defmodule ExPhoneNumber.Metadata do
   import SweetXml
-  import ExPhoneNumber.Normalization
-  import ExPhoneNumber.Validation
-  alias ExPhoneNumber.Constants.PhoneNumberTypes
-  alias ExPhoneNumber.Constants.Values
+  import ExPhoneNumber.{Normalization, Validation}
+  alias ExPhoneNumber.Constants.{PhoneNumberTypes, Values}
   alias ExPhoneNumber.Metadata.PhoneMetadata
   alias ExPhoneNumber.Model.PhoneNumber
 
@@ -126,7 +124,7 @@ defmodule ExPhoneNumber.Metadata do
   end
 
   def get_region_code_for_number(nil), do: nil
-  def get_region_code_for_number(%PhoneNumber{} = phone_number) do
+  def get_region_code_for_number(phone_number = %PhoneNumber{}) do
     regions = country_code_to_region_code_map()[phone_number.country_code]
     if is_nil(regions) do
       nil
@@ -139,7 +137,7 @@ defmodule ExPhoneNumber.Metadata do
     end
   end
 
-  def get_region_code_for_number_from_region_list(%PhoneNumber{} = phone_number, region_codes) when is_list(region_codes) do
+  def get_region_code_for_number_from_region_list(phone_number = %PhoneNumber{}, region_codes) when is_list(region_codes) do
     national_number = PhoneNumber.get_national_significant_number(phone_number)
     find_matching_region_code(region_codes, national_number)
   end

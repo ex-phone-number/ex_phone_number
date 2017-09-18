@@ -34,9 +34,11 @@ defmodule ExPhoneNumber.Metadata.PhoneMetadata do
   import SweetXml
   import ExPhoneNumber.Utilities
   alias ExPhoneNumber.Constants.Values
-  alias ExPhoneNumber.Metadata.NumberFormat
-  alias ExPhoneNumber.Metadata.PhoneMetadata
-  alias ExPhoneNumber.Metadata.PhoneNumberDescription
+  alias ExPhoneNumber.Metadata.{
+    NumberFormat,
+    PhoneMetadata,
+    PhoneNumberDescription
+  }
 
   require Logger
   Logger.configure(level: Application.get_env(:ex_phone_number, :log_level, :warn))
@@ -103,7 +105,7 @@ defmodule ExPhoneNumber.Metadata.PhoneMetadata do
   defp normalize_boolean(nil), do: false
   defp normalize_boolean(true_char_list) when is_list(true_char_list) and length(true_char_list) == 4, do: true
 
-  defp get_map_key(%PhoneMetadata{} = phone_metadata) do
+  defp get_map_key(phone_metadata = %PhoneMetadata{}) do
     if Integer.parse(phone_metadata.id) != :error do
       Integer.to_string(phone_metadata.country_code)
     else
@@ -112,7 +114,7 @@ defmodule ExPhoneNumber.Metadata.PhoneMetadata do
   end
 
   def is_main_country_for_code?(nil), do: nil
-  def is_main_country_for_code?(%PhoneMetadata{} = phone_metadata) do
+  def is_main_country_for_code?(phone_metadata = %PhoneMetadata{}) do
     not is_nil(phone_metadata.main_country_for_code) and phone_metadata.main_country_for_code
   end
 
@@ -135,7 +137,7 @@ defmodule ExPhoneNumber.Metadata.PhoneMetadata do
   end
 
   @leading_zero_possible_default false
-  def get_leading_zero_possible_or_default(%PhoneMetadata{} = phone_metadata) do
+  def get_leading_zero_possible_or_default(phone_metadata = %PhoneMetadata{}) do
     if is_nil(phone_metadata.leading_zero_possible) do
       @leading_zero_possible_default
     else
@@ -152,23 +154,23 @@ defmodule ExPhoneNumber.Metadata.PhoneMetadata do
     end
   end
 
-  def has_leading_digits(%PhoneMetadata{} = phone_metadata) do
+  def has_leading_digits(phone_metadata = %PhoneMetadata{}) do
     not is_nil_or_empty?(phone_metadata.leading_digits)
   end
 
-  def has_national_prefix?(%PhoneMetadata{} = phone_metadata) do
+  def has_national_prefix?(phone_metadata = %PhoneMetadata{}) do
     not is_nil_or_empty?(phone_metadata.national_prefix)
   end
 
-  def has_national_prefix_for_parsing?(%PhoneMetadata{} = phone_metadata) do
+  def has_national_prefix_for_parsing?(phone_metadata = %PhoneMetadata{}) do
     not is_nil_or_empty?(phone_metadata.national_prefix_for_parsing)
   end
 
-  def has_national_prefix_optional_when_formatting?(%PhoneMetadata{} = phone_metadata) do
+  def has_national_prefix_optional_when_formatting?(phone_metadata = %PhoneMetadata{}) do
     not is_nil_or_empty?(phone_metadata.national_prefix_optional_when_formatting)
   end
 
-  def has_preferred_extn_prefix?(%PhoneMetadata{} = phone_metadata) do
+  def has_preferred_extn_prefix?(phone_metadata = %PhoneMetadata{}) do
     not is_nil_or_empty?(phone_metadata.preferred_extn_prefix)
   end
 
@@ -257,11 +259,11 @@ defmodule ExPhoneNumber.Metadata.PhoneMetadata do
     Regex.replace(~r/\$NP/, rule, prefix, global: false)
   end
 
-  def get_number_format(%PhoneMetadata{} = phone_metadata), do: get_number_format(phone_metadata.available_formats, phone_metadata)
-  def get_number_format([head | tail], %PhoneMetadata{} = phone_metadata) do
+  def get_number_format(phone_metadata = %PhoneMetadata{}), do: get_number_format(phone_metadata.available_formats, phone_metadata)
+  def get_number_format([head | tail], phone_metadata = %PhoneMetadata{}) do
     [get_number_format(head, phone_metadata) | get_number_format(tail, phone_metadata)]
   end
-  def get_number_format(%{number_format: number_format}, %PhoneMetadata{} = phone_metadata) do
+  def get_number_format(%{number_format: number_format}, phone_metadata = %PhoneMetadata{}) do
     Logger.debug "---> number_format"
     Logger.debug fn ->
       "\t#{inspect(number_format)}"
@@ -313,7 +315,7 @@ defmodule ExPhoneNumber.Metadata.PhoneMetadata do
   end
   def get_number_format([], _), do: []
 
-  def get_intl_format(%NumberFormat{} = number_format) do
+  def get_intl_format(number_format = %NumberFormat{}) do
     intl_number_format =
       if is_nil_or_empty?(number_format.intl_format) do
         Map.merge(%NumberFormat{}, number_format)
@@ -340,9 +342,9 @@ defmodule ExPhoneNumber.Metadata.PhoneMetadata do
 
   def process_phone_number_description(nil, nil), do: process_phone_number_description(%PhoneNumberDescription{}, %PhoneNumberDescription{})
   def process_phone_number_description(nil, %PhoneMetadata{general: general}), do: process_phone_number_description(%PhoneNumberDescription{}, general)
-  def process_phone_number_description(%PhoneNumberDescription{} = description, nil), do: process_phone_number_description(description, %PhoneNumberDescription{})
-  def process_phone_number_description(%PhoneNumberDescription{} = description, %PhoneMetadata{general: general}), do: process_phone_number_description(description, general)
-  def process_phone_number_description(%PhoneNumberDescription{} = description, %PhoneNumberDescription{} = general) do
+  def process_phone_number_description(description = %PhoneNumberDescription{}, nil), do: process_phone_number_description(description, %PhoneNumberDescription{})
+  def process_phone_number_description(description = %PhoneNumberDescription{}, %PhoneMetadata{general: general}), do: process_phone_number_description(description, general)
+  def process_phone_number_description(description = %PhoneNumberDescription{}, general = %PhoneNumberDescription{}) do
     national_number_pattern =
       if is_nil_or_empty?(description.national_number_pattern) do
         general.national_number_pattern
