@@ -39,7 +39,7 @@ defmodule ExPhoneNumber.Metadata do
     {new_key, _} = Integer.parse(Atom.to_string(key))
     Map.put(acc, new_key, Keyword.get_values(list_cctrc, key))
   end)
-  defp country_code_to_region_code_map() do
+  defp country_code_to_region_code_map do
     unquote(Macro.escape(map_cctrc))
   end
   Module.delete_attribute(__MODULE__, :list_country_code_to_region_code)
@@ -47,7 +47,7 @@ defmodule ExPhoneNumber.Metadata do
   list_rctm = Module.get_attribute(__MODULE__, :list_region_code_to_metadata)
   uniq_keys_rctm = Enum.uniq(Keyword.keys(list_rctm))
   map_rctm = Enum.reduce(uniq_keys_rctm, %{}, fn(key, acc) -> Map.put(acc, Atom.to_string(key), Keyword.get(list_rctm, key)) end)
-  defp region_code_to_metadata_map() do
+  defp region_code_to_metadata_map do
     unquote(Macro.escape(map_rctm))
   end
   Module.delete_attribute(__MODULE__, :list_region_code_to_metadata)
@@ -148,11 +148,11 @@ defmodule ExPhoneNumber.Metadata do
     List.wrap(country_code_to_region_code_map()[country_code])
   end
 
-  def get_supported_regions() do
+  def get_supported_regions do
     Enum.filter(Map.keys(region_code_to_metadata_map()), fn(key) -> Integer.parse(key) == :error end)
   end
 
-  def get_supported_global_network_calling_codes() do
+  def get_supported_global_network_calling_codes do
     region_codes_as_strings = Enum.filter(Map.keys(region_code_to_metadata_map()), fn(key) -> Integer.parse(key) != :error end)
     Enum.map(region_codes_as_strings, fn(calling_code) ->
       {number, _} = Integer.parse(calling_code)
