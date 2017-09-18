@@ -1,7 +1,7 @@
 defmodule ExPhoneNumber.Constants.Mappings do
   alias ExPhoneNumber.Constants.Values
 
-  def digit_mappings() do
+  def digit_mappings do
     %{
       "0"      => "0",
       "1"      => "1",
@@ -46,7 +46,7 @@ defmodule ExPhoneNumber.Constants.Mappings do
     }
   end
 
-  def diallable_char_mappings() do
+  def diallable_char_mappings do
     %{
       "0" => "0",
       "1" => "1",
@@ -60,10 +60,10 @@ defmodule ExPhoneNumber.Constants.Mappings do
       "9" => "9",
       "+" => Values.plus_sign,
       "*" => "*"
-    };
+    }
   end
 
-  def alpha_mappings() do
+  def alpha_mappings do
     %{
       "A" => "2",
       "B" => "2",
@@ -94,7 +94,7 @@ defmodule ExPhoneNumber.Constants.Mappings do
     }
   end
 
-  def all_normalization_mappings() do
+  def all_normalization_mappings do
     %{
       "0"      => "0",
       "1"      => "1",
@@ -165,7 +165,7 @@ defmodule ExPhoneNumber.Constants.Mappings do
     }
   end
 
-  def all_plus_number_grouping_symbols() do
+  def all_plus_number_grouping_symbols do
     %{
       "0"      => "0",
       "1"      => "1",

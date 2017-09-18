@@ -1,12 +1,16 @@
 defmodule ExPhoneNumber.Extraction do
-  import ExPhoneNumber.Normalization
-  import ExPhoneNumber.Validation
-  import ExPhoneNumber.Utilities
-  alias ExPhoneNumber.Constants.CountryCodeSource
-  alias ExPhoneNumber.Constants.ErrorMessages
-  alias ExPhoneNumber.Constants.Patterns
-  alias ExPhoneNumber.Constants.ValidationResults
-  alias ExPhoneNumber.Constants.Values
+  import ExPhoneNumber.{
+    Normalization,
+    Validation,
+    Utilities
+  }
+  alias ExPhoneNumber.Constants.{
+    CountryCodeSource,
+    ErrorMessages,
+    Patterns,
+    ValidationResults,
+    Values
+  }
   alias ExPhoneNumber.Metadata
   alias ExPhoneNumber.Metadata.PhoneMetadata
   alias ExPhoneNumber.Model.PhoneNumber
@@ -128,8 +132,8 @@ defmodule ExPhoneNumber.Extraction do
     end
   end
 
-  def maybe_strip_national_prefix_and_carrier_code(number, %PhoneMetadata{} = metadata) do
-    maybe_strip_national_prefix_and_carrier_code(number, metadata.national_prefix_for_parsing, metadata.national_prefix_transform_rule, metadata.general.national_number_pattern)
+  def maybe_strip_national_prefix_and_carrier_code(number, phone_metadata = %PhoneMetadata{}) do
+    maybe_strip_national_prefix_and_carrier_code(number, phone_metadata.national_prefix_for_parsing, phone_metadata.national_prefix_transform_rule, phone_metadata.general.national_number_pattern)
   end
   def maybe_strip_national_prefix_and_carrier_code(number, national_prefix_for_parsing, _national_prefix_transform_rule, _general_national_number_pattern)
     when is_nil(number) or is_nil(national_prefix_for_parsing), do: {false, "", number}

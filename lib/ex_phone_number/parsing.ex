@@ -1,11 +1,15 @@
 defmodule ExPhoneNumber.Parsing do
-  import ExPhoneNumber.Extraction
-  import ExPhoneNumber.Normalization
-  import ExPhoneNumber.Validation
-  import ExPhoneNumber.Utilities
-  alias ExPhoneNumber.Constants.ErrorMessages
-  alias ExPhoneNumber.Constants.Patterns
-  alias ExPhoneNumber.Constants.Values
+  import ExPhoneNumber.{
+    Extraction,
+    Normalization,
+    Validation,
+    Utilities
+  }
+  alias ExPhoneNumber.Constants.{
+    ErrorMessages,
+    Patterns,
+    Values
+  }
   alias ExPhoneNumber.Metadata
   alias ExPhoneNumber.Model.PhoneNumber
 

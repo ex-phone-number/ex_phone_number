@@ -1,9 +1,7 @@
 defmodule ExPhoneNumber.Metadata do
   import SweetXml
-  import ExPhoneNumber.Normalization
-  import ExPhoneNumber.Validation
-  alias ExPhoneNumber.Constants.PhoneNumberTypes
-  alias ExPhoneNumber.Constants.Values
+  import ExPhoneNumber.{Normalization, Validation}
+  alias ExPhoneNumber.Constants.{PhoneNumberTypes, Values}
   alias ExPhoneNumber.Metadata.PhoneMetadata
   alias ExPhoneNumber.Model.PhoneNumber
 
@@ -39,7 +37,7 @@ defmodule ExPhoneNumber.Metadata do
     {new_key, _} = Integer.parse(Atom.to_string(key))
     Map.put(acc, new_key, Keyword.get_values(list_cctrc, key))
   end)
-  defp country_code_to_region_code_map() do
+  defp country_code_to_region_code_map do
     unquote(Macro.escape(map_cctrc))
   end
   Module.delete_attribute(__MODULE__, :list_country_code_to_region_code)
@@ -47,7 +45,7 @@ defmodule ExPhoneNumber.Metadata do
   list_rctm = Module.get_attribute(__MODULE__, :list_region_code_to_metadata)
   uniq_keys_rctm = Enum.uniq(Keyword.keys(list_rctm))
   map_rctm = Enum.reduce(uniq_keys_rctm, %{}, fn(key, acc) -> Map.put(acc, Atom.to_string(key), Keyword.get(list_rctm, key)) end)
-  defp region_code_to_metadata_map() do
+  defp region_code_to_metadata_map do
     unquote(Macro.escape(map_rctm))
   end
   Module.delete_attribute(__MODULE__, :list_region_code_to_metadata)
@@ -126,7 +124,7 @@ defmodule ExPhoneNumber.Metadata do
   end
 
   def get_region_code_for_number(nil), do: nil
-  def get_region_code_for_number(%PhoneNumber{} = phone_number) do
+  def get_region_code_for_number(phone_number = %PhoneNumber{}) do
     regions = country_code_to_region_code_map()[phone_number.country_code]
     if is_nil(regions) do
       nil
@@ -139,7 +137,7 @@ defmodule ExPhoneNumber.Metadata do
     end
   end
 
-  def get_region_code_for_number_from_region_list(%PhoneNumber{} = phone_number, region_codes) when is_list(region_codes) do
+  def get_region_code_for_number_from_region_list(phone_number = %PhoneNumber{}, region_codes) when is_list(region_codes) do
     national_number = PhoneNumber.get_national_significant_number(phone_number)
     find_matching_region_code(region_codes, national_number)
   end
@@ -148,11 +146,11 @@ defmodule ExPhoneNumber.Metadata do
     List.wrap(country_code_to_region_code_map()[country_code])
   end
 
-  def get_supported_regions() do
+  def get_supported_regions do
     Enum.filter(Map.keys(region_code_to_metadata_map()), fn(key) -> Integer.parse(key) == :error end)
   end
 
-  def get_supported_global_network_calling_codes() do
+  def get_supported_global_network_calling_codes do
     region_codes_as_strings = Enum.filter(Map.keys(region_code_to_metadata_map()), fn(key) -> Integer.parse(key) != :error end)
     Enum.map(region_codes_as_strings, fn(calling_code) ->
       {number, _} = Integer.parse(calling_code)
