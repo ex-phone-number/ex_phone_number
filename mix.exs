@@ -28,7 +28,7 @@ defmodule ExPhoneNumber.Mixfile do
      {:ex_doc, "~> 0.14", only: :dev, runtime: false},
      {:ex_spec, "~> 2.0", only: :test},
      {:excoveralls, "~> 0.6", only: :test},
-     {:credo, "~> 0.7", only: [:dev, :test]}]
+     {:credo, "~> 0.8", only: [:dev, :test]}]
   end
 
   defp description do
