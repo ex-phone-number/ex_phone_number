@@ -4,7 +4,7 @@ defmodule ExPhoneNumber.Normalization do
   alias ExPhoneNumber.Constants.Patterns
 
   def convert_alpha_chars_in_number(number) do
-    normalize_helper(number, Mappings.all_normalization_mappings, false)
+    normalize_helper(number, Mappings.all_normalization_mappings(), false)
   end
 
   def match_at_start?(string, pattern) when is_binary(string) and is_map(pattern) do
@@ -15,22 +15,24 @@ defmodule ExPhoneNumber.Normalization do
   end
 
   def normalize(number) do
-    if matches_entirely?(Patterns.valid_alpha_phone_pattern, number) do
-      normalize_helper(number, Mappings.all_normalization_mappings, true)
+    if matches_entirely?(Patterns.valid_alpha_phone_pattern(), number) do
+      normalize_helper(number, Mappings.all_normalization_mappings(), true)
     else
       normalize_digits_only(number)
     end
   end
 
   def normalize_digits_only(number) do
-    normalize_helper(number, Mappings.digit_mappings, true)
+    normalize_helper(number, Mappings.digit_mappings(), true)
   end
 
-  def normalize_helper(number, normalization_replacements, remove_non_matches) when is_binary(number) and is_map(normalization_replacements) and is_boolean(remove_non_matches) do
+  def normalize_helper(number, normalization_replacements, remove_non_matches)
+      when is_binary(number) and is_map(normalization_replacements) and is_boolean(remove_non_matches) do
     number
     |> String.codepoints()
-    |> Enum.reduce([], fn(char, list) ->
+    |> Enum.reduce([], fn char, list ->
       new_char = Map.get(normalization_replacements, String.upcase(char))
+
       if new_char do
         list ++ [new_char]
       else
@@ -49,7 +51,9 @@ defmodule ExPhoneNumber.Normalization do
       [{index, _length} | _tail] ->
         {head, _tail} = String.split_at(string, index)
         head
-      nil -> string
+
+      nil ->
+        string
     end
   end
 
@@ -58,7 +62,9 @@ defmodule ExPhoneNumber.Normalization do
       {pos, _length} ->
         {head, _tail} = String.split_at(string, pos)
         head
-      :nomatch -> string
+
+      :nomatch ->
+        string
     end
   end
 end
