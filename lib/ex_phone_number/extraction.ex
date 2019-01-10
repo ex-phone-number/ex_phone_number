@@ -72,7 +72,7 @@ defmodule ExPhoneNumber.Extraction do
           potential_national_number = if result, do: possible_national_number, else: potential_national_number
           if (not matches_entirely?(metadata.general.national_number_pattern, full_number) and
             matches_entirely?(metadata.general.national_number_pattern, potential_national_number))
-            or test_number_length_against_pattern(metadata.general.possible_number_pattern, full_number) == ValidationResults.too_long do
+            or test_number_length(full_number, metadata) == ValidationResults.too_long do
             phone_number = if keep_raw_input, do: %{phone_number | country_code: metadata.country_code, country_code_source: CountryCodeSource.from_number_without_plus_sign},
               else: phone_number
             {true, potential_national_number, %{phone_number | country_code: metadata.country_code}}

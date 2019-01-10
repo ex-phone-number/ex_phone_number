@@ -29,5 +29,7 @@ defmodule ExPhoneNumber.Constants.Values do
 
   def description_default_pattern(), do: "NA"
 
+  def description_default_length(), do: [-1]
+
   def default_extn_prefix(), do: " ext. "
 end

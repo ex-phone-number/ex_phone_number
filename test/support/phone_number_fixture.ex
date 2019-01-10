@@ -261,7 +261,7 @@ defmodule PhoneNumberFixture do
     }
   end
 
-  def gb_shard_cost() do
+  def gb_shared_cost() do
     %PhoneNumber{
       country_code: 44,
       national_number: 8431231234

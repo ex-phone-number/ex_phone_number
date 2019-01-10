@@ -46,16 +46,12 @@ defmodule ExPhoneNumber.MetadataTest do
         assert ~r/[13-689]\d{9}|2[0-35-9]\d{8}/ == state[:us_metadata].general.national_number_pattern
       end
 
-      it "returns valid general.possible_number_pattern", state do
-        assert ~r/\d{7}(?:\d{3})?/ == state[:us_metadata].general.possible_number_pattern
+      it "returns valid general.possible_lengths", state do
+        assert [7,10] == state[:us_metadata].general.possible_lengths
       end
 
-      it "returns valid fixed_line", state do
-        assert state[:us_metadata].general == state[:us_metadata].fixed_line
-      end
-
-      it "returns valid toll_free.possible_number_pattern", state do
-        assert ~r/\d{10}/ == state[:us_metadata].toll_free.possible_number_pattern
+      it "returns valid toll_free.possible_lengths", state do
+        assert [10] == state[:us_metadata].toll_free.possible_lengths
       end
 
       it "returns valid premium_rate.national_number_pattern", state do
@@ -66,8 +62,8 @@ defmodule ExPhoneNumber.MetadataTest do
         assert Values.description_default_pattern == state[:us_metadata].shared_cost.national_number_pattern
       end
 
-      it "returns valid shared_cost.possible_number_pattern", state do
-        assert Values.description_default_pattern == state[:us_metadata].shared_cost.possible_number_pattern
+      it "returns valid shared_cost.possible_lengths", state do
+        assert Values.description_default_length == state[:us_metadata].shared_cost.possible_lengths
       end
     end
 
@@ -113,19 +109,19 @@ defmodule ExPhoneNumber.MetadataTest do
       end
 
       it "returns valid fixed_line.national_number_pattern", state do
-        assert ~r/(?:[24-6]\d{2}|3[03-9]\d|[789](?:[1-9]\d|0[2-9]))\d{1,8}/ == state[:de_metadata].fixed_line.national_number_pattern
+        assert ~r/(?:[24-6]\d{2}|3[03-9]\d|[789](?:0[2-9]|[1-9]\d))\d{1,8}/ == state[:de_metadata].fixed_line.national_number_pattern
       end
 
-      it "returns valid fixed_line.possible_number_pattern", state do
-        assert ~r/\d{2,14}/ == state[:de_metadata].fixed_line.possible_number_pattern
+      it "returns valid fixed_line.possible_lengths", state do
+        assert Enum.to_list(2..11) == state[:de_metadata].fixed_line.possible_lengths
       end
 
       it "returns valid fixed_line.example_number", state do
         assert "30123456" == state[:de_metadata].fixed_line.example_number
       end
 
-      it "returns valid toll_free.possible_number_pattern", state do
-        assert ~r/\d{10}/ == state[:de_metadata].toll_free.possible_number_pattern
+      it "returns valid toll_free.possible_lengths", state do
+        assert [10] == state[:de_metadata].toll_free.possible_lengths
       end
 
       it "returns valid premium_rate.national_number_pattern", state do
@@ -167,11 +163,11 @@ defmodule ExPhoneNumber.MetadataTest do
       end
 
       it "returns valid number_format(3).pattern", state do
-        assert ~r/(9)(\d{4})(\d{2})(\d{4})/ == Enum.at(state[:ar_metadata].number_format, 3).pattern
+        assert ~r/(\d)(\d{4})(\d{2})(\d{4})/ == Enum.at(state[:ar_metadata].number_format, 3).pattern
       end
 
       it "returns valid intl_number_format(3).pattern", state do
-        assert ~r/(9)(\d{4})(\d{2})(\d{4})/ == Enum.at(state[:ar_metadata].intl_number_format, 3).pattern
+        assert ~r/(\d)(\d{4})(\d{2})(\d{4})/ == Enum.at(state[:ar_metadata].intl_number_format, 3).pattern
       end
 
       it "returns valid intl_number_format(3).format", state do
@@ -200,10 +196,6 @@ defmodule ExPhoneNumber.MetadataTest do
 
       it "returns valid number_format(0).pattern", state do
         assert ~r/(\d{4})(\d{4})/ == Enum.at(state[:un001_metadata].number_format, 0).pattern
-      end
-
-      it "returns valid general.example_number", state do
-        assert "12345678" == state[:un001_metadata].general.example_number
       end
 
       it "returns valid toll_free.example_number", state do
@@ -405,38 +397,6 @@ defmodule ExPhoneNumber.MetadataTest do
 
       it "return correct value for Universal Premium Rate" do
         assert RegionCodeFixture.un001 == get_region_code_for_number(PhoneNumberFixture.universal_premium_rate)
-      end
-    end
-  end
-
-  describe ".is_leading_zero_possible?/1" do
-    context "Italy" do
-      it "returns true" do
-        assert is_leading_zero_possible?(39)
-      end
-    end
-
-    context "USA" do
-      it "returns false" do
-        refute is_leading_zero_possible?(1)
-      end
-    end
-
-    context "International Toll Free" do
-      it "returns true" do
-        assert is_leading_zero_possible?(800)
-      end
-    end
-
-    context "Internatioal Premium Rate" do
-      it "returns false" do
-        refute is_leading_zero_possible?(979)
-      end
-    end
-
-    context "Invalid" do
-      it "returns false" do
-        refute is_leading_zero_possible?(888)
       end
     end
   end

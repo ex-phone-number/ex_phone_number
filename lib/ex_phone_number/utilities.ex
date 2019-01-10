@@ -7,11 +7,10 @@ defmodule ExPhoneNumber.Utilities do
   def is_nil_or_empty?(_), do: false
 
   def is_number_matching_description?(number, %PhoneNumberDescription{} = description) when is_binary(number) do
-    if description.possible_number_pattern == Values.description_default_pattern or description.national_number_pattern == Values.description_default_pattern do
+    if description.possible_lengths == Values.description_default_length or description.national_number_pattern == Values.description_default_pattern do
       false
     else
-      matches_entirely?(description.possible_number_pattern, number) and
-        matches_entirely?(description.national_number_pattern, number)
+      matches_entirely?(description.national_number_pattern, number)
     end
   end
 

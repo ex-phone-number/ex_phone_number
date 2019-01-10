@@ -79,12 +79,12 @@ defmodule ExPhoneNumber.Validation do
       region_code = Metadata.get_region_code_for_country_code(number.country_code)
       metadata = Metadata.get_for_region_code_or_calling_code(number.country_code, region_code)
       national_number = PhoneNumber.get_national_significant_number(number)
-      test_number_length_against_pattern(metadata.general.possible_number_pattern, national_number)
+      test_number_length(national_number, metadata)
     end
   end
 
   def is_shorter_than_possible_normal_number?(metadata, number) do
-    test_number_length_against_pattern(metadata.general.possible_number_pattern, number) == ValidationResults.too_short
+    test_number_length(number, metadata) == ValidationResults.too_short
   end
 
   def is_valid_number?(%PhoneNumber{} = number) do
@@ -112,13 +112,49 @@ defmodule ExPhoneNumber.Validation do
     end
   end
 
-  def test_number_length_against_pattern(pattern, number) do
-    if matches_entirely?(pattern, number) do
-      ValidationResults.is_possible
+  def test_number_length(number, metadata) do
+    test_number_length_for_type(number, metadata, PhoneNumberTypes.unknown)
+  end
+
+  def test_number_length_for_type(number, metadata, type) do
+    desc_for_type = get_number_description_by_type(metadata, type)
+    desc_general = get_number_description_by_type(metadata, :general)
+
+    possible_lengths = case Enum.count(desc_for_type.possible_lengths) do
+      0 -> desc_general.possible_lengths
+      _ -> desc_for_type.possible_lengths
+    end
+
+    possible_lengths =
+      if type == PhoneNumberTypes.fixed_line_or_mobile do
+        desc_mobile = get_number_description_by_type(metadata, :mobile)
+
+        possible_lengths ++
+        case Enum.count(desc_mobile.possible_lengths) do
+          0 -> desc_general.possible_lengths
+          _ -> desc_mobile.possible_lengths
+        end
+        |> Enum.sort
+        |> Enum.dedup
+      else
+        possible_lengths
+      end
+
+    min_length = List.first(possible_lengths)
+    max_length = List.last(possible_lengths)
+
+    if(min_length == -1) do
+      ValidationResults.invalid_length
     else
-      case Regex.run(pattern, number, return: :index) do
-        [{index, _match_length} | _tail] -> if index == 0, do: ValidationResults.too_long, else: ValidationResults.too_short
-        nil -> ValidationResults.too_short
+      case String.length(number) do
+        actual_length when (actual_length < min_length) -> ValidationResults.too_short
+        actual_length when (actual_length > max_length) -> ValidationResults.too_long
+        actual_length ->
+          if Enum.member?(possible_lengths, actual_length) do
+            ValidationResults.is_possible
+          else
+            ValidationResults.invalid_length
+          end
       end
     end
   end

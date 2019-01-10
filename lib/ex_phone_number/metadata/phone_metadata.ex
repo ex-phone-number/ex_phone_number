@@ -11,7 +11,6 @@ defmodule ExPhoneNumber.Metadata.PhoneMetadata do
             national_prefix_optional_when_formatting: nil, # string
             preferred_extn_prefix: nil,                    # string
             main_country_for_code: nil,                    # boolean
-            leading_zero_possible: nil,                    # boolean
             mobile_number_portable_region: nil,            # boolean
             carrier_code_formatting_rule: nil,             # string
             general: nil,                                  # %PhoneNumberDescription{}
@@ -43,40 +42,73 @@ defmodule ExPhoneNumber.Metadata.PhoneMetadata do
 
   def from_xpath_node(xpath_node) do
     kwlist =
-      xpath_node |> xmap(
-        id: ~x"./@id"s,
-        country_code: ~x"./@countryCode"i,
-        leading_digits: ~x"./@leadingDigits"o |> transform_by(&normalize_pattern/1),
-        international_prefix: ~x"./@internationalPrefix"s,
-        preferred_international_prefix: ~x"./@preferredInternationalPrefix"o |> transform_by(&normalize_string/1),
-        national_prefix: ~x"./@nationalPrefix"s,
-        national_prefix_for_parsing: ~x"./@nationalPrefixForParsing"o |> transform_by(&normalize_string/1),
-        national_prefix_transform_rule: ~x"./@nationalPrefixTransformRule"o |> transform_by(&normalize_rule/1),
-        national_prefix_formatting_rule: ~x"./@nationalPrefixFormattingRule"s,
-        preferred_extn_prefix: ~x"./@preferredExtnPrefix"o |> transform_by(&normalize_string/1),
-        main_country_for_code: ~x"./@mainCountryForCode"o |> transform_by(&normalize_boolean/1),
-        leading_zero_possible: ~x"./@leadingZeroPossible"o |> transform_by(&normalize_boolean/1),
-        mobile_number_portable_region: ~x"./@mobileNumberPortableRegion"o |> transform_by(&normalize_boolean/1),
-        carrier_code_formatting_rule: ~x"./@carrierCodeFormattingRule"s,
-        general: ~x"./generalDesc"e |> transform_by(&PhoneNumberDescription.from_xpath_node/1),
-        fixed_line: ~x"./fixedLine"e |> transform_by(&PhoneNumberDescription.from_xpath_node/1),
-        mobile: ~x"./mobile"e |> transform_by(&PhoneNumberDescription.from_xpath_node/1),
-        toll_free: ~x"./tollFree"o |> transform_by(&PhoneNumberDescription.from_xpath_node/1),
-        premium_rate: ~x"./premiumRate"e |> transform_by(&PhoneNumberDescription.from_xpath_node/1),
-        shared_cost: ~x"./sharedCost"e |> transform_by(&PhoneNumberDescription.from_xpath_node/1),
-        personal_number: ~x"./personalNumber"e |> transform_by(&PhoneNumberDescription.from_xpath_node/1),
-        voip: ~x"./voip"e |> transform_by(&PhoneNumberDescription.from_xpath_node/1),
-        pager: ~x"./pager"e |> transform_by(&PhoneNumberDescription.from_xpath_node/1),
-        uan: ~x"./uan"e |> transform_by(&PhoneNumberDescription.from_xpath_node/1),
-        voicemail: ~x"./voicemail"e |> transform_by(&PhoneNumberDescription.from_xpath_node/1),
-        no_international_dialing: ~x"./noInternationalDialling"e |> transform_by(&PhoneNumberDescription.from_xpath_node/1),
-        available_formats: [
-          ~x"./availableFormats/numberFormat"el,
-          number_format: ~x"."e |> transform_by(&NumberFormat.from_xpath_node/1)
-        ]
-      )
+      xpath_node
+      |> xmap(
+           id: ~x"./@id"s,
+           country_code: ~x"./@countryCode"i,
+           leading_digits: ~x"./@leadingDigits"o |> transform_by(&normalize_pattern/1),
+           international_prefix: ~x"./@internationalPrefix"s,
+           preferred_international_prefix: ~x"./@preferredInternationalPrefix"o |> transform_by(&normalize_string/1),
+           national_prefix: ~x"./@nationalPrefix"s,
+           national_prefix_for_parsing: ~x"./@nationalPrefixForParsing"o |> transform_by(&normalize_string/1),
+           national_prefix_transform_rule: ~x"./@nationalPrefixTransformRule"o |> transform_by(&normalize_rule/1),
+           national_prefix_formatting_rule: ~x"./@nationalPrefixFormattingRule"s,
+           preferred_extn_prefix: ~x"./@preferredExtnPrefix"o |> transform_by(&normalize_string/1),
+           main_country_for_code: ~x"./@mainCountryForCode"o |> transform_by(&normalize_boolean/1),
+           mobile_number_portable_region: ~x"./@mobileNumberPortableRegion"o |> transform_by(&normalize_boolean/1),
+           carrier_code_formatting_rule: ~x"./@carrierCodeFormattingRule"s,
+           general: ~x"./generalDesc"e |> transform_by(&PhoneNumberDescription.from_xpath_node/1),
+           fixed_line: ~x"./fixedLine"e |> transform_by(&PhoneNumberDescription.from_xpath_node/1),
+           mobile: ~x"./mobile"e |> transform_by(&PhoneNumberDescription.from_xpath_node/1),
+           toll_free: ~x"./tollFree"o |> transform_by(&PhoneNumberDescription.from_xpath_node/1),
+           premium_rate: ~x"./premiumRate"e |> transform_by(&PhoneNumberDescription.from_xpath_node/1),
+           shared_cost: ~x"./sharedCost"e |> transform_by(&PhoneNumberDescription.from_xpath_node/1),
+           personal_number: ~x"./personalNumber"e |> transform_by(&PhoneNumberDescription.from_xpath_node/1),
+           voip: ~x"./voip"e |> transform_by(&PhoneNumberDescription.from_xpath_node/1),
+           pager: ~x"./pager"e |> transform_by(&PhoneNumberDescription.from_xpath_node/1),
+           uan: ~x"./uan"e |> transform_by(&PhoneNumberDescription.from_xpath_node/1),
+           voicemail: ~x"./voicemail"e |> transform_by(&PhoneNumberDescription.from_xpath_node/1),
+           no_international_dialing: ~x"./noInternationalDialling"e |> transform_by(&PhoneNumberDescription.from_xpath_node/1),
+           available_formats: [
+             ~x"./availableFormats/numberFormat"el,
+             number_format: ~x"."e |> transform_by(&NumberFormat.from_xpath_node/1)
+           ]
+         )
+
+    kwlist = if(is_map(kwlist) && is_map(kwlist.general)) do
+      set_general_possible_lengths(kwlist)
+    else
+      kwlist
+    end
+
     struct(%PhoneMetadata{}, kwlist)
   end
+
+  defp set_general_possible_lengths(kwlist) do
+    possible_lengths =
+      [
+        Map.get(kwlist, :fixed_line) |> get_possible_length,
+        Map.get(kwlist, :mobile) |> get_possible_length,
+        Map.get(kwlist, :toll_free) |> get_possible_length,
+        Map.get(kwlist, :premium_rate) |> get_possible_length,
+        Map.get(kwlist, :shared_cost) |> get_possible_length,
+        Map.get(kwlist, :personal_number) |> get_possible_length,
+        Map.get(kwlist, :voip) |> get_possible_length,
+        Map.get(kwlist, :pager) |> get_possible_length,
+        Map.get(kwlist, :uan) |> get_possible_length,
+        Map.get(kwlist, :voicemail) |> get_possible_length,
+        Map.get(kwlist, :no_international_dialing) |> get_possible_length,
+      ]
+      |> Enum.reject(&is_nil/1)
+      |> List.flatten
+      |> Enum.sort
+      |> Enum.dedup
+
+    put_in(kwlist.general.possible_lengths, possible_lengths)
+  end
+
+  defp get_possible_length(nil), do: nil
+  defp get_possible_length(phone_number_description = %PhoneNumberDescription{}), do: phone_number_description.possible_lengths
 
   defp normalize_rule(nil), do: nil
   defp normalize_rule(char_list) when is_list(char_list), do: char_list |> List.to_string() |> normalize_rule()
@@ -131,15 +163,6 @@ defmodule ExPhoneNumber.Metadata.PhoneMetadata do
       @main_country_for_code_default
     else
       phone_metadata.main_country_for_code
-    end
-  end
-
-  @leading_zero_possible_default false
-  def get_leading_zero_possible_or_default(%PhoneMetadata{} = phone_metadata) do
-    if is_nil(phone_metadata.leading_zero_possible) do
-      @leading_zero_possible_default
-    else
-      phone_metadata.leading_zero_possible
     end
   end
 
@@ -321,11 +344,11 @@ defmodule ExPhoneNumber.Metadata.PhoneMetadata do
       else
         description.national_number_pattern
       end
-    possible_number_pattern =
-      if is_nil_or_empty?(description.possible_number_pattern) do
-        general.possible_number_pattern
+    possible_lengths =
+      if is_nil_or_empty?(description.possible_lengths) do
+        general.possible_lengths
       else
-        description.possible_number_pattern
+        description.possible_lengths
       end
     example_number =
       if is_nil_or_empty?(description.example_number) do
@@ -335,14 +358,14 @@ defmodule ExPhoneNumber.Metadata.PhoneMetadata do
       end
     %PhoneNumberDescription{
       national_number_pattern: national_number_pattern,
-      possible_number_pattern: possible_number_pattern,
+      possible_lengths: possible_lengths,
       example_number: example_number
     }
   end
 
   def process_other_phone_number_description(description, %PhoneMetadata{general: general}) do
     if is_nil(description) do
-      %PhoneNumberDescription{national_number_pattern: Values.description_default_pattern, possible_number_pattern: Values.description_default_pattern}
+      %PhoneNumberDescription{national_number_pattern: Values.description_default_pattern, possible_lengths: Values.description_default_length}
     else
       process_phone_number_description(description, general)
     end

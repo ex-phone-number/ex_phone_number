@@ -459,7 +459,7 @@ defmodule ExPhoneNumber.ValidationTest do
 
     context "test GB shared cost" do
       it "returns true" do
-        assert get_number_type(PhoneNumberFixture.gb_shard_cost) == PhoneNumberTypes.shared_cost
+        assert get_number_type(PhoneNumberFixture.gb_shared_cost) == PhoneNumberTypes.shared_cost
       end
     end
 
