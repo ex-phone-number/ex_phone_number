@@ -17,13 +17,11 @@ defmodule ExPhoneNumber.Metadata.PhoneNumberDescription do
            example_number: ~x"./exampleNumber/text()"o |> transform_by(&normalize_string/1)
          )
 
-    possible_lengths = case is_list(kwlist.local_possible_lengths) do
-      true ->
-        ( kwlist.national_possible_lengths ++ kwlist.local_possible_lengths )
-        |> Enum.sort
-        |> Enum.dedup
-      false -> kwlist.national_possible_lengths
-    end
+    possible_lengths =
+      (kwlist.local_possible_lengths || [])
+      |> Enum.concat(kwlist.national_possible_lengths || [])
+      |> Enum.sort
+      |> Enum.dedup()
 
     struct(%PhoneNumberDescription{}, %{
       national_number_pattern: kwlist.national_number_pattern,
@@ -33,16 +31,14 @@ defmodule ExPhoneNumber.Metadata.PhoneNumberDescription do
   end
 
   defp clean_list(char_list) do
-    List.to_string(char_list)
+    char_list
+    |> List.to_string
     |> String.split(["\n", " "], trim: true)
-    |> List.to_string()
+    |> List.to_string
   end
 
   defp normalize_string(nil), do: nil
-  defp normalize_string(char_list) when is_list(char_list) do
-    char_list
-    |> clean_list
-  end
+  defp normalize_string(char_list) when is_list(char_list), do: clean_list(char_list)
 
   defp normalize_pattern(nil), do: nil
   defp normalize_pattern(char_list) when is_list(char_list) do

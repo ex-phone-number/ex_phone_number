@@ -1,7 +1,7 @@
 defmodule ExPhoneNumber.Mixfile do
   use Mix.Project
 
-  @version "0.1.2"
+  @version "0.1.1"
 
   def project do
     [app: :ex_phone_number,

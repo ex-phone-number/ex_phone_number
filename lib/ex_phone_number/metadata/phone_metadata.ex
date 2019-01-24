@@ -76,7 +76,7 @@ defmodule ExPhoneNumber.Metadata.PhoneMetadata do
          )
 
     kwlist = if(is_map(kwlist) && is_map(kwlist.general)) do
-      set_general_possible_lengths(kwlist)
+      put_in(kwlist.general.possible_lengths, general_possible_lengths(kwlist))
     else
       kwlist
     end
@@ -84,31 +84,32 @@ defmodule ExPhoneNumber.Metadata.PhoneMetadata do
     struct(%PhoneMetadata{}, kwlist)
   end
 
-  defp set_general_possible_lengths(kwlist) do
-    possible_lengths =
+  defp general_possible_lengths(kwlist) do
       [
-        Map.get(kwlist, :fixed_line) |> get_possible_length,
-        Map.get(kwlist, :mobile) |> get_possible_length,
-        Map.get(kwlist, :toll_free) |> get_possible_length,
-        Map.get(kwlist, :premium_rate) |> get_possible_length,
-        Map.get(kwlist, :shared_cost) |> get_possible_length,
-        Map.get(kwlist, :personal_number) |> get_possible_length,
-        Map.get(kwlist, :voip) |> get_possible_length,
-        Map.get(kwlist, :pager) |> get_possible_length,
-        Map.get(kwlist, :uan) |> get_possible_length,
-        Map.get(kwlist, :voicemail) |> get_possible_length,
-        Map.get(kwlist, :no_international_dialing) |> get_possible_length,
+        :fixed_line,
+        :mobile,
+        :toll_free,
+        :premium_rate,
+        :shared_cost,
+        :personal_number,
+        :voip,
+        :pager,
+        :uan,
+        :voicemail,
+        :no_international_dialing,
       ]
+      |> Enum.flat_map(fn type ->
+        kwlist
+        |> Map.get(type)
+        |> get_possible_length()
+      end)
       |> Enum.reject(&is_nil/1)
-      |> List.flatten
       |> Enum.sort
       |> Enum.dedup
-
-    put_in(kwlist.general.possible_lengths, possible_lengths)
   end
 
-  defp get_possible_length(nil), do: nil
-  defp get_possible_length(phone_number_description = %PhoneNumberDescription{}), do: phone_number_description.possible_lengths
+  defp get_possible_length(nil), do: []
+  defp get_possible_length(phone_number_description = %PhoneNumberDescription{}), do: phone_number_description.possible_lengths || []
 
   defp normalize_rule(nil), do: nil
   defp normalize_rule(char_list) when is_list(char_list), do: char_list |> List.to_string() |> normalize_rule()

@@ -9,23 +9,6 @@ defmodule ExPhoneNumber.Validation do
   alias ExPhoneNumber.Metadata.PhoneMetadata
   alias ExPhoneNumber.Model.PhoneNumber
 
-  def get_number_description_by_type(%PhoneMetadata{} = metadata, type) do
-    cond do
-      type == PhoneNumberTypes.premium_rate -> metadata.premium_rate
-      type == PhoneNumberTypes.toll_free -> metadata.toll_free
-      type == PhoneNumberTypes.mobile -> metadata.mobile
-      type == PhoneNumberTypes.fixed_line -> metadata.fixed_line
-      type == PhoneNumberTypes.fixed_line_or_mobile -> metadata.fixed_line
-      type == PhoneNumberTypes.shared_cost -> metadata.shared_cost
-      type == PhoneNumberTypes.voip -> metadata.voip
-      type == PhoneNumberTypes.personal_number -> metadata.personal_number
-      type == PhoneNumberTypes.pager -> metadata.pager
-      type == PhoneNumberTypes.uan -> metadata.uan
-      type == PhoneNumberTypes.voicemail -> metadata.voicemail
-      true -> metadata.general
-    end
-  end
-
   def get_number_type(%PhoneNumber{} = phone_number) do
     region_code = Metadata.get_region_code_for_number(phone_number)
     metadata = Metadata.get_for_region_code_or_calling_code(phone_number.country_code, region_code)
@@ -116,28 +99,23 @@ defmodule ExPhoneNumber.Validation do
     test_number_length_for_type(number, metadata, PhoneNumberTypes.unknown)
   end
 
-  def test_number_length_for_type(number, metadata, type) do
-    desc_for_type = get_number_description_by_type(metadata, type)
-    desc_general = get_number_description_by_type(metadata, :general)
-
-    possible_lengths = case Enum.count(desc_for_type.possible_lengths) do
-      0 -> desc_general.possible_lengths
-      _ -> desc_for_type.possible_lengths
+  def validate_length(number_to_parse) do
+    if String.length(number_to_parse) > Values.max_input_string_length do
+      {:error, ErrorMessages.too_long()}
+    else
+      {:ok, number_to_parse}
     end
+  end
 
+  defp test_number_length_for_type(number, metadata, type) do
     possible_lengths =
-      if type == PhoneNumberTypes.fixed_line_or_mobile do
-        desc_mobile = get_number_description_by_type(metadata, :mobile)
-
-        possible_lengths ++
-        case Enum.count(desc_mobile.possible_lengths) do
-          0 -> desc_general.possible_lengths
-          _ -> desc_mobile.possible_lengths
-        end
+      if type == PhoneNumberTypes.fixed_line_or_mobile() do
+        possible_lengths_by_type(metadata, PhoneNumberTypes.fixed_line())
+        ++ possible_lengths_by_type(metadata, PhoneNumberTypes.mobile())
         |> Enum.sort
         |> Enum.dedup
       else
-        possible_lengths
+        possible_lengths_by_type(metadata, type)
       end
 
     min_length = List.first(possible_lengths)
@@ -159,11 +137,30 @@ defmodule ExPhoneNumber.Validation do
     end
   end
 
-  def validate_length(number_to_parse) do
-    if String.length(number_to_parse) > Values.max_input_string_length do
-      {:error, ErrorMessages.too_long()}
+  defp possible_lengths_by_type(metadata, type) do
+    desc_for_type = get_number_description_by_type(metadata, type)
+    desc_general = get_number_description_by_type(metadata, :general)
+
+    if Enum.empty?(desc_for_type.possible_lengths) do
+      desc_general.possible_lengths
     else
-      {:ok, number_to_parse}
+      desc_for_type.possible_lengths
+    end
+  end
+
+  defp get_number_description_by_type(%PhoneMetadata{} = metadata, type) do
+    cond do
+      type == PhoneNumberTypes.premium_rate -> metadata.premium_rate
+      type == PhoneNumberTypes.toll_free -> metadata.toll_free
+      type == PhoneNumberTypes.mobile -> metadata.mobile
+      type == PhoneNumberTypes.fixed_line -> metadata.fixed_line
+      type == PhoneNumberTypes.shared_cost -> metadata.shared_cost
+      type == PhoneNumberTypes.voip -> metadata.voip
+      type == PhoneNumberTypes.personal_number -> metadata.personal_number
+      type == PhoneNumberTypes.pager -> metadata.pager
+      type == PhoneNumberTypes.uan -> metadata.uan
+      type == PhoneNumberTypes.voicemail -> metadata.voicemail
+      true -> metadata.general
     end
   end
 end
