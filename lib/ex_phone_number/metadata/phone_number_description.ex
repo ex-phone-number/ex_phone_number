@@ -9,13 +9,13 @@ defmodule ExPhoneNumber.Metadata.PhoneNumberDescription do
   def from_xpath_node(nil), do: nil
   def from_xpath_node(xpath_node) do
     kwlist =
-      xpath_node
-      |> xmap(
-           national_number_pattern: ~x"./nationalNumberPattern/text()"o |> transform_by(&normalize_pattern/1),
-           national_possible_lengths: ~x"./possibleLengths/@national"o |> transform_by(&normalize_range/1),
-           local_possible_lengths: ~x"./possibleLengths/@localOnly"o |> transform_by(&normalize_range/1),
-           example_number: ~x"./exampleNumber/text()"o |> transform_by(&normalize_string/1)
-         )
+      xmap(
+        xpath_node,
+        national_number_pattern: ~x"./nationalNumberPattern/text()"o |> transform_by(&normalize_pattern/1),
+        national_possible_lengths: ~x"./possibleLengths/@national"o |> transform_by(&normalize_range/1),
+        local_possible_lengths: ~x"./possibleLengths/@localOnly"o |> transform_by(&normalize_range/1),
+        example_number: ~x"./exampleNumber/text()"o |> transform_by(&normalize_string/1)
+      )
 
     possible_lengths =
       (kwlist.local_possible_lengths || [])
@@ -30,27 +30,28 @@ defmodule ExPhoneNumber.Metadata.PhoneNumberDescription do
     })
   end
 
-  defp clean_list(char_list) do
-    char_list
-    |> List.to_string
+  defp clean_string(string) when is_binary(string) do
+    string
     |> String.split(["\n", " "], trim: true)
     |> List.to_string
   end
 
   defp normalize_string(nil), do: nil
-  defp normalize_string(char_list) when is_list(char_list), do: clean_list(char_list)
+  defp normalize_string(char_list) when is_list(char_list), do: List.to_string(char_list) |> clean_string
 
   defp normalize_pattern(nil), do: nil
   defp normalize_pattern(char_list) when is_list(char_list) do
     char_list
-    |> clean_list
+    |> List.to_string
+    |> clean_string
     |> Regex.compile!()
   end
 
   defp normalize_range(nil), do: nil
   defp normalize_range(char_list) when is_list(char_list) do
     char_list
-    |> clean_list
+    |> List.to_string
+    |> clean_string
     |> String.split(",")
     |> Enum.map(&range_to_list/1)
     |> List.flatten
