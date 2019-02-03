@@ -105,7 +105,7 @@ defmodule ExPhoneNumber.Metadata.PhoneMetadata do
       end)
       |> Enum.reject(&is_nil/1)
       |> Enum.sort
-      |> Enum.dedup
+      |> Enum.uniq
   end
 
   defp get_possible_length(nil), do: []

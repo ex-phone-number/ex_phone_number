@@ -112,14 +112,13 @@ defmodule ExPhoneNumber.Validation do
       if type == PhoneNumberTypes.fixed_line_or_mobile() do
         possible_lengths_by_type(metadata, PhoneNumberTypes.fixed_line())
         ++ possible_lengths_by_type(metadata, PhoneNumberTypes.mobile())
-        |> Enum.sort
-        |> Enum.dedup
+        |> Enum.uniq
       else
         possible_lengths_by_type(metadata, type)
       end
 
-    min_length = List.first(possible_lengths)
-    max_length = List.last(possible_lengths)
+    min_length = Enum.min(possible_lengths)
+    max_length = Enum.max(possible_lengths)
 
     if(min_length == -1) do
       ValidationResults.invalid_length

@@ -21,7 +21,7 @@ defmodule ExPhoneNumber.Metadata.PhoneNumberDescription do
       (kwlist.local_possible_lengths || [])
       |> Enum.concat(kwlist.national_possible_lengths || [])
       |> Enum.sort
-      |> Enum.dedup()
+      |> Enum.uniq
 
     struct(%PhoneNumberDescription{}, %{
       national_number_pattern: kwlist.national_number_pattern,
@@ -56,7 +56,7 @@ defmodule ExPhoneNumber.Metadata.PhoneNumberDescription do
     |> Enum.map(&range_to_list/1)
     |> List.flatten
     |> Enum.sort
-    |> Enum.dedup
+    |> Enum.uniq
   end
 
   defp range_to_list(range_or_number) do
