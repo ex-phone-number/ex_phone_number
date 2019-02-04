@@ -11,11 +11,11 @@ defmodule ExPhoneNumber.MetadataTest do
   describe ".get_for_region_code/1" do
     context "US region_code" do
       setup do
-        {:ok, us_metadata: get_for_region_code(RegionCodeFixture.us)}
+        {:ok, us_metadata: get_for_region_code(RegionCodeFixture.us())}
       end
 
       it "returns valid id", state do
-        assert RegionCodeFixture.us == state[:us_metadata].id
+        assert RegionCodeFixture.us() == state[:us_metadata].id
       end
 
       it "returns valid country_code", state do
@@ -43,11 +43,12 @@ defmodule ExPhoneNumber.MetadataTest do
       end
 
       it "returns valid general.national_number_pattern", state do
-        assert ~r/[13-689]\d{9}|2[0-35-9]\d{8}/ == state[:us_metadata].general.national_number_pattern
+        assert ~r/[13-689]\d{9}|2[0-35-9]\d{8}/ ==
+                 state[:us_metadata].general.national_number_pattern
       end
 
       it "returns valid general.possible_lengths", state do
-        assert [7,10] == state[:us_metadata].general.possible_lengths
+        assert [7, 10] == state[:us_metadata].general.possible_lengths
       end
 
       it "returns valid toll_free.possible_lengths", state do
@@ -59,21 +60,23 @@ defmodule ExPhoneNumber.MetadataTest do
       end
 
       it "returns valid shared_cost.national_number_pattern", state do
-        assert Values.description_default_pattern == state[:us_metadata].shared_cost.national_number_pattern
+        assert Values.description_default_pattern() ==
+                 state[:us_metadata].shared_cost.national_number_pattern
       end
 
       it "returns valid shared_cost.possible_lengths", state do
-        assert Values.description_default_length == state[:us_metadata].shared_cost.possible_lengths
+        assert Values.description_default_length() ==
+                 state[:us_metadata].shared_cost.possible_lengths
       end
     end
 
     context "DE region_code" do
       setup do
-        {:ok, de_metadata: get_for_region_code(RegionCodeFixture.de)}
+        {:ok, de_metadata: get_for_region_code(RegionCodeFixture.de())}
       end
 
       it "returns valid id", state do
-        assert RegionCodeFixture.de  == state[:de_metadata].id
+        assert RegionCodeFixture.de() == state[:de_metadata].id
       end
 
       it "returns valid country_code", state do
@@ -97,19 +100,22 @@ defmodule ExPhoneNumber.MetadataTest do
       end
 
       it "returns valid number_format(5).leading_digits_pattern(0)", state do
-        assert ~r/900/ == Enum.at(Enum.at(state[:de_metadata].number_format, 5).leading_digits_pattern, 0)
+        assert ~r/900/ ==
+                 Enum.at(Enum.at(state[:de_metadata].number_format, 5).leading_digits_pattern, 0)
       end
 
       it "returns valid number_format(5).pattern", state do
-        assert ~r/(\d{3})(\d{3,4})(\d{4})/ == Enum.at(state[:de_metadata].number_format, 5).pattern
+        assert ~r/(\d{3})(\d{3,4})(\d{4})/ ==
+                 Enum.at(state[:de_metadata].number_format, 5).pattern
       end
 
       it "returns valid number_format(5).format", state do
-        assert "\\g{1} \\g{2} \\g{3}" ==  Enum.at(state[:de_metadata].number_format, 5).format
+        assert "\\g{1} \\g{2} \\g{3}" == Enum.at(state[:de_metadata].number_format, 5).format
       end
 
       it "returns valid fixed_line.national_number_pattern", state do
-        assert ~r/(?:[24-6]\d{2}|3[03-9]\d|[789](?:0[2-9]|[1-9]\d))\d{1,8}/ == state[:de_metadata].fixed_line.national_number_pattern
+        assert ~r/(?:[24-6]\d{2}|3[03-9]\d|[789](?:0[2-9]|[1-9]\d))\d{1,8}/ ==
+                 state[:de_metadata].fixed_line.national_number_pattern
       end
 
       it "returns valid fixed_line.possible_lengths", state do
@@ -125,17 +131,18 @@ defmodule ExPhoneNumber.MetadataTest do
       end
 
       it "returns valid premium_rate.national_number_pattern", state do
-        assert ~r/900([135]\d{6}|9\d{7})/ == state[:de_metadata].premium_rate.national_number_pattern
+        assert ~r/900([135]\d{6}|9\d{7})/ ==
+                 state[:de_metadata].premium_rate.national_number_pattern
       end
     end
 
     context "AR region_code" do
       setup do
-        {:ok, ar_metadata: get_for_region_code(RegionCodeFixture.ar)}
+        {:ok, ar_metadata: get_for_region_code(RegionCodeFixture.ar())}
       end
 
       it "returns valid id", state do
-        assert RegionCodeFixture.ar == state[:ar_metadata].id
+        assert RegionCodeFixture.ar() == state[:ar_metadata].id
       end
 
       it "returns valid country_code", state do
@@ -163,15 +170,18 @@ defmodule ExPhoneNumber.MetadataTest do
       end
 
       it "returns valid number_format(3).pattern", state do
-        assert ~r/(\d)(\d{4})(\d{2})(\d{4})/ == Enum.at(state[:ar_metadata].number_format, 3).pattern
+        assert ~r/(\d)(\d{4})(\d{2})(\d{4})/ ==
+                 Enum.at(state[:ar_metadata].number_format, 3).pattern
       end
 
       it "returns valid intl_number_format(3).pattern", state do
-        assert ~r/(\d)(\d{4})(\d{2})(\d{4})/ == Enum.at(state[:ar_metadata].intl_number_format, 3).pattern
+        assert ~r/(\d)(\d{4})(\d{2})(\d{4})/ ==
+                 Enum.at(state[:ar_metadata].intl_number_format, 3).pattern
       end
 
       it "returns valid intl_number_format(3).format", state do
-        assert "\\g{1} \\g{2} \\g{3} \\g{4}" == Enum.at(state[:ar_metadata].intl_number_format, 3).format
+        assert "\\g{1} \\g{2} \\g{3} \\g{4}" ==
+                 Enum.at(state[:ar_metadata].intl_number_format, 3).format
       end
     end
   end
@@ -183,7 +193,7 @@ defmodule ExPhoneNumber.MetadataTest do
       end
 
       it "returns valid id", state do
-        assert RegionCodeFixture.un001 == state[:un001_metadata].id
+        assert RegionCodeFixture.un001() == state[:un001_metadata].id
       end
 
       it "returns valid country_code", state do
@@ -215,17 +225,17 @@ defmodule ExPhoneNumber.MetadataTest do
   describe ".is_supported_region?/1" do
     context "US" do
       it "returns true" do
-        assert is_supported_region?(RegionCodeFixture.us)
+        assert is_supported_region?(RegionCodeFixture.us())
       end
     end
 
     context "001" do
       it "returns false" do
-        refute is_supported_region?(RegionCodeFixture.un001)
+        refute is_supported_region?(RegionCodeFixture.un001())
       end
 
       it "returns false for calling code" do
-        refute Enum.any?(get_supported_regions(), fn(region_code) -> region_code == "800" end)
+        refute Enum.any?(get_supported_regions(), fn region_code -> region_code == "800" end)
       end
     end
   end
@@ -239,7 +249,9 @@ defmodule ExPhoneNumber.MetadataTest do
 
     context "test all the calling codes" do
       it "contains all the calling codes" do
-        assert Enum.all?(get_supported_global_network_calling_codes(), fn(calling_code) -> get_region_code_for_country_code(calling_code) == RegionCodeFixture.un001 end)
+        assert Enum.all?(get_supported_global_network_calling_codes(), fn calling_code ->
+                 get_region_code_for_country_code(calling_code) == RegionCodeFixture.un001()
+               end)
       end
     end
   end
@@ -261,31 +273,31 @@ defmodule ExPhoneNumber.MetadataTest do
   describe ".get_region_code_for_country_code/1" do
     context "1" do
       it "returns correct value" do
-        assert RegionCodeFixture.us == get_region_code_for_country_code(1)
+        assert RegionCodeFixture.us() == get_region_code_for_country_code(1)
       end
     end
 
     context "44" do
       it "returns correct value" do
-        assert RegionCodeFixture.gb == get_region_code_for_country_code(44)
+        assert RegionCodeFixture.gb() == get_region_code_for_country_code(44)
       end
     end
 
     context "49" do
       it "returns correct value" do
-        assert RegionCodeFixture.de == get_region_code_for_country_code(49)
+        assert RegionCodeFixture.de() == get_region_code_for_country_code(49)
       end
     end
 
     context "800" do
       it "returns correct value" do
-        assert RegionCodeFixture.un001 == get_region_code_for_country_code(800)
+        assert RegionCodeFixture.un001() == get_region_code_for_country_code(800)
       end
     end
 
     context "979" do
       it "returns correct value" do
-        assert RegionCodeFixture.un001 == get_region_code_for_country_code(979)
+        assert RegionCodeFixture.un001() == get_region_code_for_country_code(979)
       end
     end
   end
@@ -294,29 +306,29 @@ defmodule ExPhoneNumber.MetadataTest do
     context "1" do
       it "should contains US BS" do
         list = get_region_codes_for_country_code(1)
-        assert Enum.any?(list, &(&1 == RegionCodeFixture.us))
-        assert Enum.any?(list, &(&1 == RegionCodeFixture.bs))
+        assert Enum.any?(list, &(&1 == RegionCodeFixture.us()))
+        assert Enum.any?(list, &(&1 == RegionCodeFixture.bs()))
       end
     end
 
     context "44" do
       it "should contains GB" do
         list = get_region_codes_for_country_code(44)
-        assert Enum.any?(list, &(&1 == RegionCodeFixture.gb))
+        assert Enum.any?(list, &(&1 == RegionCodeFixture.gb()))
       end
     end
 
     context "49" do
       it "should contains DE" do
         list = get_region_codes_for_country_code(49)
-        assert Enum.any?(list, &(&1 == RegionCodeFixture.de))
+        assert Enum.any?(list, &(&1 == RegionCodeFixture.de()))
       end
     end
 
     context "800" do
       it "should contains 001" do
         list = get_region_codes_for_country_code(800)
-        assert Enum.any?(list, &(&1 == RegionCodeFixture.un001))
+        assert Enum.any?(list, &(&1 == RegionCodeFixture.un001()))
       end
     end
 
@@ -330,37 +342,37 @@ defmodule ExPhoneNumber.MetadataTest do
   describe ".get_country_code_for_region_code/1" do
     context "US" do
       it "returns correct value" do
-        assert 1 == get_country_code_for_region_code RegionCodeFixture.us
+        assert 1 == get_country_code_for_region_code(RegionCodeFixture.us())
       end
     end
 
     context "NZ" do
       it "returns correct value" do
-        assert 64 == get_country_code_for_region_code RegionCodeFixture.nz
+        assert 64 == get_country_code_for_region_code(RegionCodeFixture.nz())
       end
     end
 
     context "nil" do
       it "returns correct value" do
-        assert 0 == get_country_code_for_region_code nil
+        assert 0 == get_country_code_for_region_code(nil)
       end
     end
 
     context "ZZ" do
       it "returns correct value" do
-        assert 0 == get_country_code_for_region_code RegionCodeFixture.zz
+        assert 0 == get_country_code_for_region_code(RegionCodeFixture.zz())
       end
     end
 
     context "001" do
       it "returns correct value" do
-        assert 0 == get_country_code_for_region_code RegionCodeFixture.un001
+        assert 0 == get_country_code_for_region_code(RegionCodeFixture.un001())
       end
     end
 
     context "CS" do
       it "returns correct value" do
-        assert 0 == get_country_code_for_region_code "CS"
+        assert 0 == get_country_code_for_region_code("CS")
       end
     end
   end
@@ -368,35 +380,41 @@ defmodule ExPhoneNumber.MetadataTest do
   describe ".get_region_code_for_number/1" do
     context "BS" do
       it "return correct value" do
-        assert RegionCodeFixture.bs == get_region_code_for_number(PhoneNumberFixture.bs_number)
+        assert RegionCodeFixture.bs() ==
+                 get_region_code_for_number(PhoneNumberFixture.bs_number())
       end
     end
 
     context "YT" do
       it "return correct value" do
-        assert RegionCodeFixture.yt == get_region_code_for_number(PhoneNumberFixture.re_number_invalid)
+        assert RegionCodeFixture.yt() ==
+                 get_region_code_for_number(PhoneNumberFixture.re_number_invalid())
       end
     end
 
     context "US" do
       it "return correct value" do
-        assert RegionCodeFixture.us == get_region_code_for_number(PhoneNumberFixture.us_number)
+        assert RegionCodeFixture.us() ==
+                 get_region_code_for_number(PhoneNumberFixture.us_number())
       end
     end
 
     context "GB" do
       it "return correct value" do
-        assert RegionCodeFixture.gb == get_region_code_for_number(PhoneNumberFixture.gb_mobile)
+        assert RegionCodeFixture.gb() ==
+                 get_region_code_for_number(PhoneNumberFixture.gb_mobile())
       end
     end
 
     context "001" do
       it "return correct value for International Toll Free" do
-        assert RegionCodeFixture.un001 == get_region_code_for_number(PhoneNumberFixture.international_toll_free)
+        assert RegionCodeFixture.un001() ==
+                 get_region_code_for_number(PhoneNumberFixture.international_toll_free())
       end
 
       it "return correct value for Universal Premium Rate" do
-        assert RegionCodeFixture.un001 == get_region_code_for_number(PhoneNumberFixture.universal_premium_rate)
+        assert RegionCodeFixture.un001() ==
+                 get_region_code_for_number(PhoneNumberFixture.universal_premium_rate())
       end
     end
   end
@@ -404,31 +422,31 @@ defmodule ExPhoneNumber.MetadataTest do
   describe ".get_ndd_prefix_for_region_code/2" do
     context "US, false" do
       it "returns the correct value" do
-        assert "1" == get_ndd_prefix_for_region_code(RegionCodeFixture.us, false)
+        assert "1" == get_ndd_prefix_for_region_code(RegionCodeFixture.us(), false)
       end
     end
 
     context "BS, false" do
       it "returns the correct value" do
-        assert "1" == get_ndd_prefix_for_region_code(RegionCodeFixture.bs, false)
+        assert "1" == get_ndd_prefix_for_region_code(RegionCodeFixture.bs(), false)
       end
     end
 
     context "NZ, false" do
       it "returns the correct value" do
-        assert "0" == get_ndd_prefix_for_region_code(RegionCodeFixture.nz, false)
+        assert "0" == get_ndd_prefix_for_region_code(RegionCodeFixture.nz(), false)
       end
     end
 
     context "A0, false" do
       it "returns the correct value" do
-        assert "0~0" == get_ndd_prefix_for_region_code(RegionCodeFixture.ao, false)
+        assert "0~0" == get_ndd_prefix_for_region_code(RegionCodeFixture.ao(), false)
       end
     end
 
     context "A0, true" do
       it "returns the correct value" do
-        assert "00" == get_ndd_prefix_for_region_code(RegionCodeFixture.ao, true)
+        assert "00" == get_ndd_prefix_for_region_code(RegionCodeFixture.ao(), true)
       end
     end
 
@@ -440,19 +458,19 @@ defmodule ExPhoneNumber.MetadataTest do
 
     context "ZZ, false" do
       it "returns the correct value" do
-        refute get_ndd_prefix_for_region_code(RegionCodeFixture.zz, false)
+        refute get_ndd_prefix_for_region_code(RegionCodeFixture.zz(), false)
       end
     end
 
     context "UN001, false" do
       it "returns the correct value" do
-        refute get_ndd_prefix_for_region_code(RegionCodeFixture.un001, false)
+        refute get_ndd_prefix_for_region_code(RegionCodeFixture.un001(), false)
       end
     end
 
     context "CS, false" do
       it "returns the correct value" do
-        refute get_ndd_prefix_for_region_code(RegionCodeFixture.cs, false)
+        refute get_ndd_prefix_for_region_code(RegionCodeFixture.cs(), false)
       end
     end
   end
@@ -460,31 +478,31 @@ defmodule ExPhoneNumber.MetadataTest do
   describe ".is_nanpa_country?/1" do
     context "US" do
       it "returns true" do
-        assert is_nanpa_country?(RegionCodeFixture.us)
+        assert is_nanpa_country?(RegionCodeFixture.us())
       end
     end
 
     context "BS" do
       it "returns true" do
-        assert is_nanpa_country?(RegionCodeFixture.bs)
+        assert is_nanpa_country?(RegionCodeFixture.bs())
       end
     end
 
     context "DE" do
       it "returns false" do
-        refute is_nanpa_country?(RegionCodeFixture.de)
+        refute is_nanpa_country?(RegionCodeFixture.de())
       end
     end
 
     context "ZZ" do
       it "returns false" do
-        refute is_nanpa_country?(RegionCodeFixture.zz)
+        refute is_nanpa_country?(RegionCodeFixture.zz())
       end
     end
 
     context "UN001" do
       it "returns false" do
-        refute is_nanpa_country?(RegionCodeFixture.un001)
+        refute is_nanpa_country?(RegionCodeFixture.un001())
       end
     end
 

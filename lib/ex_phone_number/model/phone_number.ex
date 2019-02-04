@@ -1,12 +1,20 @@
 defmodule ExPhoneNumber.Model.PhoneNumber do
-  defstruct country_code: nil,                   # number
-            national_number: nil,                # number
-            extension: nil,                      # string
-            italian_leading_zero: nil,           # boolean
-            number_of_leading_zeros: nil,        # number
-            raw_input: nil,                      # string
-            country_code_source: nil,            # atom
-            preferred_domestic_carrier_code: nil # string
+  # number
+  defstruct country_code: nil,
+            # number
+            national_number: nil,
+            # string
+            extension: nil,
+            # boolean
+            italian_leading_zero: nil,
+            # number
+            number_of_leading_zeros: nil,
+            # string
+            raw_input: nil,
+            # atom
+            country_code_source: nil,
+            # string
+            preferred_domestic_carrier_code: nil
 
   alias ExPhoneNumber.Model.PhoneNumber
   alias ExPhoneNumber.Constants.CountryCodeSource
@@ -62,11 +70,12 @@ defmodule ExPhoneNumber.Model.PhoneNumber do
   end
 
   def get_national_significant_number(phone_number = %PhoneNumber{}) do
-    national_number = if has_national_number?(phone_number) do
-      phone_number.national_number
-    else
-      ""
-    end
+    national_number =
+      if has_national_number?(phone_number) do
+        phone_number.national_number
+      else
+        ""
+      end
 
     if has_italian_leading_zero?(phone_number) and phone_number.italian_leading_zero do
       upper_bound = get_number_of_leading_zeros_or_default(phone_number)
@@ -80,9 +89,20 @@ defmodule ExPhoneNumber.Model.PhoneNumber do
   def set_italian_leading_zeros(national_number, %PhoneNumber{} = phone_number) do
     if String.length(national_number) > 1 and String.at(national_number, 0) == "0" do
       phone_number = %{phone_number | italian_leading_zero: true}
-      number_of_leading_zeros = Enum.reduce_while(String.graphemes(national_number), 0, fn ele, acc -> if ele == "0", do: {:cont, acc + 1}, else: {:halt, acc} end)
-      number_of_leading_zeros = if String.ends_with?(national_number, "0"), do: number_of_leading_zeros - 1, else: number_of_leading_zeros
-      if number_of_leading_zeros > 1, do: %{phone_number | number_of_leading_zeros: number_of_leading_zeros}, else: phone_number
+
+      number_of_leading_zeros =
+        Enum.reduce_while(String.graphemes(national_number), 0, fn ele, acc ->
+          if ele == "0", do: {:cont, acc + 1}, else: {:halt, acc}
+        end)
+
+      number_of_leading_zeros =
+        if String.ends_with?(national_number, "0"),
+          do: number_of_leading_zeros - 1,
+          else: number_of_leading_zeros
+
+      if number_of_leading_zeros > 1,
+        do: %{phone_number | number_of_leading_zeros: number_of_leading_zeros},
+        else: phone_number
     else
       phone_number
     end

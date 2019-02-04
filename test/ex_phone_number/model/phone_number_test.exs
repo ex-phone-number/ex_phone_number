@@ -29,6 +29,5 @@ defmodule ExPhoneNumber.Model.PhoneNumberTest do
         assert "12345678" == get_national_significant_number(international_toll_free())
       end
     end
-
   end
 end
