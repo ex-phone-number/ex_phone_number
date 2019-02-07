@@ -47,6 +47,6 @@ iex> ExPhoneNumber.format(phone_number, :rfc3966)
 
 ## Copyright and License
 
-Copyright (c) 2016-2018 NLCollect B.V.
+Copyright (c) 2016-2019 NLCollect B.V.
 
 The source code is licensed under [The MIT License (MIT)](LICENSE.md)
