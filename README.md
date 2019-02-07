@@ -3,7 +3,7 @@
 [![Build Status](https://travis-ci.org/socialpaymentsbv/ex_phone_number.svg?branch=develop)](https://travis-ci.org/socialpaymentsbv/ex_phone_number) [![Hex Version](http://img.shields.io/hexpm/v/ex_phone_number.svg?style=flat)](https://hex.pm/packages/ex_phone_number)
 
 It's a library for parsing, formatting, and validating international phone numbers.
-Based on Google's [libphonenumber](https://github.com/googlei18n/libphonenumber).
+Based on Google's [libphonenumber](https://github.com/googlei18n/libphonenumber) (current metadata version: 8.10.2).
 
 ## Installation
 
