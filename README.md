@@ -45,6 +45,26 @@ iex> ExPhoneNumber.format(phone_number, :rfc3966)
 "tel:+41-44-668-18-00"
 ```
 
+##  E164 formatted numbers
+
+You can pass in e164 formatted number with `""` or `nil` as the second argument. 
+
+```elixir
+iex(2)> ExPhoneNumber.parse("+977123456789", "")
+{:ok,
+ %ExPhoneNumber.Model.PhoneNumber{
+   country_code: 977,
+   country_code_source: nil,
+   extension: nil,
+   italian_leading_zero: nil,
+   national_number: 123456789,
+   number_of_leading_zeros: nil,
+   preferred_domestic_carrier_code: nil,
+   raw_input: nil
+ }}
+
+```
+
 ## Copyright and License
 
 Copyright (c) 2016-2019 NLCollect B.V.
