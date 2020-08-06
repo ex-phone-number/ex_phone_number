@@ -62,7 +62,6 @@ iex(2)> ExPhoneNumber.parse("+977123456789", "")
    preferred_domestic_carrier_code: nil,
    raw_input: nil
  }}
-
 ```
 
 ## Copyright and License
