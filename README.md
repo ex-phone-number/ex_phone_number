@@ -47,7 +47,7 @@ iex> ExPhoneNumber.format(phone_number, :rfc3966)
 
 ##  E164 formatted numbers
 
-You can pass in e164 formatted number with `""` or `nil` as the second argument. 
+In e164 formatted numbers the country code can be detected. So you can pass them in to `parse/2` with `""` or `nil` as the second argument.
 
 ```elixir
 iex(2)> ExPhoneNumber.parse("+977123456789", "")
