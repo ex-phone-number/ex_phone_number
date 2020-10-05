@@ -551,19 +551,14 @@
     <!-- This country is used to test ShortNumberInfo, so at least the country calling code must be
          recognised by the library, and it must be the same as that of the United Kingdom. -->
     <territory id="GG" countryCode="44" internationalPrefix="00">
-    </territory>
-
-    <!-- Hungary -->
-    <!-- This country has special logic in formatNumberForMobileDialing which must be tested. -->
-    <territory id="HU" countryCode="36" internationalPrefix="00" nationalPrefix="06">
       <generalDesc>
-        <nationalNumberPattern>30\d{7}</nationalNumberPattern>
+        <nationalNumberPattern>\d{6,10}</nationalNumberPattern>
       </generalDesc>
-      <mobile>
-        <nationalNumberPattern>30\d{7}</nationalNumberPattern>
-        <possibleLengths national="9"/>
-        <exampleNumber>301234567</exampleNumber>
-      </mobile>
+      <fixedLine>
+        <nationalNumberPattern>\d{6,10}</nationalNumberPattern>
+        <possibleLengths national="10" localOnly="6"/>
+        <exampleNumber>7033456789</exampleNumber>
+      </fixedLine>
     </territory>
 
     <!-- Italy -->

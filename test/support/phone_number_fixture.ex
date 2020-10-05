@@ -285,7 +285,7 @@ defmodule PhoneNumberFixture do
   def gb_invalid() do
     %PhoneNumber{
       country_code: 44,
-      national_number: 791_234_567
+      national_number: 11001
     }
   end
 
