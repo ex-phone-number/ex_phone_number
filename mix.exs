@@ -1,12 +1,14 @@
 defmodule ExPhoneNumber.Mixfile do
   use Mix.Project
 
+  @source_url "https://github.com/socialpaymentsbv/ex_phone_number"
   @version "0.2.1"
 
   def project do
     [
       app: :ex_phone_number,
       version: @version,
+      name: "ExPhoneNumber",
       elixir: "~> 1.4",
       build_embedded: Mix.env() == :prod,
       start_permanent: Mix.env() == :prod,
@@ -15,9 +17,7 @@ defmodule ExPhoneNumber.Mixfile do
       deps: deps(),
       package: package(),
       description: description(),
-      name: "ExPhoneNumber",
-      source_url: "https://github.com/socialpaymentsbv/ex_phone_number",
-      homepage_url: "https://github.com/socialpaymentsbv/ex_phone_number"
+      docs: docs()
     ]
   end
 
@@ -28,10 +28,10 @@ defmodule ExPhoneNumber.Mixfile do
   defp deps do
     [
       {:sweet_xml, "~> 0.6.5"},
-      {:ex_doc, "~> 0.18.0", only: :dev, runtime: false},
+      {:credo, "~> 1.0.0", only: [:dev, :test], runtime: false},
+      {:ex_doc, ">= 0.0.0", only: :dev, runtime: false},
       {:ex_spec, "~> 2.0", only: :test},
-      {:excoveralls, "~> 0.10", only: :test},
-      {:credo, "~> 1.0.0", only: [:dev, :test], runtime: false}
+      {:excoveralls, "~> 0.10", only: :test}
     ]
   end
 
@@ -41,10 +41,22 @@ defmodule ExPhoneNumber.Mixfile do
   end
 
   defp package do
-    [files: ["lib", "config", "resources", "LICENSE*", "README*", "mix.exs"],
-     licenses: ["MIT"],
-     links: %{"GitHub" => "https://github.com/socialpaymentsbv/ex_phone_number"},
-     maintainers: ["ClubCollect (@socialpaymentsbv)",  "Jose Miguel Rivero Bruno (@josemrb)"],
-     name: :ex_phone_number]
+    [
+      files: ["lib", "config", "resources", "LICENSE*", "README*", "mix.exs"],
+      licenses: ["MIT"],
+      links: %{"GitHub" => @source_url},
+      maintainers: ["ClubCollect (@socialpaymentsbv)", "Jose Miguel Rivero Bruno (@josemrb)"],
+      name: :ex_phone_number
+    ]
+  end
+
+  defp docs do
+    [
+      extras: ["README.md"],
+      main: "readme",
+      source_url: @source_url,
+      source_ref: "v#{@version}",
+      homepage_url: @source_url
+    ]
   end
 end

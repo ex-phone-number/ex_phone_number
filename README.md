@@ -1,20 +1,29 @@
 # ExPhoneNumber
 
-[![Build Status](https://travis-ci.org/socialpaymentsbv/ex_phone_number.svg?branch=develop)](https://travis-ci.org/socialpaymentsbv/ex_phone_number) [![Hex Version](http://img.shields.io/hexpm/v/ex_phone_number.svg?style=flat)](https://hex.pm/packages/ex_phone_number)
+[![Build Status](https://travis-ci.org/socialpaymentsbv/ex_phone_number.svg?branch=develop)](https://travis-ci.org/socialpaymentsbv/ex_phone_number)
+[![Module Version](https://img.shields.io/hexpm/v/ex_phone_number.svg)](https://hex.pm/packages/ex_phone_number)
+[![Hex Docs](https://img.shields.io/badge/hex-docs-lightgreen.svg)](https://hexdocs.pm/ex_phone_number/)
+[![Total Download](https://img.shields.io/hexpm/dt/ex_phone_number.svg)](https://hex.pm/packages/ex_phone_number)
+[![License](https://img.shields.io/hexpm/l/ex_phone_number.svg)](https://github.com/socialpaymentsbv/ex_phone_number/blob/develop/LICENSE.md)
+[![Last Updated](https://img.shields.io/github/last-commit/socialpaymentsbv/ex_phone_number.svg)](https://github.com/socialpaymentsbv/ex_phone_number/commits/develop)
 
-It's a library for parsing, formatting, and validating international phone numbers.
+Elixir library for parsing, formatting, and validating international phone numbers.
 Based on Google's [libphonenumber](https://github.com/googlei18n/libphonenumber) (current metadata version: 8.10.2).
 
 ## Installation
 
-  1. Add `:ex_phone_number` to your list of dependencies in `mix.exs`:
+Add `:ex_phone_number` to your list of dependencies in `mix.exs`:
+
 ```elixir
 def deps do
-  [{:ex_phone_number, "~> 0.2"}]
+  [
+    {:ex_phone_number, "~> 0.2"}
+  ]
 end
 ```
 
 ## Usage
+
 ```elixir
 iex> {:ok, phone_number} = ExPhoneNumber.parse("044 668 18 00", "CH")
 {:ok,
@@ -51,12 +60,12 @@ iex> ExPhoneNumber.format(phone_number, :rfc3966)
 "tel:+41-44-668-18-00"
 ```
 
-##  E164 formatted numbers
+##  E164 Formatted Numbers
 
-In e164 formatted numbers the country code can be detected. So you can pass them in to `parse/2` with `""` or `nil` as the second argument.
+In E164 formatted numbers the country code can be detected. So you can pass them in to `ExPhoneNumber.parse/2` with `""` or `nil` as the second argument.
 
 ```elixir
-iex(2)> ExPhoneNumber.parse("+977123456789", "")
+iex> ExPhoneNumber.parse("+977123456789", "")
 {:ok,
  %ExPhoneNumber.Model.PhoneNumber{
    country_code: 977,
@@ -72,6 +81,6 @@ iex(2)> ExPhoneNumber.parse("+977123456789", "")
 
 ## Copyright and License
 
-Copyright (c) 2016-2020 NLCollect B.V.
+Copyright (c) 2016-2021 NLCollect B.V.
 
-The source code is licensed under [The MIT License (MIT)](LICENSE.md)
+The source code is licensed under [The MIT License (MIT)](https://github.com/socialpaymentsbv/ex_phone_number/blob/develop/LICENSE.md)
