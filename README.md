@@ -83,4 +83,4 @@ iex> ExPhoneNumber.parse("+977123456789", "")
 
 Copyright (c) 2016-2021 NLCollect B.V.
 
-The source code is licensed under [The MIT License (MIT)](https://github.com/socialpaymentsbv/ex_phone_number/blob/develop/LICENSE.md)
+The source code is licensed under [The MIT License (MIT)](LICENSE.md)
