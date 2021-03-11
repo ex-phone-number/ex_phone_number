@@ -304,6 +304,13 @@ defmodule PhoneNumberFixture do
     }
   end
 
+  def gg_valid() do
+    %PhoneNumber{
+      country_code: 44,
+      national_number: 791_234_567
+    }
+  end
+
   def it_mobile() do
     %PhoneNumber{
       country_code: 39,

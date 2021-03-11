@@ -204,7 +204,13 @@ defmodule ExPhoneNumber.ValidationTest do
 
     context "test GB invalid" do
       it "returns false" do
-        refute is_valid_number?(PhoneNumberFixture.gb_invalid())
+        refute is_valid_number_for_region?(PhoneNumberFixture.gb_invalid(), "GB")
+      end
+    end
+
+    context "test GG valid" do
+      it "returns true" do
+        assert is_valid_number_for_region?(PhoneNumberFixture.gg_valid(), "GG")
       end
     end
 
