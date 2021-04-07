@@ -17,6 +17,13 @@ defmodule ExPhoneNumber.Utilities do
     end
   end
 
+  @doc """
+  Check whether the entire input sequence can be matched against the regular
+  expression.
+
+  Implements `i18n.phonenumbers.PhoneNumberUtil.matchesEntirely`
+  """
+  @spec matches_entirely?(Regex.t() | nil, binary()) :: boolean()
   def matches_entirely?(nil, _string), do: false
 
   def matches_entirely?(regex, string) do

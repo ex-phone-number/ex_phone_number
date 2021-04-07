@@ -70,6 +70,26 @@ defmodule ExPhoneNumber.Validation do
     end
   end
 
+  @doc """
+  Checks if the number is a valid vanity (alpha) number such as 800 MICROSOFT.
+  A valid vanity number will start with at least 3 digits and will have three
+  or more alpha characters. This does not do region-specific checks - to work
+  out if this number is actually valid for a region, it should be parsed and
+  methods such as `Validation.is_possible_number_with_reason?/1` and
+  `Validation.is_valid_number?/1` should be used.
+
+  Implements `i18n.phonenumbers.PhoneNumberUtil.prototype.isAlphaNumber`
+  """
+  @spec is_alpha_number(binary()) :: boolean()
+  def is_alpha_number(number) when is_binary(number) do
+    if is_viable_phone_number?(number) do
+      {_ext, maybe_stripped} = maybe_strip_extension(number)
+      matches_entirely?(Patterns.valid_alpha_phone_pattern(), maybe_stripped)
+    else
+      false
+    end
+  end
+
   def is_number_geographical?(%PhoneNumber{} = phone_number) do
     number_type = get_number_type(phone_number)
 
@@ -131,11 +151,57 @@ defmodule ExPhoneNumber.Validation do
     end
   end
 
+  @doc """
+  Checks to see if the string of characters could possibly be a phone number at
+  all. At the moment, checks to see that the string begins with at least 2
+  digits, ignoring any punctuation commonly found in phone numbers. This method
+  does not require the number to be normalized in advance - but does assume
+  that leading non-number symbols have been removed, such as by the method
+  `Extraction.extract_possible_number/1`.
+
+  Implements `i18n.phonenumbers.PhoneNumberUtil.isViablePhoneNumber`
+  """
+  @spec is_viable_phone_number?(binary()) :: boolean()
   def is_viable_phone_number?(phone_number) do
     if String.length(phone_number) < Values.min_length_for_nsn() do
       false
     else
       matches_entirely?(Patterns.valid_phone_number_pattern(), phone_number)
+    end
+  end
+
+  @doc """
+  Strips any extension (as in, the part of the number dialled after the call is
+  connected, usually indicated with extn, ext, x or similar) from the end of
+  the number, and returns it.
+
+  Implements `i18n.phonenumbers.PhoneNumberUtil.prototype.maybeStripExtension`
+  """
+  @spec maybe_strip_extension(binary()) :: {binary(), binary()}
+  def maybe_strip_extension(number) do
+    case Regex.run(Patterns.extn_pattern(), number, return: :index) do
+      [{index, _} | tail] ->
+        {phone_number_head, _} = String.split_at(number, index)
+
+        if is_viable_phone_number?(phone_number_head) do
+          {match_index, match_length} =
+            Enum.find(tail, fn {match_index, match_length} ->
+              if match_index > 0 do
+                match = Kernel.binary_part(number, match_index, match_length)
+                match != ""
+              else
+                false
+              end
+            end)
+
+          ext = Kernel.binary_part(number, match_index, match_length)
+          {ext, phone_number_head}
+        else
+          {"", number}
+        end
+
+      nil ->
+        {"", number}
     end
   end
 

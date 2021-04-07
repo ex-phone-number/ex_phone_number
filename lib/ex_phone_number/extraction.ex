@@ -120,33 +120,6 @@ defmodule ExPhoneNumber.Extraction do
     end
   end
 
-  def maybe_strip_extension(number) do
-    case Regex.run(Patterns.extn_pattern(), number, return: :index) do
-      [{index, _} | tail] ->
-        {phone_number_head, _} = String.split_at(number, index)
-
-        if is_viable_phone_number?(phone_number_head) do
-          {match_index, match_length} =
-            Enum.find(tail, fn {match_index, match_length} ->
-              if match_index > 0 do
-                match = Kernel.binary_part(number, match_index, match_length)
-                match != ""
-              else
-                false
-              end
-            end)
-
-          ext = Kernel.binary_part(number, match_index, match_length)
-          {ext, phone_number_head}
-        else
-          {"", number}
-        end
-
-      nil ->
-        {"", number}
-    end
-  end
-
   def maybe_strip_international_prefix_and_normalize(number, _possible_country_idd_prefix)
       when length(number) == 0,
       do: {CountryCodeSource.from_default_country(), ""}

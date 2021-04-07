@@ -210,4 +210,18 @@ defmodule ExPhoneNumber.ValidationTest do
       assert {:error, _} = validate_length(subject)
     end
   end
+
+  describe ".is_alpha_number" do
+    test "IsAlphaNumber" do
+      assert is_alpha_number("1800 six-flags")
+      assert is_alpha_number("1800 six-flags ext. 1234")
+      assert is_alpha_number("+800 six-flags")
+      assert is_alpha_number("180 six-flags")
+      refute is_alpha_number("1800 123-1234")
+      refute is_alpha_number("1 six-flags")
+      refute is_alpha_number("18 six-flags")
+      refute is_alpha_number("1800 123-1234 extension: 1234")
+      refute is_alpha_number("+800 1234-1234")
+    end
+  end
 end
