@@ -92,6 +92,19 @@ defmodule ExPhoneNumber.Metadata do
     end
   end
 
+  @doc """
+  Returns the mobile token for the provided country calling code if it has
+  one, otherwise returns an empty string. A mobile token is a number inserted
+  before the area code when dialing a mobile number from that country from
+  abroad.
+
+  Implements `i18n.phonenumbers.PhoneNumberUtil.getCountryMobileToken`
+  """
+  @spec get_country_mobile_token(integer()) :: binary()
+  def get_country_mobile_token(country_calling_code) do
+    Values.mobile_token_mappings() |> Map.get(country_calling_code, "")
+  end
+
   @spec get_for_non_geographical_region(integer() | String.t()) :: %PhoneMetadata{} | nil
   def get_for_non_geographical_region(calling_code) when is_number(calling_code),
     do: get_for_non_geographical_region(Integer.to_string(calling_code))

@@ -240,6 +240,13 @@ defmodule ExPhoneNumber.MetadataTest do
     end
   end
 
+  describe "get_country_mobile_token/1" do
+    test "GetCountryMobileToken" do
+      assert "9" == get_country_mobile_token(get_country_code_for_region_code(RegionCodeFixture.ar()))
+      assert "" == get_country_mobile_token(get_country_code_for_region_code(RegionCodeFixture.se()))
+    end
+  end
+
   describe "get_country_code_for_region_code/1" do
     test "GetCountryCodeForRegion" do
       assert 1 == get_country_code_for_region_code(RegionCodeFixture.us())
