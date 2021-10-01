@@ -1,5 +1,6 @@
 defmodule ExPhoneNumber.Utilities do
   alias ExPhoneNumber.Constants.Values
+  alias ExPhoneNumber.Model.PhoneNumber
   alias ExPhoneNumber.Metadata.PhoneNumberDescription
 
   def is_nil_or_empty?(nil), do: true
@@ -32,6 +33,36 @@ defmodule ExPhoneNumber.Utilities do
     case Regex.run(regex, string, return: :index) do
       [{_index, length} | _tail] -> Kernel.byte_size(string) == length
       _ -> false
+    end
+  end
+
+  @doc """
+  Attempts to extract a valid number from a phone number that is too long to be
+  valid, and resets the PhoneNumber object passed in to that valid version. If
+  no valid number could be extracted, the PhoneNumber object passed in will not
+  be modified.
+  """
+  @spec truncate_too_long_number(%PhoneNumber{}) :: {:ok, %PhoneNumber{}} | {:error, %PhoneNumber{}} 
+  def truncate_too_long_number(%PhoneNumber{} = phone_number) do 
+    case truncate_number(phone_number) do 
+      :error -> {:error, phone_number}
+      other -> other
+    end
+  end
+
+  def truncate_too_long_number(other) do 
+    raise ArgumentError, "expected an %ExPhoneNumber.Model.PhoneNumber{} received #{inspect other}"
+  end
+
+  defp truncate_number(%PhoneNumber{national_number: 0}) do 
+    :error
+  end
+
+  defp truncate_number(number) do 
+    if ExPhoneNumber.Validation.is_valid_number?(number) do
+      {:ok, number}
+    else
+      truncate_number(Map.replace(number, :national_number, div(number.national_number, 10)))
     end
   end
 end

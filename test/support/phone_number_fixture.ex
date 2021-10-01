@@ -658,6 +658,13 @@ defmodule ExPhoneNumber.PhoneNumberFixture do
     }
   end
 
+  def us_invalid_prefix() do 
+    %PhoneNumber{
+      country_code: 1,
+      national_number: 2401234567
+    }
+  end
+
   def uz_fixed_line() do
     %PhoneNumber{
       country_code: 998,
