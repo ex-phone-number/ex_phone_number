@@ -8,7 +8,7 @@
 [![Last Updated](https://img.shields.io/github/last-commit/socialpaymentsbv/ex_phone_number.svg)](https://github.com/socialpaymentsbv/ex_phone_number/commits/develop)
 
 Elixir library for parsing, formatting, and validating international phone numbers.
-Based on Google's [libphonenumber](https://github.com/googlei18n/libphonenumber) (current metadata version: v8.12.20).
+Based on Google's [libphonenumber](https://github.com/googlei18n/libphonenumber) (current metadata version: v8.12.34).
 
 ---
 

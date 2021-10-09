@@ -1070,5 +1070,25 @@ defmodule ExPhoneNumber.ParsingTest do
       assert :ok == result
       assert PhoneNumberFixture.au_leading_zero4() == phone_number
     end
+
+    test "ParseNumbersWithPlusWithNoRegion" do
+      assert {:ok, PhoneNumberFixture.nz_number()} == parse("+64 3 331 6005", RegionCodeFixture.zz())
+
+      assert {:ok, PhoneNumberFixture.nz_number()} == parse("\uFF0B64 3 331 6005", RegionCodeFixture.zz())
+
+      assert {:ok, PhoneNumberFixture.nz_number()} == parse("Tel: +64 3 331 6005", RegionCodeFixture.zz())
+
+      assert {:ok, PhoneNumberFixture.nz_number()} == parse("+64 3 331 6005", nil)
+
+      assert {:ok, PhoneNumberFixture.international_toll_free()} == parse("+800 1234 5678", nil)
+
+      assert {:ok, PhoneNumberFixture.universal_premium_rate()} == parse("+979 123 456 789", nil)
+
+      assert {:ok, PhoneNumberFixture.nz_number()} == parse("tel:03-331-6005;phone-context=+64", RegionCodeFixture.zz())
+
+      assert {:ok, PhoneNumberFixture.nz_number()} == parse("  tel:03-331-6005;phone-context=+64", RegionCodeFixture.zz())
+
+      assert {:ok, PhoneNumberFixture.nz_number()} == parse("tel:03-331-6005;isub=12345;phone-context=+64", RegionCodeFixture.zz())
+    end
   end
 end
