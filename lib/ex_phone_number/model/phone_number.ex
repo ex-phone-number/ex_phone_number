@@ -32,6 +32,15 @@ defmodule ExPhoneNumber.Model.PhoneNumber do
     not is_nil(phone_number.country_code)
   end
 
+  @national_number_default 0
+  def get_national_number_or_default(phone_number = %PhoneNumber{}) do
+    if is_nil(phone_number.national_number) do
+      @national_number_default
+    else
+      phone_number.national_number
+    end
+  end
+
   @spec has_national_number?(%PhoneNumber{}) :: boolean()
   def has_national_number?(phone_number = %PhoneNumber{}) do
     not is_nil(phone_number.national_number)

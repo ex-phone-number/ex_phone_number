@@ -232,4 +232,38 @@ defmodule ExPhoneNumber.Extraction do
         {false, number}
     end
   end
+
+  @doc """
+  Attempts to extract a valid number from a phone number that is too long to be
+  valid, and resets the PhoneNumber object passed in to that valid version. If
+  no valid number could be extracted, the PhoneNumber object passed in will not
+  be modified.
+
+  Implements `i18n.phonenumbers.PhoneNumberUtil.prototype.truncateTooLongNumber`
+  """
+  @spec truncate_too_long_number(%PhoneNumber{}) :: {boolean(), %PhoneNumber{}}
+  def truncate_too_long_number(%PhoneNumber{} = phone_number) do
+    if is_valid_number?(phone_number) do
+      {true, phone_number}
+    else
+      national_number = PhoneNumber.get_national_number_or_default(phone_number)
+      truncate_too_long_number(phone_number, national_number)
+    end
+  end
+
+  defp truncate_too_long_number(%PhoneNumber{} = phone_number, national_number) do
+    national_number = div(national_number, 10)
+    phone_number_copy = %PhoneNumber{phone_number | national_number: national_number}
+
+    cond do
+      national_number == 0 or is_possible_number_with_reason?(phone_number_copy) == ValidationResults.too_short() ->
+        {false, phone_number}
+
+      not is_valid_number?(phone_number_copy) ->
+        truncate_too_long_number(phone_number, national_number)
+
+      true ->
+        {true, phone_number_copy}
+    end
+  end
 end
