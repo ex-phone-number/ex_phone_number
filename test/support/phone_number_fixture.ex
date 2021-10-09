@@ -23,7 +23,7 @@ defmodule ExPhoneNumber.PhoneNumberFixture do
   def ad_number() do
     %PhoneNumber{
       country_code: 376,
-      national_number: 12345
+      national_number: 12_345
     }
   end
 
@@ -291,6 +291,13 @@ defmodule ExPhoneNumber.PhoneNumberFixture do
     }
   end
 
+  def gb_toll_free_too_long() do
+    %PhoneNumber{
+      country_code: 44,
+      national_number: 80_123_456_780_123
+    }
+  end
+
   def gb_shared_cost() do
     %PhoneNumber{
       country_code: 44,
@@ -353,6 +360,22 @@ defmodule ExPhoneNumber.PhoneNumberFixture do
     %PhoneNumber{
       country_code: 39,
       national_number: 236_618_300,
+      italian_leading_zero: true
+    }
+  end
+
+  def it_number2() do
+    %PhoneNumber{
+      country_code: 39,
+      national_number: 2_234_567_890,
+      italian_leading_zero: true
+    }
+  end
+
+  def it_number2_too_long() do
+    %PhoneNumber{
+      country_code: 39,
+      national_number: 2_234_567_890_123,
       italian_leading_zero: true
     }
   end
@@ -598,6 +621,13 @@ defmodule ExPhoneNumber.PhoneNumberFixture do
     }
   end
 
+  def us_short_number() do
+    %PhoneNumber{
+      country_code: 1,
+      national_number: 1_234
+    }
+  end
+
   def us_short_by_one_number() do
     %PhoneNumber{
       country_code: 1,
@@ -655,6 +685,13 @@ defmodule ExPhoneNumber.PhoneNumberFixture do
       country_code: 1,
       national_number: 6_451_231_234,
       extension: "910"
+    }
+  end
+
+  def us_invalid_prefix() do
+    %PhoneNumber{
+      country_code: 1,
+      national_number: 2_401_234_567
     }
   end
 

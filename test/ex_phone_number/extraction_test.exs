@@ -6,6 +6,7 @@ defmodule ExPhoneNumber.ExtractionTest do
   import ExPhoneNumber.Extraction
 
   alias ExPhoneNumber.Metadata
+  alias ExPhoneNumber.PhoneNumberFixture
   alias ExPhoneNumber.RegionCodeFixture
   alias ExPhoneNumber.Constants.CountryCodeSource
   alias ExPhoneNumber.Constants.ErrorMessages
@@ -231,6 +232,24 @@ defmodule ExPhoneNumber.ExtractionTest do
       assert result
       assert 0 = phone_number.country_code
       assert CountryCodeSource.from_default_country() == phone_number.country_code_source
+    end
+  end
+
+  describe ".truncate_too_long_number/1" do
+    test "TruncateTooLongNumber" do
+      assert {true, PhoneNumberFixture.gb_toll_free()} == truncate_too_long_number(PhoneNumberFixture.gb_toll_free_too_long())
+
+      assert {true, PhoneNumberFixture.it_number2()} == truncate_too_long_number(PhoneNumberFixture.it_number2_too_long())
+
+      assert {true, PhoneNumberFixture.us_number()} == truncate_too_long_number(PhoneNumberFixture.us_long_number())
+
+      assert {true, PhoneNumberFixture.international_toll_free()} == truncate_too_long_number(PhoneNumberFixture.international_toll_free_too_long())
+
+      assert {true, PhoneNumberFixture.gb_toll_free()} == truncate_too_long_number(PhoneNumberFixture.gb_toll_free())
+
+      assert {false, PhoneNumberFixture.us_invalid_prefix()} == truncate_too_long_number(PhoneNumberFixture.us_invalid_prefix())
+
+      assert {false, PhoneNumberFixture.us_short_number()} == truncate_too_long_number(PhoneNumberFixture.us_short_number())
     end
   end
 end
