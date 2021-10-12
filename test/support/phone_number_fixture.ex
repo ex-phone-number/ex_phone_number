@@ -105,6 +105,41 @@ defmodule ExPhoneNumber.PhoneNumberFixture do
     }
   end
 
+  def ar_number7() do 
+    %PhoneNumber{
+      country_code: 54,
+      national_number: 12345
+    }
+  end
+
+  def ar_number8() do 
+    %PhoneNumber{
+      country_code: 54,
+      national_number: 123456
+    }
+  end
+
+  def ar_number9() do 
+    %PhoneNumber{
+      country_code: 54,
+      national_number: 123456789
+    }
+  end
+
+  def ar_number10() do 
+    %PhoneNumber{
+      country_code: 54,
+      national_number: 1234567890
+    }
+  end
+
+  def ar_number11() do 
+    %PhoneNumber{
+      country_code: 54,
+      national_number: 12345678901
+    }
+  end
+
   def au_number() do
     %PhoneNumber{
       country_code: 61,

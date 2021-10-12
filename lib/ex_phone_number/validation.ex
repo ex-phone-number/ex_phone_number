@@ -180,6 +180,47 @@ defmodule ExPhoneNumber.Validation do
     end
   end
 
+  def is_possible_number_for_type?(number, type) do 
+    result = is_possible_number_for_type_with_reason(number, type)
+
+    result == ValidationResults.is_possible() ||
+    result == ValidationResults.is_possible_local_only()
+  end
+
+  @doc """
+  Check whether a phone number is a possible number. It provides a more lenient
+  check than is_valid_number in the following sense:
+  It only checks the length of phone numbers. In particular, it doesn't
+  check starting digits of the number.
+
+  For some numbers (particularly fixed-line), many regions have the concept
+  of area code, which together with subscriber number constitute the national
+  significant number.  It is sometimes okay to dial only the subscriber number
+  when dialing in the same area. This function will return
+  :is_possible_local_only if the subscriber-number-only version is passed in. On
+  the other hand, because is_valid_number validates using information on both
+  starting digits (for fixed line numbers, that would most likely be area
+  codes) and length (obviously includes the length of area codes for fixed line
+  numbers), it will return false for the subscriber-number-only version.
+  """
+  def is_possible_number_for_type_with_reason(number, type) do 
+    national_number = PhoneNumber.get_national_significant_number(number)
+    country_code = PhoneNumber.get_country_code_or_default(number)
+
+    if !has_valid_country_calling_code?(country_code) do
+      raise ArgumentError, message: "Invalid country calling code"
+    end
+
+    region_code = Metadata.get_region_code_for_country_code(country_code)
+    metadata = Metadata.get_for_region_code_or_calling_code(country_code, region_code)
+
+    test_number_length_for_type(national_number, metadata, type)
+  end
+
+  def has_valid_country_calling_code?(country_code) do
+    Map.has_key?(ExPhoneNumber.Metadata.country_code_to_region_code_map(), country_code)
+  end
+
   def is_valid_possible_number_length?(metadata, number) do
     !Enum.member?(
       [

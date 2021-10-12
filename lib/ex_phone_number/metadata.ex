@@ -51,7 +51,7 @@ defmodule ExPhoneNumber.Metadata do
       Map.put(acc, new_key, Keyword.get_values(list_cctrc, key))
     end)
 
-  defp country_code_to_region_code_map() do
+  def country_code_to_region_code_map() do
     unquote(Macro.escape(map_cctrc))
   end
 
