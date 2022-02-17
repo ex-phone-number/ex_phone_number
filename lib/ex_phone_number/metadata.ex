@@ -2,6 +2,7 @@ defmodule ExPhoneNumber.Metadata do
   import SweetXml
   import ExPhoneNumber.Normalization
   import ExPhoneNumber.Validation
+  import ExPhoneNumber.Utilities
   alias ExPhoneNumber.Constants.PhoneNumberTypes
   alias ExPhoneNumber.Constants.Values
   alias ExPhoneNumber.Metadata.PhoneMetadata
@@ -71,6 +72,32 @@ defmodule ExPhoneNumber.Metadata do
   end
 
   Module.delete_attribute(__MODULE__, :list_region_code_to_metadata)
+
+  @doc """
+  Returns true if the number can be dialled from outside the region, or
+  unknown. If the number can only be dialled from within the region, returns
+  false. Does not check the number is a valid number. Note that, at the
+  moment, this method does not handle short numbers (which are currently
+  all presumed to not be diallable from outside their country).
+
+  Implements `i18n.phonenumbers.PhoneNumberUtil.prototype.canBeInternationallyDialled`
+  """
+  @spec can_be_internationally_dialled?(%PhoneNumber{}) :: boolean()
+  def can_be_internationally_dialled?(phone_number = %PhoneNumber{}) do
+    metadata =
+      phone_number
+      |> get_region_code_for_number()
+      |> get_for_region_code()
+
+    if is_nil(metadata) do
+      true
+    else
+      phone_number
+      |> PhoneNumber.get_national_significant_number()
+      |> is_number_matching_description?(metadata.no_international_dialing)
+      |> Kernel.not()
+    end
+  end
 
   def get_country_code_for_region_code(nil), do: 0
 

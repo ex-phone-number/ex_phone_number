@@ -19,6 +19,25 @@ defmodule ExPhoneNumber.MetadataTest do
     ]
   end
 
+  describe "can_be_internationally_dialled?/1" do
+    test "CanBeInternationallyDialled" do
+      # US toll free
+      refute can_be_internationally_dialled?(PhoneNumberFixture.us_tollfree())
+
+      # Normal US number
+      assert can_be_internationally_dialled?(PhoneNumberFixture.us_number())
+
+      # US local number
+      assert can_be_internationally_dialled?(PhoneNumberFixture.us_local_number())
+
+      # NZ number
+      assert can_be_internationally_dialled?(PhoneNumberFixture.nz_number())
+
+      # International Toll Free
+      assert can_be_internationally_dialled?(PhoneNumberFixture.international_toll_free())
+    end
+  end
+
   describe "get_for_region_code/1" do
     test "GetInstanceLoadUSMetadata", %{us_metadata: metadata} do
       assert RegionCodeFixture.us() == metadata.id

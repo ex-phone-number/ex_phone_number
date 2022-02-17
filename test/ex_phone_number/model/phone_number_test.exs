@@ -20,26 +20,4 @@ defmodule ExPhoneNumber.Model.PhoneNumberTest do
       assert "650" == get_national_significant_number(too_many_zeros2())
     end
   end
-
-  describe ".can_be_internationally_dialled?" do 
-    test "US toll free" do
-      refute can_be_internationally_dialled?(us_tollfree())
-    end
-
-    test "Normal US number" do 
-      assert can_be_internationally_dialled?(us_number())
-    end
-
-    test "US local number" do 
-      assert can_be_internationally_dialled?(us_local_number())
-    end
-
-    test "NZ number" do 
-      assert can_be_internationally_dialled?(nz_number())
-    end
-
-    test "International Toll Free" do
-      assert can_be_internationally_dialled?(international_toll_free())
-    end
-  end
 end

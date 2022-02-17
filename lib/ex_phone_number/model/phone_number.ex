@@ -140,20 +140,4 @@ defmodule ExPhoneNumber.Model.PhoneNumber do
       phone_number
     end
   end
-
-  def can_be_internationally_dialled?(phone_number = %PhoneNumber{}) do 
-    metadata = 
-      phone_number 
-      |> ExPhoneNumber.Metadata.get_region_code_for_number() 
-      |> ExPhoneNumber.Metadata.get_for_region_code()
-
-    if is_nil(metadata) do
-      true
-    else
-      phone_number
-      |> get_national_significant_number()
-      |> ExPhoneNumber.Utilities.is_number_matching_description?(metadata.no_international_dialing)
-      |> Kernel.not()
-    end
-  end
 end
