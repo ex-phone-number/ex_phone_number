@@ -255,4 +255,167 @@ defmodule ExPhoneNumber.ValidationTest do
       assert 4 == get_length_of_national_destination_code(PhoneNumberFixture.international_toll_free())
     end
   end
+
+  describe ".is_possible_number_for_type?/2" do
+    test "IsPossibleNumberForType_DifferentTypeLengths" do
+      refute is_possible_number_for_type?(PhoneNumberFixture.ar_number7(), PhoneNumberTypes.fixed_line())
+      refute is_possible_number_for_type?(PhoneNumberFixture.ar_number7(), PhoneNumberTypes.unknown())
+
+      assert is_possible_number_for_type?(PhoneNumberFixture.ar_number8(), PhoneNumberTypes.fixed_line())
+      assert is_possible_number_for_type?(PhoneNumberFixture.ar_number8(), PhoneNumberTypes.unknown())
+      refute is_possible_number_for_type?(PhoneNumberFixture.ar_number8(), PhoneNumberTypes.mobile())
+      refute is_possible_number_for_type?(PhoneNumberFixture.ar_number8(), PhoneNumberTypes.toll_free())
+
+      assert is_possible_number_for_type?(PhoneNumberFixture.ar_number9(), PhoneNumberTypes.fixed_line())
+      assert is_possible_number_for_type?(PhoneNumberFixture.ar_number9(), PhoneNumberTypes.unknown())
+      refute is_possible_number_for_type?(PhoneNumberFixture.ar_number9(), PhoneNumberTypes.mobile())
+      refute is_possible_number_for_type?(PhoneNumberFixture.ar_number9(), PhoneNumberTypes.toll_free())
+
+      assert is_possible_number_for_type?(PhoneNumberFixture.ar_number10(), PhoneNumberTypes.fixed_line())
+      assert is_possible_number_for_type?(PhoneNumberFixture.ar_number10(), PhoneNumberTypes.unknown())
+      assert is_possible_number_for_type?(PhoneNumberFixture.ar_number10(), PhoneNumberTypes.mobile())
+      assert is_possible_number_for_type?(PhoneNumberFixture.ar_number10(), PhoneNumberTypes.toll_free())
+
+      assert is_possible_number_for_type?(PhoneNumberFixture.ar_number11(), PhoneNumberTypes.unknown())
+      refute is_possible_number_for_type?(PhoneNumberFixture.ar_number11(), PhoneNumberTypes.fixed_line())
+      assert is_possible_number_for_type?(PhoneNumberFixture.ar_number11(), PhoneNumberTypes.mobile())
+      refute is_possible_number_for_type?(PhoneNumberFixture.ar_number11(), PhoneNumberTypes.toll_free())
+    end
+
+    test "IsPossibleNumberForType_LocalOnly" do
+      assert is_possible_number_for_type?(PhoneNumberFixture.de_local_only(), PhoneNumberTypes.unknown())
+      assert is_possible_number_for_type?(PhoneNumberFixture.de_local_only(), PhoneNumberTypes.fixed_line())
+      refute is_possible_number_for_type?(PhoneNumberFixture.de_local_only(), PhoneNumberTypes.mobile())
+    end
+
+    test "IsPossibleNumberForType_DataMissingForSizeReasons" do
+      assert is_possible_number_for_type?(PhoneNumberFixture.br_local_only(), PhoneNumberTypes.unknown())
+      assert is_possible_number_for_type?(PhoneNumberFixture.br_local_only(), PhoneNumberTypes.fixed_line())
+
+      assert is_possible_number_for_type?(PhoneNumberFixture.br_local_only2(), PhoneNumberTypes.unknown())
+      assert is_possible_number_for_type?(PhoneNumberFixture.br_local_only2(), PhoneNumberTypes.fixed_line())
+    end
+
+    test "IsPossibleNumberForType_NumberTypeNotSupportedForRegion" do
+      refute is_possible_number_for_type?(PhoneNumberFixture.br_local_only(), PhoneNumberTypes.mobile())
+      assert is_possible_number_for_type?(PhoneNumberFixture.br_local_only(), PhoneNumberTypes.fixed_line())
+      assert is_possible_number_for_type?(PhoneNumberFixture.br_local_only(), PhoneNumberTypes.fixed_line_or_mobile())
+
+      refute is_possible_number_for_type?(PhoneNumberFixture.universal_premium_rate(), PhoneNumberTypes.mobile())
+      refute is_possible_number_for_type?(PhoneNumberFixture.universal_premium_rate(), PhoneNumberTypes.fixed_line())
+      refute is_possible_number_for_type?(PhoneNumberFixture.universal_premium_rate(), PhoneNumberTypes.fixed_line_or_mobile())
+      assert is_possible_number_for_type?(PhoneNumberFixture.universal_premium_rate(), PhoneNumberTypes.premium_rate())
+    end
+  end
+
+  describe ".is_possible_number_for_type_with_reason?/2" do
+    test "IsPossibleNumberForTypeWithReason_DifferentTypeLengths" do
+      assert ValidationResults.too_short() == is_possible_number_for_type_with_reason?(PhoneNumberFixture.ar_number7(), PhoneNumberTypes.unknown())
+      assert ValidationResults.too_short() == is_possible_number_for_type_with_reason?(PhoneNumberFixture.ar_number7(), PhoneNumberTypes.fixed_line())
+
+      assert ValidationResults.is_possible() == is_possible_number_for_type_with_reason?(PhoneNumberFixture.ar_number8(), PhoneNumberTypes.unknown())
+      assert ValidationResults.is_possible() == is_possible_number_for_type_with_reason?(PhoneNumberFixture.ar_number8(), PhoneNumberTypes.fixed_line())
+      assert ValidationResults.too_short() == is_possible_number_for_type_with_reason?(PhoneNumberFixture.ar_number8(), PhoneNumberTypes.mobile())
+      assert ValidationResults.too_short() == is_possible_number_for_type_with_reason?(PhoneNumberFixture.ar_number8(), PhoneNumberTypes.toll_free())
+
+      assert ValidationResults.is_possible() == is_possible_number_for_type_with_reason?(PhoneNumberFixture.ar_number9(), PhoneNumberTypes.unknown())
+      assert ValidationResults.is_possible() == is_possible_number_for_type_with_reason?(PhoneNumberFixture.ar_number9(), PhoneNumberTypes.fixed_line())
+      assert ValidationResults.too_short() == is_possible_number_for_type_with_reason?(PhoneNumberFixture.ar_number9(), PhoneNumberTypes.mobile())
+      assert ValidationResults.too_short() == is_possible_number_for_type_with_reason?(PhoneNumberFixture.ar_number9(), PhoneNumberTypes.toll_free())
+
+      assert ValidationResults.is_possible() == is_possible_number_for_type_with_reason?(PhoneNumberFixture.ar_number10(), PhoneNumberTypes.unknown())
+      assert ValidationResults.is_possible() == is_possible_number_for_type_with_reason?(PhoneNumberFixture.ar_number10(), PhoneNumberTypes.fixed_line())
+      assert ValidationResults.is_possible() == is_possible_number_for_type_with_reason?(PhoneNumberFixture.ar_number10(), PhoneNumberTypes.mobile())
+      assert ValidationResults.is_possible() == is_possible_number_for_type_with_reason?(PhoneNumberFixture.ar_number10(), PhoneNumberTypes.toll_free())
+
+      assert ValidationResults.is_possible() == is_possible_number_for_type_with_reason?(PhoneNumberFixture.ar_number11(), PhoneNumberTypes.unknown())
+      assert ValidationResults.too_long() == is_possible_number_for_type_with_reason?(PhoneNumberFixture.ar_number11(), PhoneNumberTypes.fixed_line())
+      assert ValidationResults.is_possible() == is_possible_number_for_type_with_reason?(PhoneNumberFixture.ar_number11(), PhoneNumberTypes.mobile())
+      assert ValidationResults.too_long() == is_possible_number_for_type_with_reason?(PhoneNumberFixture.ar_number11(), PhoneNumberTypes.toll_free())
+    end
+
+    test "IsPossibleNumberForTypeWithReason_LocalOnly" do
+      assert ValidationResults.is_possible_local_only() ==
+               is_possible_number_for_type_with_reason?(PhoneNumberFixture.de_local_only(), PhoneNumberTypes.unknown())
+
+      assert ValidationResults.is_possible_local_only() ==
+               is_possible_number_for_type_with_reason?(PhoneNumberFixture.de_local_only(), PhoneNumberTypes.fixed_line())
+
+      assert ValidationResults.too_short() == is_possible_number_for_type_with_reason?(PhoneNumberFixture.de_local_only(), PhoneNumberTypes.mobile())
+    end
+
+    test "IsPossibleNumberForTypeWithReason_DataMissingForSizeReasons" do
+      assert ValidationResults.is_possible_local_only() ==
+               is_possible_number_for_type_with_reason?(PhoneNumberFixture.br_local_only(), PhoneNumberTypes.unknown())
+
+      assert ValidationResults.is_possible_local_only() ==
+               is_possible_number_for_type_with_reason?(PhoneNumberFixture.br_local_only(), PhoneNumberTypes.fixed_line())
+
+      assert ValidationResults.is_possible() == is_possible_number_for_type_with_reason?(PhoneNumberFixture.br_local_only2(), PhoneNumberTypes.unknown())
+      assert ValidationResults.is_possible() == is_possible_number_for_type_with_reason?(PhoneNumberFixture.br_local_only2(), PhoneNumberTypes.fixed_line())
+    end
+
+    test "IsPossibleNumberForTypeWithReason_NumberTypeNotSupportedForRegion" do
+      assert ValidationResults.invalid_length() == is_possible_number_for_type_with_reason?(PhoneNumberFixture.br_local_only(), PhoneNumberTypes.mobile())
+
+      assert ValidationResults.is_possible_local_only() ==
+               is_possible_number_for_type_with_reason?(PhoneNumberFixture.br_local_only(), PhoneNumberTypes.fixed_line_or_mobile())
+
+      assert ValidationResults.invalid_length() == is_possible_number_for_type_with_reason?(PhoneNumberFixture.br_too_short(), PhoneNumberTypes.mobile())
+
+      assert ValidationResults.too_short() ==
+               is_possible_number_for_type_with_reason?(PhoneNumberFixture.br_too_short(), PhoneNumberTypes.fixed_line_or_mobile())
+
+      assert ValidationResults.too_short() == is_possible_number_for_type_with_reason?(PhoneNumberFixture.br_too_short(), PhoneNumberTypes.fixed_line())
+
+      assert ValidationResults.too_short() == is_possible_number_for_type_with_reason?(PhoneNumberFixture.international_networks(), PhoneNumberTypes.mobile())
+
+      assert ValidationResults.too_short() ==
+               is_possible_number_for_type_with_reason?(PhoneNumberFixture.international_networks(), PhoneNumberTypes.fixed_line_or_mobile())
+
+      assert ValidationResults.invalid_length() ==
+               is_possible_number_for_type_with_reason?(PhoneNumberFixture.international_networks(), PhoneNumberTypes.fixed_line())
+
+      assert ValidationResults.invalid_length() ==
+               is_possible_number_for_type_with_reason?(PhoneNumberFixture.universal_premium_rate(), PhoneNumberTypes.mobile())
+
+      assert ValidationResults.invalid_length() ==
+               is_possible_number_for_type_with_reason?(PhoneNumberFixture.universal_premium_rate(), PhoneNumberTypes.fixed_line())
+
+      assert ValidationResults.invalid_length() ==
+               is_possible_number_for_type_with_reason?(PhoneNumberFixture.universal_premium_rate(), PhoneNumberTypes.fixed_line_or_mobile())
+
+      assert ValidationResults.is_possible() ==
+               is_possible_number_for_type_with_reason?(PhoneNumberFixture.universal_premium_rate(), PhoneNumberTypes.premium_rate())
+    end
+
+    test "IsPossibleNumberForTypeWithReason_FixedLineOrMobile" do
+      assert ValidationResults.too_short() == is_possible_number_for_type_with_reason?(PhoneNumberFixture.sh_number(), PhoneNumberTypes.fixed_line())
+      assert ValidationResults.is_possible() == is_possible_number_for_type_with_reason?(PhoneNumberFixture.sh_number(), PhoneNumberTypes.mobile())
+
+      assert ValidationResults.is_possible() ==
+               is_possible_number_for_type_with_reason?(PhoneNumberFixture.sh_number(), PhoneNumberTypes.fixed_line_or_mobile())
+
+      assert ValidationResults.too_short() == is_possible_number_for_type_with_reason?(PhoneNumberFixture.sh_invalid(), PhoneNumberTypes.fixed_line())
+      assert ValidationResults.too_long() == is_possible_number_for_type_with_reason?(PhoneNumberFixture.sh_invalid(), PhoneNumberTypes.mobile())
+
+      assert ValidationResults.invalid_length() ==
+               is_possible_number_for_type_with_reason?(PhoneNumberFixture.sh_invalid(), PhoneNumberTypes.fixed_line_or_mobile())
+
+      assert ValidationResults.is_possible() == is_possible_number_for_type_with_reason?(PhoneNumberFixture.sh_number2(), PhoneNumberTypes.fixed_line())
+      assert ValidationResults.too_long() == is_possible_number_for_type_with_reason?(PhoneNumberFixture.sh_number2(), PhoneNumberTypes.mobile())
+
+      assert ValidationResults.is_possible() ==
+               is_possible_number_for_type_with_reason?(PhoneNumberFixture.sh_number2(), PhoneNumberTypes.fixed_line_or_mobile())
+
+      assert ValidationResults.too_long() == is_possible_number_for_type_with_reason?(PhoneNumberFixture.sh_too_long(), PhoneNumberTypes.fixed_line())
+      assert ValidationResults.too_long() == is_possible_number_for_type_with_reason?(PhoneNumberFixture.sh_too_long(), PhoneNumberTypes.mobile())
+      assert ValidationResults.too_long() == is_possible_number_for_type_with_reason?(PhoneNumberFixture.sh_too_long(), PhoneNumberTypes.fixed_line_or_mobile())
+
+      assert ValidationResults.is_possible() == is_possible_number_for_type_with_reason?(PhoneNumberFixture.sh_toll_free(), PhoneNumberTypes.toll_free())
+
+      assert ValidationResults.too_long() ==
+               is_possible_number_for_type_with_reason?(PhoneNumberFixture.sh_toll_free(), PhoneNumberTypes.fixed_line_or_mobile())
+    end
+  end
 end

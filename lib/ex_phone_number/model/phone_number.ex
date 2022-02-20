@@ -75,6 +75,15 @@ defmodule ExPhoneNumber.Model.PhoneNumber do
     not is_nil(phone_number.raw_input)
   end
 
+  @country_code_default 1
+  def get_country_code_or_default(phone_number = %PhoneNumber{}) do 
+    if is_nil(phone_number.country_code) do
+      @country_code_default
+    else
+      phone_number.country_code
+    end
+  end
+
   @country_code_source_default CountryCodeSource.from_number_with_plus_sign()
   def get_country_code_source_or_default(phone_number = %PhoneNumber{}) do
     if is_nil(phone_number.country_code_source) do
