@@ -180,16 +180,30 @@ defmodule ExPhoneNumber.Validation do
     end
   end
 
-  def is_possible_number_for_type?(number, type) do 
-    result = is_possible_number_for_type_with_reason(number, type)
+  @doc """
+  Convenience wrapper around `Validation.is_possible_number_for_type_with_reason?/2`
+  Instead of returning the reason for failure, this method returns true if the
+  number is either a possible fully-qualified number (containing the area code
+  and country code), or if the number could be a possible local number (with a
+  country code, but missing an area code). Local numbers are considered
+  possible if they could be possibly dialled in this format: if the area code
+  is needed for a call to connect, the number is not considered possible
+  without it.
+
+  Implements `i18n.phonenumbers.PhoneNumberUtil.prototype.isPossibleNumberForType`
+  """
+  @spec is_possible_number_for_type?(%PhoneNumber{}, PhoneNumberTypes.t()) :: ValidationResults.t()
+  def is_possible_number_for_type?(%PhoneNumber{} = number, type) when is_atom(type) do
+    result = is_possible_number_for_type_with_reason?(number, type)
 
     result == ValidationResults.is_possible() ||
-    result == ValidationResults.is_possible_local_only()
+      result == ValidationResults.is_possible_local_only()
   end
 
   @doc """
   Check whether a phone number is a possible number. It provides a more lenient
-  check than is_valid_number in the following sense:
+  check than `Validation.is_valid_number/1` in the following sense:
+
   It only checks the length of phone numbers. In particular, it doesn't
   check starting digits of the number.
 
@@ -202,23 +216,22 @@ defmodule ExPhoneNumber.Validation do
   starting digits (for fixed line numbers, that would most likely be area
   codes) and length (obviously includes the length of area codes for fixed line
   numbers), it will return false for the subscriber-number-only version.
+
+  Implements `i18n.phonenumbers.PhoneNumberUtil.prototype.isPossibleNumberForTypeWithReason`
   """
-  def is_possible_number_for_type_with_reason(number, type) do 
+  @spec is_possible_number_for_type_with_reason?(%PhoneNumber{}, PhoneNumberTypes.t()) :: ValidationResults.t()
+  def is_possible_number_for_type_with_reason?(%PhoneNumber{} = number, type) when is_atom(type) do
     national_number = PhoneNumber.get_national_significant_number(number)
     country_code = PhoneNumber.get_country_code_or_default(number)
 
-    if !has_valid_country_calling_code?(country_code) do
-      raise ArgumentError, message: "Invalid country calling code"
+    if not Metadata.is_valid_country_code?(country_code) do
+      ValidationResults.invalid_country_code()
+    else
+      region_code = Metadata.get_region_code_for_country_code(country_code)
+      metadata = Metadata.get_for_region_code_or_calling_code(country_code, region_code)
+
+      test_number_length_for_type(national_number, metadata, type)
     end
-
-    region_code = Metadata.get_region_code_for_country_code(country_code)
-    metadata = Metadata.get_for_region_code_or_calling_code(country_code, region_code)
-
-    test_number_length_for_type(national_number, metadata, type)
-  end
-
-  def has_valid_country_calling_code?(country_code) do
-    Map.has_key?(ExPhoneNumber.Metadata.country_code_to_region_code_map(), country_code)
   end
 
   def is_valid_possible_number_length?(metadata, number) do

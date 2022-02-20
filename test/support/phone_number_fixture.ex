@@ -105,38 +105,38 @@ defmodule ExPhoneNumber.PhoneNumberFixture do
     }
   end
 
-  def ar_number7() do 
+  def ar_number7() do
     %PhoneNumber{
       country_code: 54,
       national_number: 12345
     }
   end
 
-  def ar_number8() do 
+  def ar_number8() do
     %PhoneNumber{
       country_code: 54,
-      national_number: 123456
+      national_number: 123_456
     }
   end
 
-  def ar_number9() do 
+  def ar_number9() do
     %PhoneNumber{
       country_code: 54,
-      national_number: 123456789
+      national_number: 123_456_789
     }
   end
 
-  def ar_number10() do 
+  def ar_number10() do
     %PhoneNumber{
       country_code: 54,
-      national_number: 1234567890
+      national_number: 1_234_567_890
     }
   end
 
-  def ar_number11() do 
+  def ar_number11() do
     %PhoneNumber{
       country_code: 54,
-      national_number: 12345678901
+      national_number: 12_345_678_901
     }
   end
 
@@ -151,6 +151,27 @@ defmodule ExPhoneNumber.PhoneNumberFixture do
     %PhoneNumber{
       country_code: 61,
       national_number: 1_800_123_456
+    }
+  end
+
+  def br_local_only() do
+    %PhoneNumber{
+      country_code: 55,
+      national_number: 12_345_678
+    }
+  end
+
+  def br_local_only2() do
+    %PhoneNumber{
+      country_code: 55,
+      national_number: 1_234_567_890
+    }
+  end
+
+  def br_too_short() do
+    %PhoneNumber{
+      country_code: 55,
+      national_number: 1_234_567
     }
   end
 
@@ -256,6 +277,13 @@ defmodule ExPhoneNumber.PhoneNumberFixture do
     %PhoneNumber{
       country_code: 49,
       national_number: 1234
+    }
+  end
+
+  def de_local_only() do
+    %PhoneNumber{
+      country_code: 49,
+      national_number: 12
     }
   end
 
@@ -613,6 +641,41 @@ defmodule ExPhoneNumber.PhoneNumberFixture do
     }
   end
 
+  def sh_number() do
+    %PhoneNumber{
+      country_code: 290,
+      national_number: 1234
+    }
+  end
+
+  def sh_invalid() do
+    %PhoneNumber{
+      country_code: 290,
+      national_number: 12345
+    }
+  end
+
+  def sh_number2() do
+    %PhoneNumber{
+      country_code: 290,
+      national_number: 123_456
+    }
+  end
+
+  def sh_too_long() do
+    %PhoneNumber{
+      country_code: 290,
+      national_number: 1_234_567
+    }
+  end
+
+  def sh_toll_free() do
+    %PhoneNumber{
+      country_code: 290,
+      national_number: 12_345_678
+    }
+  end
+
   def us_long_number() do
     %PhoneNumber{
       country_code: 1,
@@ -829,6 +892,13 @@ defmodule ExPhoneNumber.PhoneNumberFixture do
     %PhoneNumber{
       country_code: 123,
       national_number: 6_502_530_000
+    }
+  end
+
+  def international_networks() do
+    %PhoneNumber{
+      country_code: 882,
+      national_number: 1_234_567
     }
   end
 end

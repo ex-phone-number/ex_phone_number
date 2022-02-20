@@ -1,4 +1,18 @@
 defmodule ExPhoneNumber.Constants.PhoneNumberTypes do
+  @type t() ::
+          :fixed_line
+          | :mobile
+          | :fixed_line_or_mobile
+          | :toll_free
+          | :premium_rate
+          | :shared_cost
+          | :voip
+          | :personal_number
+          | :pager
+          | :uan
+          | :voicemail
+          | :unknown
+
   def fixed_line(), do: :fixed_line
 
   def mobile(), do: :mobile
