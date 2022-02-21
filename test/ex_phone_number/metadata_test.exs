@@ -12,10 +12,10 @@ defmodule ExPhoneNumber.MetadataTest do
 
   setup_all do
     [
-      us_metadata: get_for_region_code(RegionCodeFixture.us()),
-      de_metadata: get_for_region_code(RegionCodeFixture.de()),
-      ar_metadata: get_for_region_code(RegionCodeFixture.ar()),
-      un001_metadata: get_for_non_geographical_region(800)
+      us_metadata: get_metadata_for_region(RegionCodeFixture.us()),
+      de_metadata: get_metadata_for_region(RegionCodeFixture.de()),
+      ar_metadata: get_metadata_for_region(RegionCodeFixture.ar()),
+      un001_metadata: get_metadata_for_non_geographical_region(800)
     ]
   end
 
@@ -38,7 +38,7 @@ defmodule ExPhoneNumber.MetadataTest do
     end
   end
 
-  describe "get_for_region_code/1" do
+  describe "get_metadata_for_region/1" do
     test "GetInstanceLoadUSMetadata", %{us_metadata: metadata} do
       assert RegionCodeFixture.us() == metadata.id
       assert 1 == metadata.country_code
@@ -106,7 +106,7 @@ defmodule ExPhoneNumber.MetadataTest do
     end
   end
 
-  describe "get_for_non_geographical_region/1" do
+  describe "get_metadata_for_non_geographical_region/1" do
     test "GetInstanceLoadInternationalTollFreeMetadata", %{un001_metadata: metadata} do
       assert RegionCodeFixture.un001() == metadata.id
       assert 800 == metadata.country_code

@@ -85,7 +85,7 @@ defmodule ExPhoneNumber.Parsing do
 
         phone_number = if not is_nil_or_empty?(ext), do: %{phone_number | extension: ext}, else: phone_number
 
-        region_metadata = Metadata.get_for_region_code(default_region)
+        region_metadata = Metadata.get_metadata_for_region(default_region)
 
         case maybe_extract_country_code(national_number, region_metadata, keep_raw_input) do
           {true, normalized_national_number, phone_number_extract} ->
@@ -94,7 +94,7 @@ defmodule ExPhoneNumber.Parsing do
 
               phone_number_region_metadata =
                 if phone_number_region_code != default_region do
-                  Metadata.get_for_region_code_or_calling_code(
+                  Metadata.get_metadata_for_region_or_calling_code(
                     phone_number_extract.country_code,
                     phone_number_region_code
                   )

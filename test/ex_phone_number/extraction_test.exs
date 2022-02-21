@@ -152,7 +152,7 @@ defmodule ExPhoneNumber.ExtractionTest do
 
   describe ".maybe_extract_country_code/3" do
     test "MaybeExtractCountryCode 1" do
-      metadata = Metadata.get_for_region_code(RegionCodeFixture.us())
+      metadata = Metadata.get_metadata_for_region(RegionCodeFixture.us())
       {result, number, phone_number} = maybe_extract_country_code("011112-3456789", metadata, true)
 
       assert result
@@ -162,7 +162,7 @@ defmodule ExPhoneNumber.ExtractionTest do
     end
 
     test "MaybeExtractCountryCode 2" do
-      metadata = Metadata.get_for_region_code(RegionCodeFixture.us())
+      metadata = Metadata.get_metadata_for_region(RegionCodeFixture.us())
       {result, _, phone_number} = maybe_extract_country_code("+6423456789", metadata, true)
 
       assert result
@@ -171,7 +171,7 @@ defmodule ExPhoneNumber.ExtractionTest do
     end
 
     test "MaybeExtractCountryCode 3" do
-      metadata = Metadata.get_for_region_code(RegionCodeFixture.us())
+      metadata = Metadata.get_metadata_for_region(RegionCodeFixture.us())
       {result, _, phone_number} = maybe_extract_country_code("+80012345678", metadata, true)
 
       assert result
@@ -180,7 +180,7 @@ defmodule ExPhoneNumber.ExtractionTest do
     end
 
     test "MaybeExtractCountryCode 4" do
-      metadata = Metadata.get_for_region_code(RegionCodeFixture.us())
+      metadata = Metadata.get_metadata_for_region(RegionCodeFixture.us())
       {result, _, phone_number} = maybe_extract_country_code("2345-6789", metadata, true)
 
       assert result
@@ -189,7 +189,7 @@ defmodule ExPhoneNumber.ExtractionTest do
     end
 
     test "MaybeExtractCountryCode 5" do
-      metadata = Metadata.get_for_region_code(RegionCodeFixture.us())
+      metadata = Metadata.get_metadata_for_region(RegionCodeFixture.us())
       {result, message} = maybe_extract_country_code("0119991123456789", metadata, true)
 
       refute result
@@ -197,7 +197,7 @@ defmodule ExPhoneNumber.ExtractionTest do
     end
 
     test "MaybeExtractCountryCode 6" do
-      metadata = Metadata.get_for_region_code(RegionCodeFixture.us())
+      metadata = Metadata.get_metadata_for_region(RegionCodeFixture.us())
       {result, _, phone_number} = maybe_extract_country_code("(1 610) 619 4466", metadata, true)
 
       assert result
@@ -208,7 +208,7 @@ defmodule ExPhoneNumber.ExtractionTest do
     end
 
     test "MaybeExtractCountryCode 7" do
-      metadata = Metadata.get_for_region_code(RegionCodeFixture.us())
+      metadata = Metadata.get_metadata_for_region(RegionCodeFixture.us())
       {result, _, phone_number} = maybe_extract_country_code("(1 610) 619 4466", metadata, false)
 
       assert result
@@ -217,7 +217,7 @@ defmodule ExPhoneNumber.ExtractionTest do
     end
 
     test "MaybeExtractCountryCode 8" do
-      metadata = Metadata.get_for_region_code(RegionCodeFixture.us())
+      metadata = Metadata.get_metadata_for_region(RegionCodeFixture.us())
       {result, _, phone_number} = maybe_extract_country_code("(1 610) 619 446", metadata, false)
 
       assert result
@@ -226,7 +226,7 @@ defmodule ExPhoneNumber.ExtractionTest do
     end
 
     test "MaybeExtractCountryCode 9" do
-      metadata = Metadata.get_for_region_code(RegionCodeFixture.us())
+      metadata = Metadata.get_metadata_for_region(RegionCodeFixture.us())
       {result, _, phone_number} = maybe_extract_country_code("(1 610) 619", metadata, true)
 
       assert result

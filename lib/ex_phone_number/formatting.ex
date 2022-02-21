@@ -49,7 +49,7 @@ defmodule ExPhoneNumber.Formatting do
         else
           region_code = Metadata.get_region_code_for_country_code(phone_number.country_code)
 
-          metadata = Metadata.get_for_region_code_or_calling_code(phone_number.country_code, region_code)
+          metadata = Metadata.get_metadata_for_region_or_calling_code(phone_number.country_code, region_code)
 
           formatted_extension = maybe_get_formatted_extension(phone_number, metadata, phone_number_format)
 

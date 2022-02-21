@@ -87,7 +87,7 @@ defmodule ExPhoneNumber.Metadata do
     metadata =
       phone_number
       |> get_region_code_for_number()
-      |> get_for_region_code()
+      |> get_metadata_for_region()
 
     if is_nil(metadata) do
       true
@@ -110,7 +110,7 @@ defmodule ExPhoneNumber.Metadata do
   end
 
   def get_country_code_for_valid_region(region_code) when is_binary(region_code) do
-    metadata = get_for_region_code(region_code)
+    metadata = get_metadata_for_region(region_code)
 
     if metadata do
       metadata.country_code
@@ -132,32 +132,45 @@ defmodule ExPhoneNumber.Metadata do
     Values.mobile_token_mappings() |> Map.get(country_calling_code, "")
   end
 
-  @spec get_for_non_geographical_region(integer() | String.t()) :: %PhoneMetadata{} | nil
-  def get_for_non_geographical_region(calling_code) when is_number(calling_code),
-    do: get_for_non_geographical_region(Integer.to_string(calling_code))
+  @doc """
+  Implements `i18n.phonenumbers.PhoneNumberUtil.prototype.getMetadataForNonGeographicalRegion`
+  """
+  @spec get_metadata_for_non_geographical_region(integer() | String.t()) :: %PhoneMetadata{} | nil
+  def get_metadata_for_non_geographical_region(calling_code) when is_number(calling_code),
+    do: get_metadata_for_non_geographical_region(Integer.to_string(calling_code))
 
-  def get_for_non_geographical_region(region_code) when is_binary(region_code) do
-    get_for_region_code(region_code)
+  def get_metadata_for_non_geographical_region(region_code) when is_binary(region_code) do
+    get_metadata_for_region(region_code)
   end
 
-  @spec get_for_region_code(String.t() | nil) :: %PhoneMetadata{} | nil
-  def get_for_region_code(nil), do: nil
+  @doc """
+  Returns the metadata for the given region code or `nil` if the region
+  code is invalid or unknown.
 
-  def get_for_region_code(region_code) do
+  Implements `i18n.phonenumbers.PhoneNumberUtil.prototype.getMetadataForRegion`
+  """
+  @spec get_metadata_for_region(String.t() | nil) :: %PhoneMetadata{} | nil
+  def get_metadata_for_region(nil), do: nil
+
+  def get_metadata_for_region(region_code) do
     region_code_to_metadata_map()[String.upcase(region_code)]
   end
 
-  def get_for_region_code_or_calling_code(calling_code, region_code) do
-    if region_code == Values.region_code_for_non_geo_entity() do
-      get_for_non_geographical_region(calling_code)
+  @doc """
+  Implements `i18n.phonenumbers.PhoneNumberUtil.prototype.getMetadataForRegionOrCallingCode_`
+  """
+  @spec get_metadata_for_region_or_calling_code(integer(), String.t() | nil) :: %PhoneMetadata{} | nil
+  def get_metadata_for_region_or_calling_code(country_calling_code, region_code) do
+    if Values.region_code_for_non_geo_entity() == region_code do
+      get_metadata_for_non_geographical_region(country_calling_code)
     else
-      get_for_region_code(region_code)
+      get_metadata_for_region(region_code)
     end
   end
 
   def get_ndd_prefix_for_region_code(region_code, strip_non_digits)
       when is_binary(region_code) and is_boolean(strip_non_digits) do
-    if is_nil(metadata = get_for_region_code(region_code)) do
+    if is_nil(metadata = get_metadata_for_region(region_code)) do
       nil
     else
       if not (is_nil(metadata.national_prefix) or String.length(metadata.national_prefix) > 0) do
@@ -197,11 +210,19 @@ defmodule ExPhoneNumber.Metadata do
     end
   end
 
+  @doc """
+  Returns the region where a phone number is from. This could be used for
+  geocoding at the region level. Only guarantees correct results for valid,
+  full numbers (not short-codes, or invalid numbers).
+
+  Implements `i18n.phonenumbers.PhoneNumberUtil.prototype.getRegionCodeForNumber`.
+  """
   @spec get_region_code_for_number(%PhoneNumber{} | nil) :: String.t() | nil
   def get_region_code_for_number(nil), do: nil
 
   def get_region_code_for_number(%PhoneNumber{} = phone_number) do
-    regions = country_code_to_region_code_map()[phone_number.country_code]
+    country_code = PhoneNumber.get_country_code_or_default(phone_number)
+    regions = country_code_to_region_code_map()[country_code]
 
     if is_nil(regions) do
       nil
@@ -216,8 +237,11 @@ defmodule ExPhoneNumber.Metadata do
 
   defp get_region_code_for_number_from_region_list(%PhoneNumber{} = phone_number, region_codes)
        when is_list(region_codes) do
-    region_codes = if_gb_regions_ensure_gb_first(region_codes)
+    # Implements `i18n.phonenumbers.PhoneNumberUtil.prototype.getRegionCodeForNumberFromRegionList_`.
     national_number = PhoneNumber.get_national_significant_number(phone_number)
+
+    region_codes = if_gb_regions_ensure_gb_first(region_codes)
+
     find_matching_region_code(region_codes, national_number)
   end
 
@@ -267,7 +291,7 @@ defmodule ExPhoneNumber.Metadata do
   def get_supported_types_for_region(region_code) do
     if is_valid_region_code?(region_code) do
       region_code
-      |> get_for_region_code()
+      |> get_metadata_for_region()
       |> PhoneMetadata.get_supported_types()
     else
       []
@@ -279,7 +303,7 @@ defmodule ExPhoneNumber.Metadata do
   """
   @spec get_supported_types_for_non_geo_entity(String.t()) :: list(atom())
   def get_supported_types_for_non_geo_entity(country_calling_code) do
-    metadata = get_for_non_geographical_region(country_calling_code)
+    metadata = get_metadata_for_non_geographical_region(country_calling_code)
 
     if is_nil(metadata) do
       []
@@ -335,15 +359,19 @@ defmodule ExPhoneNumber.Metadata do
 
   defp find_matching_region_code(region_code, national_number)
        when is_binary(region_code) and is_binary(national_number) do
-    metadata = get_for_region_code(region_code)
+    metadata = get_metadata_for_region(region_code)
 
     if PhoneMetadata.has_leading_digits(metadata) do
       if match_at_start?(national_number, metadata.leading_digits) do
         region_code
+      else
+        nil
       end
     else
       if get_number_type_helper(national_number, metadata) != PhoneNumberTypes.unknown() do
         region_code
+      else
+        nil
       end
     end
   end

@@ -24,7 +24,7 @@ defmodule ExPhoneNumber.Validation do
     phone_metadata =
       phone_number
       |> Metadata.get_region_code_for_number()
-      |> Metadata.get_for_region_code()
+      |> Metadata.get_metadata_for_region()
 
     cond do
       is_nil(phone_metadata) -> 0
@@ -75,10 +75,16 @@ defmodule ExPhoneNumber.Validation do
     end
   end
 
+  @doc """
+  Gets the type of a valid phone number.
+
+  Implements `i18n.phonenumbers.PhoneNumberUtil.prototype.getNumberType`.
+  """
+  @spec get_number_type(%PhoneNumber{}) :: PhoneNumberTypes.t()
   def get_number_type(%PhoneNumber{} = phone_number) do
     region_code = Metadata.get_region_code_for_number(phone_number)
 
-    metadata = Metadata.get_for_region_code_or_calling_code(phone_number.country_code, region_code)
+    metadata = Metadata.get_metadata_for_region_or_calling_code(PhoneNumber.get_country_code_or_default(phone_number), region_code)
 
     if metadata == nil do
       PhoneNumberTypes.unknown()
@@ -88,7 +94,10 @@ defmodule ExPhoneNumber.Validation do
     end
   end
 
-  def get_number_type_helper(national_number, metadata = %PhoneMetadata{}) do
+  @doc """
+  Implements `i18n.phonenumbers.PhoneNumberUtil.prototype.getNumberTypeHelper_`.
+  """
+  def get_number_type_helper(national_number, %PhoneMetadata{} = metadata) do
     cond do
       not is_number_matching_description?(national_number, metadata.general) ->
         PhoneNumberTypes.unknown()
@@ -128,7 +137,7 @@ defmodule ExPhoneNumber.Validation do
           end
         end
 
-      is_number_matching_description?(national_number, metadata.mobile) ->
+      not metadata.same_mobile_and_fixed_line_pattern and is_number_matching_description?(national_number, metadata.mobile) ->
         PhoneNumberTypes.mobile()
 
       true ->
@@ -174,7 +183,7 @@ defmodule ExPhoneNumber.Validation do
       ValidationResults.invalid_country_code()
     else
       region_code = Metadata.get_region_code_for_country_code(number.country_code)
-      metadata = Metadata.get_for_region_code_or_calling_code(number.country_code, region_code)
+      metadata = Metadata.get_metadata_for_region_or_calling_code(number.country_code, region_code)
       national_number = PhoneNumber.get_national_significant_number(number)
       test_number_length(national_number, metadata)
     end
@@ -228,7 +237,7 @@ defmodule ExPhoneNumber.Validation do
       ValidationResults.invalid_country_code()
     else
       region_code = Metadata.get_region_code_for_country_code(country_code)
-      metadata = Metadata.get_for_region_code_or_calling_code(country_code, region_code)
+      metadata = Metadata.get_metadata_for_region_or_calling_code(country_code, region_code)
 
       test_number_length_for_type(national_number, metadata, type)
     end
@@ -257,7 +266,7 @@ defmodule ExPhoneNumber.Validation do
 
   def is_valid_number_for_region?(%PhoneNumber{} = number, region_code)
       when is_binary(region_code) do
-    metadata = Metadata.get_for_region_code_or_calling_code(number.country_code, region_code)
+    metadata = Metadata.get_metadata_for_region_or_calling_code(number.country_code, region_code)
 
     is_invalid_code =
       Values.region_code_for_non_geo_entity() != region_code and
@@ -337,7 +346,13 @@ defmodule ExPhoneNumber.Validation do
     end
   end
 
-  defp test_number_length_for_type(number, metadata, type) do
+  @doc """
+  Helper method to check a number against a particular pattern and determine
+  whether it matches, or is too short or too long.
+
+  Implements `i18n.phonenumbers.PhoneNumberUtil.prototype.testNumberLengthForType_`
+  """
+  def test_number_length_for_type(number, metadata, type) do
     possible_lengths =
       if type == PhoneNumberTypes.fixed_line_or_mobile() do
         (possible_lengths_by_type(metadata, PhoneNumberTypes.fixed_line()) ++
