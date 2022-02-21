@@ -5,9 +5,48 @@ defmodule ExPhoneNumber.Parsing do
   import ExPhoneNumber.Utilities
   alias ExPhoneNumber.Constants.ErrorMessages
   alias ExPhoneNumber.Constants.Patterns
+  alias ExPhoneNumber.Constants.PhoneNumberTypes
   alias ExPhoneNumber.Constants.Values
   alias ExPhoneNumber.Metadata
+  alias ExPhoneNumber.Metadata.PhoneMetadata
+  alias ExPhoneNumber.Metadata.PhoneNumberDescription
   alias ExPhoneNumber.Model.PhoneNumber
+
+  @doc """
+  Gets a valid number for the specified region.
+
+  Implements `i18n.phonenumbers.PhoneNumberUtil.prototype.getExampleNumber`.
+  """
+  @spec get_example_number(String.t()) :: %PhoneMetadata{} | nil
+  def get_example_number(region_code) when is_binary(region_code) do
+    get_example_number_for_type(region_code, PhoneNumberTypes.fixed_line())
+  end
+
+  @doc """
+  Gets a valid number for the specified region and number type.
+
+  Implements `i18n.phonenumbers.PhoneNumberUtil.prototype.getExampleNumberForType`.
+  """
+  @spec get_example_number_for_type(String.t(), PhoneNumberTypes.t()) :: %PhoneMetadata{} | nil
+  def get_example_number_for_type(region_code, type) when is_binary(region_code) and is_atom(type) do
+    if not Metadata.is_valid_region_code?(region_code) do
+      nil
+    else
+      desc =
+        region_code
+        |> Metadata.get_metadata_for_region()
+        |> PhoneMetadata.get_number_description_by_type(type)
+
+      if PhoneNumberDescription.has_example_number(desc) do
+        case parse(desc.example_number, region_code) do
+          {:ok, phone_number} -> phone_number
+          _ -> nil
+        end
+      else
+        nil
+      end
+    end
+  end
 
   def build_national_number_for_parsing(number_to_parse) do
     number_to_parse

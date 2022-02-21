@@ -7,6 +7,7 @@ defmodule ExPhoneNumber.Metadata.PhoneNumberDescription do
             example_number: nil
 
   import SweetXml
+  alias ExPhoneNumber.Utilities
   alias ExPhoneNumber.Metadata.PhoneNumberDescription
 
   def from_xpath_node(nil), do: nil
@@ -106,5 +107,10 @@ defmodule ExPhoneNumber.Metadata.PhoneNumberDescription do
 
   def has_data?(%PhoneNumberDescription{}) do
     false
+  end
+
+  @spec has_example_number(%PhoneNumberDescription{}) :: boolean()
+  def has_example_number(%PhoneNumberDescription{} = phone_number_description) do
+    not Utilities.is_nil_or_empty?(phone_number_description.example_number)
   end
 end

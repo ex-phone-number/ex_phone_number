@@ -386,29 +386,13 @@ defmodule ExPhoneNumber.Validation do
   end
 
   defp possible_lengths_by_type(metadata, type) do
-    desc_for_type = get_number_description_by_type(metadata, type)
-    desc_general = get_number_description_by_type(metadata, :general)
+    desc_for_type = PhoneMetadata.get_number_description_by_type(metadata, type)
+    desc_general = PhoneMetadata.get_number_description_by_type(metadata, :general)
 
     if Enum.empty?(desc_for_type.possible_lengths) do
       desc_general.possible_lengths
     else
       desc_for_type.possible_lengths
-    end
-  end
-
-  defp get_number_description_by_type(%PhoneMetadata{} = metadata, type) do
-    cond do
-      type == PhoneNumberTypes.premium_rate() -> metadata.premium_rate
-      type == PhoneNumberTypes.toll_free() -> metadata.toll_free
-      type == PhoneNumberTypes.mobile() -> metadata.mobile
-      type == PhoneNumberTypes.fixed_line() -> metadata.fixed_line
-      type == PhoneNumberTypes.shared_cost() -> metadata.shared_cost
-      type == PhoneNumberTypes.voip() -> metadata.voip
-      type == PhoneNumberTypes.personal_number() -> metadata.personal_number
-      type == PhoneNumberTypes.pager() -> metadata.pager
-      type == PhoneNumberTypes.uan() -> metadata.uan
-      type == PhoneNumberTypes.voicemail() -> metadata.voicemail
-      true -> metadata.general
     end
   end
 end

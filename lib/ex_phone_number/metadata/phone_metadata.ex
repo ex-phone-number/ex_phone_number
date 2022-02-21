@@ -409,6 +409,27 @@ defmodule ExPhoneNumber.Metadata.PhoneMetadata do
     Regex.replace(~r/\$NP/, rule, prefix, global: false)
   end
 
+  @doc """
+  Implements `i18n.phonenumbers.PhoneNumberUtil.getNumberDescByType_`.
+  """
+  @spec get_number_description_by_type(%PhoneMetadata{}, PhoneNumberTypes.t()) :: %PhoneNumberDescription{}
+  def get_number_description_by_type(%PhoneMetadata{} = metadata, type) when is_atom(type) do
+    cond do
+      type == PhoneNumberTypes.premium_rate() -> metadata.premium_rate
+      type == PhoneNumberTypes.toll_free() -> metadata.toll_free
+      type == PhoneNumberTypes.mobile() -> metadata.mobile
+      type == PhoneNumberTypes.fixed_line() -> metadata.fixed_line
+      type == PhoneNumberTypes.fixed_line_or_mobile() -> metadata.fixed_line
+      type == PhoneNumberTypes.shared_cost() -> metadata.shared_cost
+      type == PhoneNumberTypes.voip() -> metadata.voip
+      type == PhoneNumberTypes.personal_number() -> metadata.personal_number
+      type == PhoneNumberTypes.pager() -> metadata.pager
+      type == PhoneNumberTypes.uan() -> metadata.uan
+      type == PhoneNumberTypes.voicemail() -> metadata.voicemail
+      true -> metadata.general
+    end
+  end
+
   def get_number_format(%PhoneMetadata{} = phone_metadata),
     do: get_number_format(phone_metadata.available_formats, phone_metadata)
 

@@ -337,7 +337,12 @@ defmodule ExPhoneNumber.Metadata do
     not is_nil(country_code_to_region_code_map()[country_code])
   end
 
-  @spec is_valid_region_code?(String.t() | nil) :: map()
+  @doc """
+  Helper function to check region code is not unknown or null.
+
+  Implements `i18n.phonenumbers.PhoneNumberUtil.prototype.isValidRegionCode_`.
+  """
+  @spec is_valid_region_code?(String.t() | nil) :: boolean()
   def is_valid_region_code?(nil), do: false
 
   def is_valid_region_code?(region_code) when is_binary(region_code) do

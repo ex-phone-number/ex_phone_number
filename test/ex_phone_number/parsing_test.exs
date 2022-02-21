@@ -8,6 +8,27 @@ defmodule ExPhoneNumber.ParsingTest do
   alias ExPhoneNumber.PhoneNumberFixture
   alias ExPhoneNumber.RegionCodeFixture
   alias ExPhoneNumber.Constants.ErrorMessages
+  alias ExPhoneNumber.Constants.PhoneNumberTypes
+
+  describe ".get_example_number/1" do
+    test "GetExampleNumber" do
+      assert get_example_number(RegionCodeFixture.de()) == PhoneNumberFixture.de_number()
+      assert is_nil(get_example_number(RegionCodeFixture.un001()))
+    end
+  end
+
+  describe ".get_example_number_for_type/2" do
+    test "GetExampleNumber" do
+      assert get_example_number_for_type(RegionCodeFixture.de(), PhoneNumberTypes.fixed_line()) == PhoneNumberFixture.de_number()
+      assert get_example_number_for_type(RegionCodeFixture.de(), PhoneNumberTypes.fixed_line_or_mobile()) == PhoneNumberFixture.de_number()
+
+      assert is_nil(get_example_number_for_type(RegionCodeFixture.us(), PhoneNumberTypes.voicemail()))
+      assert not is_nil(get_example_number_for_type(RegionCodeFixture.us(), PhoneNumberTypes.fixed_line()))
+      assert not is_nil(get_example_number_for_type(RegionCodeFixture.us(), PhoneNumberTypes.mobile()))
+
+      assert is_nil(get_example_number_for_type(RegionCodeFixture.cs(), PhoneNumberTypes.mobile()))
+    end
+  end
 
   describe ".is_possible_number?/2" do
     test "IsNotPossibleNumber" do
