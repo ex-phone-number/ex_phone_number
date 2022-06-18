@@ -26,7 +26,7 @@ Add `:ex_phone_number` to your list of dependencies in `mix.exs`:
 ```elixir
 def deps do
   [
-    {:ex_phone_number, "~> 0.2"}
+    {:ex_phone_number, "~> 0.3"}
   ]
 end
 ```
