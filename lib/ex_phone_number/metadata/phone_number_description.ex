@@ -3,8 +3,12 @@ defmodule ExPhoneNumber.Metadata.PhoneNumberDescription do
   defstruct national_number_pattern: nil,
             # list
             possible_lengths: nil,
+            # list
+            local_only_possible_lengths: nil,
             # string
-            example_number: nil
+            example_number: nil,
+            # bool
+            is_default: false
 
   import SweetXml
   alias ExPhoneNumber.Utilities
@@ -31,6 +35,7 @@ defmodule ExPhoneNumber.Metadata.PhoneNumberDescription do
     struct(%PhoneNumberDescription{}, %{
       national_number_pattern: kwlist.national_number_pattern,
       possible_lengths: possible_lengths,
+      local_only_possible_lengths: kwlist.local_possible_lengths || [],
       example_number: kwlist.example_number
     })
   end
@@ -86,6 +91,12 @@ defmodule ExPhoneNumber.Metadata.PhoneNumberDescription do
 
   @spec has_data?(%PhoneNumberDescription{}) :: boolean()
   def has_data?(%PhoneNumberDescription{
+        is_default: true
+      }) do
+    false
+  end
+
+  def has_data?(%PhoneNumberDescription{
         example_number: example_number
       })
       when is_binary(example_number) do
@@ -101,8 +112,15 @@ defmodule ExPhoneNumber.Metadata.PhoneNumberDescription do
   def has_data?(%PhoneNumberDescription{
         possible_lengths: possible_lengths
       })
+      when is_list(possible_lengths) and length(possible_lengths) != 1 do
+    true
+  end
+
+  def has_data?(%PhoneNumberDescription{
+        possible_lengths: possible_lengths
+      })
       when is_list(possible_lengths) do
-    List.first(possible_lengths) > 0
+    List.first(possible_lengths) != -1
   end
 
   def has_data?(%PhoneNumberDescription{}) do

@@ -570,10 +570,10 @@ defmodule ExPhoneNumber.Metadata.PhoneMetadata do
   def destructure_to_intl_number_format(%{intl_number_format: number_format}), do: number_format
 
   def process_phone_number_description(nil, nil),
-    do: process_phone_number_description(%PhoneNumberDescription{}, %PhoneNumberDescription{})
+    do: process_phone_number_description(%PhoneNumberDescription{is_default: true}, %PhoneNumberDescription{})
 
   def process_phone_number_description(nil, %PhoneMetadata{general: general}),
-    do: process_phone_number_description(%PhoneNumberDescription{}, general)
+    do: process_phone_number_description(%PhoneNumberDescription{is_default: true}, general)
 
   def process_phone_number_description(%PhoneNumberDescription{} = description, nil),
     do: process_phone_number_description(description, %PhoneNumberDescription{})
@@ -601,6 +601,13 @@ defmodule ExPhoneNumber.Metadata.PhoneMetadata do
         description.possible_lengths
       end
 
+    local_only_possible_lengths =
+      if is_nil_or_empty?(description.local_only_possible_lengths) do
+        general.local_only_possible_lengths
+      else
+        description.local_only_possible_lengths
+      end
+
     example_number =
       if is_nil_or_empty?(description.example_number) do
         general.example_number
@@ -608,10 +615,12 @@ defmodule ExPhoneNumber.Metadata.PhoneMetadata do
         description.example_number
       end
 
-    %PhoneNumberDescription{
-      national_number_pattern: national_number_pattern,
-      possible_lengths: possible_lengths,
-      example_number: example_number
+    %{
+      description
+      | national_number_pattern: national_number_pattern,
+        possible_lengths: possible_lengths,
+        local_only_possible_lengths: local_only_possible_lengths,
+        example_number: example_number
     }
   end
 
@@ -619,7 +628,8 @@ defmodule ExPhoneNumber.Metadata.PhoneMetadata do
     if is_nil(description) do
       %PhoneNumberDescription{
         national_number_pattern: Values.description_default_pattern(),
-        possible_lengths: Values.description_default_length()
+        possible_lengths: Values.description_default_length(),
+        local_only_possible_lengths: Values.description_default_length()
       }
     else
       process_phone_number_description(description, general)
