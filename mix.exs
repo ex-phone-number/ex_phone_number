@@ -41,10 +41,12 @@ defmodule ExPhoneNumber.Mixfile do
   end
 
   defp package do
-    [files: ["lib", "config", "resources", "LICENSE*", "README*", "mix.exs"],
-     licenses: ["MIT"],
-     links: %{"GitHub" => "https://github.com/socialpaymentsbv/ex_phone_number"},
-     maintainers: ["ClubCollect (@socialpaymentsbv)",  "Jose Miguel Rivero Bruno (@josemrb)"],
-     name: :ex_phone_number]
+    [
+      files: ["lib", "config", "resources", "LICENSE*", "README*", "mix.exs"],
+      licenses: ["MIT"],
+      links: %{"GitHub" => "https://github.com/socialpaymentsbv/ex_phone_number"},
+      maintainers: ["ClubCollect (@socialpaymentsbv)", "Jose Miguel Rivero Bruno (@josemrb)"],
+      name: :ex_phone_number
+    ]
   end
 end
