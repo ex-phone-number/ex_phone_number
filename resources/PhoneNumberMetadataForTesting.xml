@@ -3,7 +3,7 @@
      Licensed under the Apache License, Version 2.0 (the "License");
      you may not use this file except in compliance with the License.
      You may obtain a copy of the License at
-
+     
      http://www.apache.org/licenses/LICENSE-2.0
 
      Unless required by applicable law or agreed to in writing, software
@@ -372,6 +372,50 @@
         </nationalNumberPattern>
         <possibleLengths national="11"/>
         <exampleNumber>13123456789</exampleNumber>
+      </mobile>
+    </territory>
+
+    <!-- Colombia (CO) -->
+    <!-- Data is here to check formatForMobileDialling() API is no more considering CO as special
+         i.e it returns regular E.164 format rather than using the 03 carrier code. -->
+    <territory id="CO" countryCode="57" nationalPrefix="0"
+               nationalPrefixForParsing="0(4(?:[14]4|56)|[579])?" mobileNumberPortableRegion="true">
+      <availableFormats>
+        <numberFormat pattern="(\d{3})(\d{7})" nationalPrefixFormattingRule="($FG)"
+                      carrierCodeFormattingRule="$NP$CC $FG">
+          <leadingDigits>6</leadingDigits>
+          <format>$1 $2</format>
+        </numberFormat>
+        <numberFormat pattern="(\d{3})(\d{7})" carrierCodeFormattingRule="$NP$CC $FG">
+          <leadingDigits>3</leadingDigits>
+          <format>$1 $2</format>
+        </numberFormat>
+      </availableFormats>
+      <generalDesc>
+        <nationalNumberPattern>
+          (?:
+            60|
+            3\d
+          )\d{8}
+        </nationalNumberPattern>
+      </generalDesc>
+      <fixedLine>
+        <possibleLengths national="10"/>
+        <exampleNumber>6012345678</exampleNumber>
+        <nationalNumberPattern>60\d{8}</nationalNumberPattern>
+      </fixedLine>
+      <mobile>
+        <possibleLengths national="10"/>
+        <exampleNumber>3211234567</exampleNumber>
+        <nationalNumberPattern>
+          3(?:
+            0[0-5]|
+            1\d|
+            2[0-3]|
+            5[01]|
+            70
+          )\d{7}
+        </nationalNumberPattern>
       </mobile>
     </territory>
 
