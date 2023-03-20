@@ -15,9 +15,6 @@ defmodule ExPhoneNumber.Mixfile do
       deps: deps(),
       package: package(),
       description: description(),
-      dialyzer: [
-        plt_add_apps: [:inets, :mix]
-      ],
       docs: docs()
     ]
   end
@@ -30,7 +27,6 @@ defmodule ExPhoneNumber.Mixfile do
     [
       {:sweet_xml, "~> 0.7"},
       {:credo, "~> 1.0", only: [:dev, :test], runtime: false},
-      {:dialyxir, "~> 1.0", only: :dev, runtime: false},
       {:ex_doc, ">= 0.0.0", only: :dev, runtime: false},
       {:ex_spec, "~> 2.0", only: :test},
       {:excoveralls, "~> 0.10", only: :test}
