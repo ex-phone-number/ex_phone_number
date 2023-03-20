@@ -156,7 +156,7 @@ defmodule ExPhoneNumber.Parsing do
           case maybe_strip_national_prefix_and_carrier_code(normalized_national_number, metadata) do
             {true, carrier_code, potential_national_number} ->
               national_number =
-                if not is_shorter_than_possible_normal_number?(
+                if is_valid_possible_number_length?(
                      metadata,
                      potential_national_number
                    ),

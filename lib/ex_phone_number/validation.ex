@@ -94,8 +94,14 @@ defmodule ExPhoneNumber.Validation do
     end
   end
 
-  def is_shorter_than_possible_normal_number?(metadata, number) do
-    test_number_length(number, metadata) == ValidationResults.too_short()
+  def is_valid_possible_number_length?(metadata, number) do
+    !Enum.member?(
+      [
+        ValidationResults.too_short(),
+        ValidationResults.invalid_length()
+      ],
+      test_number_length(number, metadata)
+    )
   end
 
   def is_valid_number?(%PhoneNumber{} = number) do

@@ -24,6 +24,10 @@ defmodule ExPhoneNumber.ParsingTest do
         assert is_possible_number?("253-0000", RegionCodeFixture.us())
       end
 
+      it "should return true #5" do
+        assert is_possible_number?("+1 111 253 0000", RegionCodeFixture.us())
+      end
+
       it "should return false #1" do
         refute is_possible_number?("+1 650 253 00000", RegionCodeFixture.us())
       end

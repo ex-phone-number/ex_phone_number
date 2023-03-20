@@ -1,22 +1,24 @@
 defmodule ExPhoneNumber.Mixfile do
   use Mix.Project
 
+  @source_url "https://github.com/ex-phone-number/ex_phone_number"
+  @version "0.3.0"
+
   def project do
     [
       app: :ex_phone_number,
-      version: "0.3.4",
+      version: @version,
+      name: "ExPhoneNumber",
       elixir: "~> 1.4",
       build_embedded: Mix.env() == :prod,
       start_permanent: Mix.env() == :prod,
       deps: deps(),
       package: package(),
       description: description(),
-      name: "ExPhoneNumber",
-      source_url: "https://github.com/surgeventures/ex_phone_number",
-      homepage_url: "https://github.com/surgeventures/ex_phone_number",
       dialyzer: [
         plt_add_apps: [:inets, :mix]
-      ]
+      ],
+      docs: docs()
     ]
   end
 
@@ -27,10 +29,11 @@ defmodule ExPhoneNumber.Mixfile do
   defp deps do
     [
       {:sweet_xml, "~> 0.7"},
-      {:ex_doc, "~> 0.29", only: :dev, runtime: false},
+      {:credo, "~> 1.0", only: [:dev, :test], runtime: false},
+      {:dialyxir, "~> 1.0", only: :dev, runtime: false},
+      {:ex_doc, ">= 0.0.0", only: :dev, runtime: false},
       {:ex_spec, "~> 2.0", only: :test},
-      {:credo, "~> 1.6", only: [:dev, :test], runtime: false},
-      {:dialyxir, "~> 1.0", only: [:dev], runtime: false}
+      {:excoveralls, "~> 0.10", only: :test}
     ]
   end
 
@@ -44,9 +47,19 @@ defmodule ExPhoneNumber.Mixfile do
     [
       files: ["lib", "config", "resources", "LICENSE*", "README*", "mix.exs"],
       licenses: ["MIT"],
-      links: %{"GitHub" => "https://github.com/surgeventures/ex_phone_number"},
-      maintainers: ["ClubCollect (@socialpaymentsbv)", "Jose Miguel Rivero Bruno (@josemrb)"],
-      name: :ex_phone_number_fresha
+      links: %{"GitHub" => @source_url},
+      maintainers: ["Jose Miguel Rivero Bruno (@josemrb)", "Szymon Jeż (@szymon-jez)"],
+      name: :ex_phone_number
+    ]
+  end
+
+  defp docs do
+    [
+      extras: ["README.md"],
+      main: "readme",
+      source_url: @source_url,
+      source_ref: "v#{@version}",
+      homepage_url: @source_url
     ]
   end
 end
