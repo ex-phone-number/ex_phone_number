@@ -4,21 +4,15 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ## [Unreleased]
 
+### Changed
 
-## [0.3.1] update metadata
+- Updated metadata source file to version `8.12.43`
+
+## [0.3.0] - 2022-06-17
 
 ### Changed
 
-- updated metadata source file to version `8.12.43`
+- Changed `sweet_xml` version requirement to `~> 0.7`
 
-## [0.3.0] modernize deployment stack
-
-### Fixed
-
-- almost issues with credo
-- removed dead code
-
-[Unreleased]: https://github.com/surgeventures/ex_phone_number/compare/v0.3.1...HEAD
-
-[0.3.1]: https://github.com/surgeventures/ex_phone_number/compare/v0.3.0...v0.3.1
-[0.3.0]: https://github.com/surgeventures/ex_phone_number/compare/v0.2.5...v0.3.0
+[unreleased]: https://github.com/ex-phone-number/ex_phone_number/compare/v0.3.0...HEAD
+[0.3.0]: https://github.com/ex-phone-number/ex_phone_number/compare/v0.2.1...v0.3.0
