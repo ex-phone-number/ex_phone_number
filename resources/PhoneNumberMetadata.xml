@@ -22591,7 +22591,7 @@
       <mobile>
         <possibleLengths national="9"/>
         <exampleNumber>720123456</exampleNumber>
-        <nationalNumberPattern>7[238]\d{7}</nationalNumberPattern>
+        <nationalNumberPattern>7[2389]\d{7}</nationalNumberPattern>
       </mobile>
       <tollFree>
         <possibleLengths national="9"/>
