@@ -1,9 +1,9 @@
 # ExPhoneNumber
 
-[![CI](https://github.com/ex-phone-number/ex_phone_number/actions/workflows/elixir.yml/badge.svg)](https://github.com/ex-phone-number/ex_phone_number/actions/workflows/elixir.yml)
+[![CI](https://github.com/ex-phone-number/ex_phone_number/actions/workflows/build.yml/badge.svg)](https://github.com/ex-phone-number/ex_phone_number/actions/workflows/build.yml)
 [![Module Version](https://img.shields.io/hexpm/v/ex_phone_number.svg)](https://hex.pm/packages/ex_phone_number)
 [![Hex Docs](https://img.shields.io/badge/hex-docs-lightgreen.svg)](https://hexdocs.pm/ex_phone_number/)
-[![Total Download](https://img.shields.io/hexpm/dt/ex_phone_number.svg)](https://hex.pm/packages/ex_phone_number)
+[![Total Downloads](https://img.shields.io/hexpm/dt/ex_phone_number.svg)](https://hex.pm/packages/ex_phone_number)
 [![License](https://img.shields.io/hexpm/l/ex_phone_number.svg)](https://github.com/ex-phone-number/ex_phone_number/blob/master/LICENSE.md)
 [![Last Updated](https://img.shields.io/github/last-commit/ex-phone-number/ex_phone_number.svg)](https://github.com/ex-phone-number/ex_phone_number/commits/master)
 
