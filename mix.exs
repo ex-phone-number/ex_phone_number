@@ -45,7 +45,11 @@ defmodule ExPhoneNumber.Mixfile do
       files: ["lib", "config", "resources", "LICENSE*", "README*", "mix.exs"],
       licenses: ["MIT"],
       links: %{"GitHub" => @source_url},
-      maintainers: ["Jose Miguel Rivero Bruno (@josemrb)", "Szymon Jeż (@szymon-jez)"],
+      maintainers: [
+        "Jose Miguel Rivero Bruno (@josemrb)",
+        "Szymon Jeż (@szymon-jez)",
+        "Kamil Kowalski (@kamilkowalski)"
+      ],
       name: :ex_phone_number
     ]
   end
