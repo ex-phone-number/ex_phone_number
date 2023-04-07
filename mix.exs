@@ -15,7 +15,8 @@ defmodule ExPhoneNumber.Mixfile do
       deps: deps(),
       package: package(),
       description: description(),
-      docs: docs()
+      docs: docs(),
+      xref: [exclude: [:httpc]]
     ]
   end
 
