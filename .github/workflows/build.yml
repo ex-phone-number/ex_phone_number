@@ -1,0 +1,58 @@
+name: Build
+
+on:
+  pull_request:
+    branches:
+      - "master"
+  push:
+    branches:
+      - "master"
+
+jobs:
+  format:
+    name: Check formatting
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: erlef/setup-beam@v1
+        with:
+          otp-version: "25.3"
+          elixir-version: "1.14.4"
+      - run: mix format --check-formatted
+  test:
+    name: Test on Elixir ${{ matrix.elixir }} (OTP ${{ matrix.otp }})
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        otp: ["23.3.4.18", "24.3.4.10"]
+        elixir: ["1.12.3", "1.13.4", "1.14.4"]
+        include:
+          # Only Elixir 1.14 supports OTP 25
+          - otp: "25.3"
+            elixir: "1.14.4"
+    steps:
+      - uses: actions/checkout@v3
+      - uses: erlef/setup-beam@v1
+        with:
+          otp-version: ${{ matrix.otp }}
+          elixir-version: ${{ matrix.elixir }}
+      - uses: actions/cache@v3
+        name: Cache dependencies
+        with:
+          path: |
+            deps
+          key: deps-${{ hashFiles('mix.lock') }}
+          restore-keys: |
+            deps-${{ hashFiles('mix.lock') }}
+            deps-
+      - run: mix deps.get
+      - uses: actions/cache@v3
+        name: Cache build
+        with:
+          path: |
+            _build
+          key: build-${{ runner.os }}-${{ matrix.otp }}-${{ matrix.elixir }}-${{ hashFiles('mix.lock') }}
+          restore-keys: |
+            build-${{ runner.os }}-${{ matrix.otp }}-${{ matrix.elixir }}-${{ hashFiles('mix.lock') }}
+            build-${{ runner.os }}-${{ matrix.otp }}-${{ matrix.elixir }}-
+      - run: mix test
