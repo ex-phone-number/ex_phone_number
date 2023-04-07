@@ -6,7 +6,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ### Changed
 
-- Updated metadata source file to version `8.12.43`
+- Updated metadata source file to v8.13.8
 
 ## [0.3.0] - 2022-06-17
 

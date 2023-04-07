@@ -1,24 +1,52 @@
 defmodule Mix.Tasks.UpdateMetadata do
-  @moduledoc "downloads latest metadata from libphonenumber github repo"
-  @shortdoc "updates metadata"
+  @moduledoc "Downloads the latest libphonenumber metadata from GitHub"
+  @shortdoc "Update libphonenumber metadata"
 
   use Mix.Task
-  @files_to_download ["PhoneNumberMetadata.xml", "PhoneNumberMetadataForTesting.xml"]
-  @remote_path "https://raw.githubusercontent.com/google/libphonenumber/master/resources/"
+  @raw_files_url "https://raw.githubusercontent.com/google/libphonenumber"
+  @files_to_download ["resources/PhoneNumberMetadata.xml", "resources/PhoneNumberMetadataForTesting.xml"]
   @resources_directory "resources"
+
+  defmodule GitHub do
+    use Tesla
+
+    plug(Tesla.Middleware.BaseUrl, "https://api.github.com")
+    plug(Tesla.Middleware.Headers, [{"User-Agent", "ex_phone_number"}])
+    plug(Tesla.Middleware.JSON)
+
+    def latest_release(repo) do
+      get("/repos/" <> repo <> "/releases/latest")
+    end
+  end
 
   @impl Mix.Task
   def run(_args) do
-    Enum.each(@files_to_download, &download/1)
-    IO.puts("files updated, check any changes with git diff")
+    latest_tag = fetch_latest_tag()
+    Enum.each(@files_to_download, &download(latest_tag, &1))
+    update_readme(latest_tag)
   end
 
-  def download(filename) do
-    local_path = Path.join([File.cwd!(), @resources_directory, filename])
+  defp fetch_latest_tag() do
+    {:ok, %{body: body}} = GitHub.latest_release("google/libphonenumber")
+    body["tag_name"]
+  end
 
-    with {:ok, {_status, _headers, body}} <- :httpc.request([@remote_path <> filename]),
-         :ok <- File.write(local_path, body) do
-      IO.puts("written #{length(body)} bytes to #{local_path}")
-    end
+  defp download(tag, path) do
+    filename = Path.basename(path)
+    local_path = Path.join([File.cwd!(), @resources_directory, filename])
+    file_url = "#{@raw_files_url}/#{tag}/#{path}"
+    {:ok, %{body: body}} = Tesla.get(file_url)
+    File.write!(local_path, body)
+  end
+
+  defp update_readme(tag) do
+    readme_path = Path.join([File.cwd!(), "README.md"])
+
+    updated_content =
+      readme_path
+      |> File.read!()
+      |> String.replace(~r{Current metadata version: v[\d+].[\d+].[\d+]\.}, "Current metadata version: " <> tag <> ".")
+
+    File.write!(readme_path, updated_content)
   end
 end

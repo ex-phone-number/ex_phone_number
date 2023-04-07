@@ -15,8 +15,7 @@ defmodule ExPhoneNumber.Mixfile do
       deps: deps(),
       package: package(),
       description: description(),
-      docs: docs(),
-      xref: [exclude: [:httpc]]
+      docs: docs()
     ]
   end
 
@@ -29,7 +28,9 @@ defmodule ExPhoneNumber.Mixfile do
       {:sweet_xml, "~> 0.7"},
       {:ex_doc, ">= 0.0.0", only: :dev, runtime: false},
       {:ex_spec, "~> 2.0", only: :test},
-      {:excoveralls, "~> 0.10", only: :test}
+      {:tesla, "~> 1.4", only: [:dev, :test]},
+      {:hackney, "~> 1.17", only: [:dev, :test]},
+      {:jason, ">= 1.0.0", only: [:dev, :test]}
     ]
   end
 
