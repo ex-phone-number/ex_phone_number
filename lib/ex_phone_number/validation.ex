@@ -136,19 +136,7 @@ defmodule ExPhoneNumber.Validation do
   end
 
   def test_number_length(number, metadata) do
-    test_number_length_for_type(number, metadata)
-  end
-
-  def validate_length(number_to_parse) do
-    if String.length(number_to_parse) > Values.max_input_string_length() do
-      {:error, ErrorMessages.too_long()}
-    else
-      {:ok, number_to_parse}
-    end
-  end
-
-  defp test_number_length_for_type(number, metadata) do
-    possible_lengths = possible_lengths_by_type(metadata)
+    possible_lengths = metadata.general.possible_lengths
 
     min_length = Enum.min(possible_lengths)
     max_length = Enum.max(possible_lengths)
@@ -173,7 +161,11 @@ defmodule ExPhoneNumber.Validation do
     end
   end
 
-  defp possible_lengths_by_type(%PhoneMetadata{} = metadata) do
-    metadata.general.possible_lengths
+  def validate_length(number_to_parse) do
+    if String.length(number_to_parse) > Values.max_input_string_length() do
+      {:error, ErrorMessages.too_long()}
+    else
+      {:ok, number_to_parse}
+    end
   end
 end
