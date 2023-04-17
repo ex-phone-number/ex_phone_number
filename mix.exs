@@ -28,7 +28,7 @@ defmodule ExPhoneNumber.Mixfile do
       {:sweet_xml, "~> 0.7"},
       {:ex_doc, ">= 0.0.0", only: :dev, runtime: false},
       {:ex_spec, "~> 2.0", only: :test},
-      {:tesla, "~> 1.4", only: [:dev, :test]},
+      {:tesla, "~> 1.3.0", only: [:dev, :test]},
       {:hackney, "~> 1.17", only: [:dev, :test]},
       {:jason, ">= 1.0.0", only: [:dev, :test]},
       {:mime, "~> 1.0", only: [:dev, :test]}
