@@ -30,7 +30,8 @@ defmodule ExPhoneNumber.Mixfile do
       {:ex_spec, "~> 2.0", only: :test},
       {:tesla, "~> 1.4", only: [:dev, :test]},
       {:hackney, "~> 1.17", only: [:dev, :test]},
-      {:jason, ">= 1.0.0", only: [:dev, :test]}
+      {:jason, ">= 1.0.0", only: [:dev, :test]},
+      {:mime, "~> 1.0", only: [:dev, :test]}
     ]
   end
 
