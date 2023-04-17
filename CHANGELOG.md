@@ -4,6 +4,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ## [Unreleased]
 
+Require Elixir v1.10+.
+
 ### Changed
 
 - Updated metadata source file to v8.13.8
