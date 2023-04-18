@@ -1,4 +1,6 @@
 defmodule Mix.Tasks.UpdateMetadata do
+  require Logger
+
   @moduledoc "Downloads the latest libphonenumber metadata from GitHub"
   @shortdoc "Update libphonenumber metadata"
 
@@ -8,14 +10,31 @@ defmodule Mix.Tasks.UpdateMetadata do
   @resources_directory "resources"
 
   defmodule GitHub do
-    use Tesla
-
-    plug(Tesla.Middleware.BaseUrl, "https://api.github.com")
-    plug(Tesla.Middleware.Headers, [{"User-Agent", "ex_phone_number"}])
-    plug(Tesla.Middleware.JSON)
-
     def latest_release(repo) do
-      get("/repos/" <> repo <> "/releases/latest")
+      ensure_tesla_loaded!()
+      Tesla.get(client(), "/repos/" <> repo <> "/releases/latest")
+    end
+
+    defp client do
+      middleware = [
+        {Tesla.Middleware.BaseUrl, "https://api.github.com"},
+        Tesla.Middleware.JSON,
+        {Tesla.Middleware.Headers, [{"User-Agent", "ex_phone_number"}]}
+      ]
+
+      Tesla.client(middleware)
+    end
+
+    defp ensure_tesla_loaded!() do
+      unless Code.ensure_loaded?(Tesla) do
+        Logger.error("""
+        Could not find Tesla dependency.
+        Please add :tesla to your dependencies:
+          {:tesla, "~> 1.6"}
+        """)
+
+        raise "missing tesla dependency"
+      end
     end
   end
 
