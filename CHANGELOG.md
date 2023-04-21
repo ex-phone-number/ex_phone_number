@@ -7,6 +7,10 @@ and this project aims to adhere to [Semantic Versioning](https://semver.org/spec
 
 ## [Unreleased]
 
+### Fixed
+
+- Stop failing if Tesla is not in the depencencies
+
 ## [0.4.0] - 2023-04-18
 
 Require Elixir v1.10+.
