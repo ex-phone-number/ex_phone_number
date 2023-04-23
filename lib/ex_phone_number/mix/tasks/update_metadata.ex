@@ -57,6 +57,4 @@ if Code.ensure_loaded?(Tesla) do
       File.write!(readme_path, updated_content)
     end
   end
-else
-  raise "missing tesla dependency"
 end
