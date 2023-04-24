@@ -1,7 +1,5 @@
 if Code.ensure_loaded?(Tesla) do
   defmodule Mix.Tasks.UpdateMetadata do
-    require Logger
-
     @moduledoc "Downloads the latest libphonenumber metadata from GitHub"
     @shortdoc "Update libphonenumber metadata"
 
