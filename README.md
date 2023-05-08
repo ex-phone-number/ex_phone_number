@@ -10,7 +10,7 @@
 Elixir library for parsing, formatting, and validating international phone numbers.
 Based on Google's [libphonenumber](https://github.com/googlei18n/libphonenumber).
 
-**Current metadata version: v8.13.8.**
+**Current metadata version: v8.13.11.**
 
 ## Installation
 
