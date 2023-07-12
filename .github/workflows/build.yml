@@ -30,9 +30,9 @@ jobs:
           # Only Elixir 1.14 supports OTP 25
           - otp: "25.3"
             elixir: "1.14.4"
-          # We need to test Elixir 1.10 for backwards compatibility
+          # We need to test Elixir 1.11 for backwards compatibility
           - otp: "22.3.4.26"
-            elixir: "1.10.4"
+            elixir: "1.11.4"
     steps:
       - uses: actions/checkout@v3
       - uses: erlef/setup-beam@v1

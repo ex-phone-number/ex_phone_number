@@ -70,7 +70,7 @@ defmodule ExPhoneNumber.Metadata.PhoneMetadata do
   alias ExPhoneNumber.Metadata.PhoneNumberDescription
 
   require Logger
-  Logger.configure(level: Application.compile_env(:ex_phone_number, :log_level, :warn))
+  Logger.configure(level: Application.compile_env(:ex_phone_number, :log_level, :warning))
 
   def from_xpath_node(xpath_node) do
     kwlist =
