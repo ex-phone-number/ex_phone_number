@@ -1,5 +1,7 @@
 defmodule ExPhoneNumber do
-  @moduledoc false
+  @moduledoc """
+  Parsing, formatting, and validating international phone numbers.
+  """
 
   alias ExPhoneNumber.Formatting
   alias ExPhoneNumber.Parsing
