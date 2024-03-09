@@ -54,11 +54,12 @@ defmodule ExPhoneNumber.Mixfile do
 
   defp docs do
     [
-      extras: ["README.md"],
+      extras: ["README.md", "LICENSE.md", "CHANGELOG.md"],
       main: "readme",
       source_url: @source_url,
       source_ref: "v#{@version}",
-      homepage_url: @source_url
+      homepage_url: @source_url,
+      skip_undefined_reference_warnings_on: ["CHANGELOG.md"]
     ]
   end
 end

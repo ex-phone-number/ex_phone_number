@@ -1,5 +1,34 @@
 defmodule ExPhoneNumber do
-  @moduledoc false
+  @moduledoc """
+  Parsing, formatting, and validating international phone numbers.
+
+  ## Example Usage
+
+      iex> ExPhoneNumber.parse("202-456-1111", "US")
+      {
+        :ok,
+        %ExPhoneNumber.Model.PhoneNumber{
+          country_code: 1,
+          country_code_source: nil,
+          extension: nil,
+          italian_leading_zero: nil,
+          national_number: 2024561111,
+          number_of_leading_zeros: nil,
+          preferred_domestic_carrier_code: nil,
+          raw_input: nil
+        }
+      }
+
+      iex> {:ok, phone_number} = ExPhoneNumber.parse("202-456-1111", "US")
+      iex> ExPhoneNumber.format(phone_number, :e164)
+      "+12024561111"
+      iex> ExPhoneNumber.is_valid_number?(phone_number)
+      true
+      iex> ExPhoneNumber.is_possible_number?(phone_number)
+      true
+      iex> ExPhoneNumber.get_number_type(phone_number)
+      :fixed_line_or_mobile
+  """
 
   alias ExPhoneNumber.Formatting
   alias ExPhoneNumber.Parsing
