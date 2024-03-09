@@ -54,7 +54,7 @@ defmodule ExPhoneNumber.Mixfile do
 
   defp docs do
     [
-      extras: ["README.md"],
+      extras: ["README.md", "LICENSE.md"],
       main: "readme",
       source_url: @source_url,
       source_ref: "v#{@version}",
