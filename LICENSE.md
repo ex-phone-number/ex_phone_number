@@ -1,6 +1,6 @@
 MIT License
 
-Copyright (c) 2023 ExPhoneNumber
+Copyright (c) 2023-2024 ExPhoneNumber
 
 Copyright (c) 2016-2022 NLCollect B.V.
 
