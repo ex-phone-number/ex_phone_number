@@ -11,12 +11,20 @@ defmodule ExPhoneNumber.Metadata do
 
   @resources_dir "./resources"
   @xml_file if Mix.env() == :test,
-              do: "PhoneNumberMetadataForTesting.xml",
+              do: "PhoneNumberMetadata.xml",
               else: "PhoneNumberMetadata.xml"
   @document_path Path.join([@resources_dir, @xml_file])
   @external_resource @document_path
 
+  @short_number_xml_file if Mix.env() == :test,
+                           do: "ShortNumberMetadata.xml",
+                           else: "ShortNumberMetadata.xml"
+  @short_number_document_path Path.join([@resources_dir, @short_number_xml_file])
+  @external_resource @document_path
+  @external_resource @short_number_document_path
+
   document = File.read!(@document_path)
+  short_number_document = File.read!(@short_number_document_path)
 
   metadata_collection =
     document
@@ -25,11 +33,42 @@ defmodule ExPhoneNumber.Metadata do
       territory: ~x"." |> transform_by(&PhoneMetadata.from_xpath_node/1)
     )
 
+  short_number_metadata_collection =
+    short_number_document
+    |> xpath(
+      ~x"//phoneNumberMetadata/territories/territory"el,
+      territory: ~x"." |> transform_by(&PhoneMetadata.from_short_number_xpath_node/1)
+    )
+
   Module.register_attribute(__MODULE__, :list_region_code_to_metadata, accumulate: true)
   Module.register_attribute(__MODULE__, :list_country_code_to_region_code, accumulate: true)
 
   for metadata <- metadata_collection do
-    {region_key, phone_metadata} = PhoneMetadata.put_default_values(Map.get(metadata, :territory))
+    short_number_metadata =
+      short_number_metadata_collection
+      |> Enum.find(fn x -> x.territory.id == metadata.territory.id end)
+      |> case do
+        nil ->
+          %{}
+
+        metadata ->
+          metadata
+          |> Map.get(:territory)
+          |> Map.from_struct()
+          |> Enum.reduce(%{}, fn
+            {_key, nil}, acc -> acc
+            {key, value}, acc -> Map.put(acc, key, value)
+          end)
+      end
+
+    all_metadata =
+      if short_number_metadata do
+        Map.merge(metadata.territory, short_number_metadata)
+      else
+        metadata
+      end
+
+    {region_key, phone_metadata} = PhoneMetadata.put_default_values(all_metadata)
 
     region_atom = String.to_atom(region_key)
     Module.put_attribute(__MODULE__, :list_region_code_to_metadata, {region_atom, phone_metadata})
