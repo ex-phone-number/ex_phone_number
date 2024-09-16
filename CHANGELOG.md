@@ -7,6 +7,8 @@ and this project aims to adhere to [Semantic Versioning](https://semver.org/spec
 
 ## [Unreleased]
 
+## [0.4.5] - 2024-09-16
+
 ### Changed
 
  - Updated metadata source file to v8.13.45
