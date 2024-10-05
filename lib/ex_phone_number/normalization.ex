@@ -37,15 +37,16 @@ defmodule ExPhoneNumber.Normalization do
       new_char = Map.get(normalization_replacements, String.upcase(char))
 
       if new_char do
-        list ++ [new_char]
+        [new_char | list]
       else
         if remove_non_matches do
           list
         else
-          list ++ [char]
+          [char | list]
         end
       end
     end)
+    |> Enum.reverse()
     |> List.to_string()
   end
 
