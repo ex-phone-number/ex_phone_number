@@ -33,6 +33,7 @@ defmodule ExPhoneNumber do
   alias ExPhoneNumber.Formatting
   alias ExPhoneNumber.Parsing
   alias ExPhoneNumber.Validation
+  alias ExPhoneNumber.Metadata
 
   def format(%ExPhoneNumber.Model.PhoneNumber{} = phone_number, phone_number_format)
       when is_atom(phone_number_format),
@@ -52,4 +53,9 @@ defmodule ExPhoneNumber do
 
   def parse(number_to_parse, default_region),
     do: Parsing.parse(number_to_parse, default_region)
+
+  @doc """
+  Returns a map of country codes to region codes.
+  """
+  defdelegate country_code_to_region_code_map(), to: Metadata
 end
