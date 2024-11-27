@@ -512,4 +512,12 @@ defmodule ExPhoneNumber.MetadataTest do
       end
     end
   end
+
+  describe "country_code_to_region_code_map" do
+    test "returns a map of country phone prefixes to region codes" do
+      result = country_code_to_region_code_map()
+      assert is_map(result)
+      assert Map.get(result, 1) == ["US", "CA", "BS", "BB"]
+    end
+  end
 end
