@@ -1,4 +1,24 @@
 defmodule ExPhoneNumber.Constants.PhoneNumberTypes do
+  @all_types [
+    :fixed_line,
+    :mobile,
+    :fixed_line_or_mobile,
+    :toll_free,
+    :premium_rate,
+    :shared_cost,
+    :voip,
+    :personal_number,
+    :pager,
+    :uan,
+    :voicemail,
+    :unknown
+  ]
+
+  @type t :: unquote(Enum.reduce(@all_types, &{:|, [], [&1, &2]}))
+
+  @spec all_types() :: [t()]
+  def all_types, do: @all_types
+
   def fixed_line(), do: :fixed_line
 
   def mobile(), do: :mobile
