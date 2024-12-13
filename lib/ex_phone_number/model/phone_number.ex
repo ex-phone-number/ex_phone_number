@@ -1,7 +1,7 @@
 defmodule ExPhoneNumber.Model.PhoneNumber do
   @moduledoc false
 
-   @type t :: %__MODULE__{}
+  @type t :: %__MODULE__{}
 
   # number
   defstruct country_code: nil,
