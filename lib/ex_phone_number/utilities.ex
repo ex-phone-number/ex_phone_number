@@ -20,8 +20,10 @@ defmodule ExPhoneNumber.Utilities do
 
   def matches_entirely?(nil, _string), do: false
 
+  def matches_entirely?(regex, string) when is_map(regex), do: matches_entirely?(regex.source, string)
+
   def matches_entirely?(regex, string) do
-    regex = ~r/^(?:#{regex.source})$/
+    regex = ~r/^(?:#{regex})$/
 
     case Regex.run(regex, string, return: :index) do
       [{_index, length} | _tail] -> Kernel.byte_size(string) == length

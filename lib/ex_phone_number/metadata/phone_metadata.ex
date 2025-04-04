@@ -165,7 +165,6 @@ defmodule ExPhoneNumber.Metadata.PhoneMetadata do
     |> List.to_string()
     |> String.split(["\n", " "], trim: true)
     |> List.to_string()
-    |> Regex.compile!()
   end
 
   defp normalize_string(nil), do: nil
