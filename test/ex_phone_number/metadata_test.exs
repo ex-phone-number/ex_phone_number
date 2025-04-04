@@ -35,7 +35,7 @@ defmodule ExPhoneNumber.MetadataTest do
       end
 
       it "returns valid number_format(1).pattern", state do
-        assert ~r/(\d{3})(\d{3})(\d{4})/ == Enum.at(state[:us_metadata].number_format, 1).pattern
+        assert "(\\d{3})(\\d{3})(\\d{4})" == Enum.at(state[:us_metadata].number_format, 1).pattern
       end
 
       it "returns valid number_format(1).format", state do
@@ -43,7 +43,7 @@ defmodule ExPhoneNumber.MetadataTest do
       end
 
       it "returns valid general.national_number_pattern", state do
-        assert ~r/[13-689]\d{9}|2[0-35-9]\d{8}/ ==
+        assert "[13-689]\\d{9}|2[0-35-9]\\d{8}" ==
                  state[:us_metadata].general.national_number_pattern
       end
 
@@ -56,7 +56,7 @@ defmodule ExPhoneNumber.MetadataTest do
       end
 
       it "returns valid premium_rate.national_number_pattern", state do
-        assert ~r/900\d{7}/ == state[:us_metadata].premium_rate.national_number_pattern
+        assert "900\\d{7}" == state[:us_metadata].premium_rate.national_number_pattern
       end
 
       it "returns valid shared_cost.national_number_pattern", state do
@@ -100,12 +100,12 @@ defmodule ExPhoneNumber.MetadataTest do
       end
 
       it "returns valid number_format(5).leading_digits_pattern(0)", state do
-        assert ~r/900/ ==
+        assert "900" ==
                  Enum.at(Enum.at(state[:de_metadata].number_format, 5).leading_digits_pattern, 0)
       end
 
       it "returns valid number_format(5).pattern", state do
-        assert ~r/(\d{3})(\d{3,4})(\d{4})/ ==
+        assert "(\\d{3})(\\d{3,4})(\\d{4})" ==
                  Enum.at(state[:de_metadata].number_format, 5).pattern
       end
 
@@ -114,7 +114,7 @@ defmodule ExPhoneNumber.MetadataTest do
       end
 
       it "returns valid fixed_line.national_number_pattern", state do
-        assert ~r/(?:[24-6]\d{2}|3[03-9]\d|[789](?:0[2-9]|[1-9]\d))\d{1,8}/ ==
+        assert "(?:[24-6]\\d{2}|3[03-9]\\d|[789](?:0[2-9]|[1-9]\\d))\\d{1,8}" ==
                  state[:de_metadata].fixed_line.national_number_pattern
       end
 
@@ -131,7 +131,7 @@ defmodule ExPhoneNumber.MetadataTest do
       end
 
       it "returns valid premium_rate.national_number_pattern", state do
-        assert ~r/900([135]\d{6}|9\d{7})/ ==
+        assert "900([135]\\d{6}|9\\d{7})" ==
                  state[:de_metadata].premium_rate.national_number_pattern
       end
     end
@@ -170,12 +170,12 @@ defmodule ExPhoneNumber.MetadataTest do
       end
 
       it "returns valid number_format(3).pattern", state do
-        assert ~r/(\d)(\d{4})(\d{2})(\d{4})/ ==
+        assert "(\\d)(\\d{4})(\\d{2})(\\d{4})" ==
                  Enum.at(state[:ar_metadata].number_format, 3).pattern
       end
 
       it "returns valid intl_number_format(3).pattern", state do
-        assert ~r/(\d)(\d{4})(\d{2})(\d{4})/ ==
+        assert "(\\d)(\\d{4})(\\d{2})(\\d{4})" ==
                  Enum.at(state[:ar_metadata].intl_number_format, 3).pattern
       end
 
@@ -205,7 +205,7 @@ defmodule ExPhoneNumber.MetadataTest do
       end
 
       it "returns valid number_format(0).pattern", state do
-        assert ~r/(\d{4})(\d{4})/ == Enum.at(state[:un001_metadata].number_format, 0).pattern
+        assert "(\\d{4})(\\d{4})" == Enum.at(state[:un001_metadata].number_format, 0).pattern
       end
 
       it "returns valid toll_free.example_number", state do

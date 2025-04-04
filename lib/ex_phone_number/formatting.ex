@@ -15,7 +15,7 @@ defmodule ExPhoneNumber.Formatting do
 
       match_index =
         if not (leading_digits_pattern_size == 0) do
-          last_leading_digits_pattern = List.last(number_format.leading_digits_pattern)
+          last_leading_digits_pattern = List.last(number_format.leading_digits_pattern) |> Regex.compile!()
 
           case Regex.run(last_leading_digits_pattern, national_number, return: :index) do
             nil -> -1
@@ -105,7 +105,9 @@ defmodule ExPhoneNumber.Formatting do
             carrier_code_rule
           )
 
-        Regex.replace(formatting_pattern.pattern, number, number_rule)
+        formatting_pattern.pattern
+        |> Regex.compile!()
+        |> Regex.replace(number, number_rule)
       else
         if PhoneNumberFormats.national() == phone_number_format and
              not is_nil_or_empty?(formatting_pattern.national_prefix_formatting_rule) do
@@ -117,9 +119,13 @@ defmodule ExPhoneNumber.Formatting do
               global: false
             )
 
-          Regex.replace(formatting_pattern.pattern, number, number_rule)
+          formatting_pattern.pattern
+          |> Regex.compile!()
+          |> Regex.replace(number, number_rule)
         else
-          Regex.replace(formatting_pattern.pattern, number, formatting_pattern.format)
+          formatting_pattern.pattern
+          |> Regex.compile!()
+          |> Regex.replace(number, formatting_pattern.format)
         end
       end
 
