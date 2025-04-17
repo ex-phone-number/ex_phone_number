@@ -17,6 +17,7 @@ and this project aims to adhere to [Semantic Versioning](https://semver.org/spec
 
 - Make `country_code_to_region_code_map` public
 - Add type to PhoneNumber model
+- Updated metadata source file to v9.0.3
 
 ### Changed
 
