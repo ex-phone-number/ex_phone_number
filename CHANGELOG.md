@@ -7,11 +7,20 @@ and this project aims to adhere to [Semantic Versioning](https://semver.org/spec
 
 ## [Unreleased]
 
-### Changed
+## [0.4.6] - 2025-06-22
+
+### Removed
+
+- Drop support for Elixir < 1.14
+
+### Added
 
 - Make `country_code_to_region_code_map` public
-- Spec phone number types
 - Add type to PhoneNumber model
+
+### Changed
+
+- Spec phone number types
 
 ## [0.4.5] - 2024-09-16
 
@@ -58,7 +67,8 @@ Require Elixir v1.10+.
 
 - Changed `sweet_xml` version requirement to `~> 0.7`
 
-[unreleased]: https://github.com/ex-phone-number/ex_phone_number/compare/v0.4.5...HEAD
+[unreleased]: https://github.com/ex-phone-number/ex_phone_number/compare/v0.4.6...HEAD
+[0.4.5]: https://github.com/ex-phone-number/ex_phone_number/compare/v0.4.5..v0.4.6
 [0.4.5]: https://github.com/ex-phone-number/ex_phone_number/compare/v0.4.4...v0.4.5
 [0.4.4]: https://github.com/ex-phone-number/ex_phone_number/compare/v0.4.3...v0.4.4
 [0.4.3]: https://github.com/ex-phone-number/ex_phone_number/compare/v0.4.2...v0.4.3
