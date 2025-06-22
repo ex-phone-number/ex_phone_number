@@ -68,7 +68,7 @@ Require Elixir v1.10+.
 - Changed `sweet_xml` version requirement to `~> 0.7`
 
 [unreleased]: https://github.com/ex-phone-number/ex_phone_number/compare/v0.4.6...HEAD
-[0.4.5]: https://github.com/ex-phone-number/ex_phone_number/compare/v0.4.5..v0.4.6
+[0.4.6]: https://github.com/ex-phone-number/ex_phone_number/compare/v0.4.5..v0.4.6
 [0.4.5]: https://github.com/ex-phone-number/ex_phone_number/compare/v0.4.4...v0.4.5
 [0.4.4]: https://github.com/ex-phone-number/ex_phone_number/compare/v0.4.3...v0.4.4
 [0.4.3]: https://github.com/ex-phone-number/ex_phone_number/compare/v0.4.2...v0.4.3
