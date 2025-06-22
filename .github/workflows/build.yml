@@ -24,18 +24,12 @@ jobs:
     runs-on: ubuntu-20.04
     strategy:
       matrix:
-        otp: ["23.3.4.18", "24.3.4.10"]
-        elixir: ["1.12.3", "1.13.4", "1.14.4"]
+        otp: ["26.2.5.13", "25.3.2.21", "24.3.4.17"]
+        elixir: ["1.15.8", "1.14.5"]
         include:
-          # Only Elixir 1.15 supports OTP 26
-          - otp: "26.0.2"
-            elixir: "1.15.4"
-          # Only Elixir 1.14 supports OTP 25
-          - otp: "25.3"
-            elixir: "1.14.4"
-          # We need to test Elixir 1.11 for backwards compatibility
-          - otp: "22.3.4.26"
-            elixir: "1.11.4"
+          # Only Elixir 1.14 still supports OTP 23
+          - otp: "23.3.4.20"
+            elixir: "1.14.5"
     steps:
       - uses: actions/checkout@v3
       - uses: erlef/setup-beam@v1
