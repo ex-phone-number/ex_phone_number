@@ -16,17 +16,28 @@ jobs:
       - uses: actions/checkout@v3
       - uses: erlef/setup-beam@v1
         with:
-          otp-version: "25.3"
-          elixir-version: "1.14.4"
+          otp-version: "27"
+          elixir-version: "1.18"
       - run: mix format --check-formatted
   test:
     name: Test on Elixir ${{ matrix.elixir }} (OTP ${{ matrix.otp }})
     runs-on: ubuntu-24.04
     strategy:
       matrix:
-        otp: ["26.2.5.13", "25.3.2.21", "24.3.4.17"]
-        elixir: ["1.15.8", "1.14.5"]
-        # include:
+        otp: ["26", "25"]
+        elixir: ["1.18", "1.17", "1.16", "1.15", "1.14"]
+        include:
+          # Has issues that need to be resolved
+          #- otp: "28"
+          #  elixir: "1.18"
+          - otp: "27"
+            elixir: "1.18"
+          - otp: "27"
+            elixir: "1.17"
+          - otp: "24"
+            elixir: "1.15"
+          - otp: "24"
+            elixir: "1.14"
           # Elixir 1.14 still supports OTP 23, but it requires ubuntu-20.04
           # which is no longer supported in GH Actions
           # - otp: "23.3.4.20"
