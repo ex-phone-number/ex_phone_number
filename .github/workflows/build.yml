@@ -13,7 +13,7 @@ jobs:
     name: Check formatting
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - uses: erlef/setup-beam@v1
         with:
           otp-version: "27"
@@ -43,12 +43,12 @@ jobs:
           # - otp: "23.3.4.20"
           #  elixir: "1.14.5"
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - uses: erlef/setup-beam@v1
         with:
           otp-version: ${{ matrix.otp }}
           elixir-version: ${{ matrix.elixir }}
-      - uses: actions/cache@v3
+      - uses: actions/cache@v4
         name: Cache dependencies
         with:
           path: |
@@ -58,7 +58,7 @@ jobs:
             deps-${{ hashFiles('mix.lock') }}
             deps-
       - run: mix deps.get
-      - uses: actions/cache@v3
+      - uses: actions/cache@v4
         name: Cache build
         with:
           path: |
