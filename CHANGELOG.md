@@ -7,7 +7,15 @@ and this project aims to adhere to [Semantic Versioning](https://semver.org/spec
 
 ## [Unreleased]
 
+## [0.4.8] - 2025-06-28
+
+### Changed
+
+- No longer store regexes in module attributes for compatibility with OTP 28
+
 ## [0.4.7] - 2025-06-24
+
+### Changed
 
 - Updated metadata source file to v9.0.8
 
@@ -71,7 +79,8 @@ Require Elixir v1.10+.
 
 - Changed `sweet_xml` version requirement to `~> 0.7`
 
-[unreleased]: https://github.com/ex-phone-number/ex_phone_number/compare/v0.4.7...HEAD
+[unreleased]: https://github.com/ex-phone-number/ex_phone_number/compare/v0.4.8...HEAD
+[0.4.8]: https://github.com/ex-phone-number/ex_phone_number/compare/v0.4.7..v0.4.8
 [0.4.7]: https://github.com/ex-phone-number/ex_phone_number/compare/v0.4.6..v0.4.7
 [0.4.6]: https://github.com/ex-phone-number/ex_phone_number/compare/v0.4.5..v0.4.6
 [0.4.5]: https://github.com/ex-phone-number/ex_phone_number/compare/v0.4.4...v0.4.5
