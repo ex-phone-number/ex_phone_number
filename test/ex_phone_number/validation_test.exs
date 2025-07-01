@@ -33,6 +33,12 @@ defmodule ExPhoneNumber.ValidationTest do
       end
     end
 
+    context "US short code" do
+      it "should return true" do
+        assert is_possible_number?(PhoneNumberFixture.us_short_code())
+      end
+    end
+
     context "NANPA short number" do
       it "should return false" do
         refute is_possible_number?(PhoneNumberFixture.nanpa_short_number())
