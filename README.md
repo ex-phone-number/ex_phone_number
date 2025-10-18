@@ -81,6 +81,15 @@ iex> ExPhoneNumber.parse("+977123456789", "")
  }}
 ```
 
+## LLM Integration
+
+This package includes a `usage-rules.md` file that provides comprehensive guidance for LLM assistants (like Claude, ChatGPT, etc.) on how to use ExPhoneNumber correctly. The file includes common usage patterns, best practices, and helps prevent typical mistakes when working with phone number parsing and validation.
+
+For more information about usage rules files, see:
+- [Usage Rules package documentation](https://hexdocs.pm/usage_rules)
+- [Ash Framework's LLM working guide](https://hexdocs.pm/ash/working-with-llms.html)
+- [Usage Rules GitHub repository](https://github.com/ash-project/usage_rules)
+
 ## Development
 
 There is a `mix update_metadata` task that downloads the latest `libphonenumber` metadata.
