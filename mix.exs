@@ -2,7 +2,7 @@ defmodule ExPhoneNumber.Mixfile do
   use Mix.Project
 
   @source_url "https://github.com/ex-phone-number/ex_phone_number"
-  @version "0.4.9"
+  @version "0.4.10"
 
   def project do
     [

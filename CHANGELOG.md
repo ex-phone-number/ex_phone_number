@@ -7,6 +7,13 @@ and this project aims to adhere to [Semantic Versioning](https://semver.org/spec
 
 ## [Unreleased]
 
+## [0.4.10] - 2025-10-18
+
+### Added
+
+- LLM integration support with usage-rules.md
+- Maintenance guide for library maintainers
+
 ## [0.4.9] - 2025-10-18
 
 ### Changed
@@ -85,7 +92,8 @@ Require Elixir v1.10+.
 
 - Changed `sweet_xml` version requirement to `~> 0.7`
 
-[unreleased]: https://github.com/ex-phone-number/ex_phone_number/compare/v0.4.9...HEAD
+[unreleased]: https://github.com/ex-phone-number/ex_phone_number/compare/v0.4.10...HEAD
+[0.4.10]: https://github.com/ex-phone-number/ex_phone_number/compare/v0.4.9..v0.4.10
 [0.4.9]: https://github.com/ex-phone-number/ex_phone_number/compare/v0.4.8..v0.4.9
 [0.4.8]: https://github.com/ex-phone-number/ex_phone_number/compare/v0.4.7..v0.4.8
 [0.4.7]: https://github.com/ex-phone-number/ex_phone_number/compare/v0.4.6..v0.4.7
