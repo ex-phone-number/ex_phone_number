@@ -85,6 +85,10 @@ iex> ExPhoneNumber.parse("+977123456789", "")
 
 There is a `mix update_metadata` task that downloads the latest `libphonenumber` metadata.
 
+## Maintenance
+
+For maintainers, see [maintenance.md](maintenance.md) for procedures on updating metadata and releasing new versions.
+
 ## Copyright and License
 
 Copyright (c) 2023-2025 ExPhoneNumber
