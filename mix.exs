@@ -40,7 +40,7 @@ defmodule ExPhoneNumber.Mixfile do
 
   defp package do
     [
-      files: ["lib", "config", "resources", "LICENSE*", "README*", "mix.exs"],
+      files: ["lib", "config", "resources", "LICENSE*", "README*", "mix.exs", "usage-rules.md"],
       licenses: ["MIT"],
       links: %{"GitHub" => @source_url},
       maintainers: [
