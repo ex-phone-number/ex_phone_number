@@ -136,7 +136,12 @@ defmodule ExPhoneNumber.Validation do
   end
 
   def test_number_length(number, metadata) do
-    possible_lengths = metadata.general.possible_lengths
+    possible_lengths =
+      if metadata.short_number_general do
+        metadata.general.possible_lengths ++ metadata.short_number_general.possible_lengths
+      else
+        metadata.general.possible_lengths
+      end
 
     min_length = Enum.min(possible_lengths)
     max_length = Enum.max(possible_lengths)

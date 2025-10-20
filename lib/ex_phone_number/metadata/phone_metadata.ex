@@ -32,6 +32,8 @@ defmodule ExPhoneNumber.Metadata.PhoneMetadata do
             # %PhoneNumberDescription{}
             general: nil,
             # %PhoneNumberDescription{}
+            short_number_general: nil,
+            # %PhoneNumberDescription{}
             fixed_line: nil,
             # %PhoneNumberDescription{}
             mobile: nil,
@@ -51,6 +53,22 @@ defmodule ExPhoneNumber.Metadata.PhoneMetadata do
             uan: nil,
             # %PhoneNumberDescription{}
             voicemail: nil,
+            # %PhoneNumberDescription{}
+            short_code: nil,
+            # %PhoneNumberDescription{}
+            short_number_toll_free: nil,
+            # %PhoneNumberDescription{}
+            standard_rate: nil,
+            # %PhoneNumberDescription{}
+            short_number_premium_rate: nil,
+            # %PhoneNumberDescription{}
+            carrier_specific: nil,
+            # %PhoneNumberDescription{}
+            emergency: nil,
+            # %PhoneNumberDescription{}
+            expanded_emergency: nil,
+            # %PhoneNumberDescription{}
+            sms_services: nil,
             # %PhoneNumberDescription{}
             no_international_dialing: nil,
             # boolean
@@ -119,6 +137,32 @@ defmodule ExPhoneNumber.Metadata.PhoneMetadata do
     struct(%PhoneMetadata{}, kwlist)
   end
 
+  def from_short_number_xpath_node(xpath_node) do
+    kwlist =
+      xpath_node
+      |> xmap(
+        id: ~x"./@id"s,
+        short_code: ~x"./shortCode"e |> transform_by(&PhoneNumberDescription.from_xpath_node/1),
+        short_number_toll_free: ~x"./tollFree"e |> transform_by(&PhoneNumberDescription.from_xpath_node/1),
+        standard_rate: ~x"./standardRate"e |> transform_by(&PhoneNumberDescription.from_xpath_node/1),
+        short_number_premium_rate: ~x"./premiumRate"e |> transform_by(&PhoneNumberDescription.from_xpath_node/1),
+        carrier_specific: ~x"./carrierSpecific"e |> transform_by(&PhoneNumberDescription.from_xpath_node/1),
+        emergency: ~x"./emergency"e |> transform_by(&PhoneNumberDescription.from_xpath_node/1),
+        expanded_emergency: ~x"./expandedEmergency"e |> transform_by(&PhoneNumberDescription.from_xpath_node/1),
+        sms_services: ~x"./smsServices"e |> transform_by(&PhoneNumberDescription.from_xpath_node/1),
+        short_number_general: ~x"./generalDesc"e |> transform_by(&PhoneNumberDescription.from_xpath_node/1)
+      )
+
+    kwlist =
+      if(is_map(kwlist) && is_map(kwlist.short_number_general)) do
+        put_in(kwlist.short_number_general.possible_lengths, general_possible_lengths(kwlist))
+      else
+        kwlist
+      end
+
+    struct(%PhoneMetadata{}, kwlist)
+  end
+
   defp general_possible_lengths(kwlist) do
     [
       :fixed_line,
@@ -131,7 +175,8 @@ defmodule ExPhoneNumber.Metadata.PhoneMetadata do
       :pager,
       :uan,
       :voicemail,
-      :no_international_dialing
+      :no_international_dialing,
+      :us_short_code
     ]
     |> Enum.flat_map(fn type ->
       kwlist
@@ -304,6 +349,11 @@ defmodule ExPhoneNumber.Metadata.PhoneMetadata do
     phone_metadata = %{
       phone_metadata
       | general: process_phone_number_description(phone_metadata.general, phone_metadata)
+    }
+
+    phone_metadata = %{
+      phone_metadata
+      | short_number_general: process_phone_number_description(phone_metadata.short_number_general, phone_metadata)
     }
 
     phone_metadata = %{
@@ -542,6 +592,8 @@ defmodule ExPhoneNumber.Metadata.PhoneMetadata do
       else
         description.national_number_pattern
       end
+
+    IO.inspect(description)
 
     possible_lengths =
       if is_nil_or_empty?(description.possible_lengths) do

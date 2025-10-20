@@ -659,4 +659,11 @@ defmodule PhoneNumberFixture do
       national_number: 12_345
     }
   end
+
+  def us_short_code() do
+    %PhoneNumber{
+      country_code: 1,
+      national_number: 78_156
+    }
+  end
 end
