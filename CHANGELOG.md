@@ -7,6 +7,10 @@ and this project aims to adhere to [Semantic Versioning](https://semver.org/spec
 
 ## [Unreleased]
 
+### Added
+
+- Allow configuring a custom metadata XML file path via `config :ex_phone_number, :metadata_file`
+
 ### Changed
 
 - Updated metadata source file to v9.0.26
