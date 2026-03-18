@@ -86,8 +86,10 @@ iex> ExPhoneNumber.parse("+977123456789", "")
 By default, ExPhoneNumber uses the bundled Google [libphonenumber metadata](https://github.com/google/libphonenumber/blob/master/resources/PhoneNumberMetadata.xml). If you need to use a custom metadata XML file, you can configure it at compile time:
 
 ```elixir
-config :ex_phone_number, :metadata_file, "path/to/custom/PhoneNumberMetadata.xml"
+config :ex_phone_number, :metadata_file, Path.join(File.cwd!(), "path/to/custom/PhoneNumberMetadata.xml")
 ```
+
+Note: the path is resolved relative to the dependency directory (`deps/ex_phone_number/`), not your project root. Use an absolute path as shown above to point to a file in your project.
 
 After changing the configuration, recompile the dependency:
 
