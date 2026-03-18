@@ -83,7 +83,7 @@ iex> ExPhoneNumber.parse("+977123456789", "")
 
 ## Configuration
 
-By default, ExPhoneNumber uses the bundled Google libphonenumber metadata. If you need to use a custom metadata XML file, you can configure it at compile time:
+By default, ExPhoneNumber uses the bundled Google [libphonenumber metadata](https://github.com/google/libphonenumber/blob/master/resources/PhoneNumberMetadata.xml). If you need to use a custom metadata XML file, you can configure it at compile time:
 
 ```elixir
 config :ex_phone_number, :metadata_file, "path/to/custom/PhoneNumberMetadata.xml"
