@@ -81,6 +81,20 @@ iex> ExPhoneNumber.parse("+977123456789", "")
  }}
 ```
 
+## Configuration
+
+By default, ExPhoneNumber uses the bundled Google libphonenumber metadata. If you need to use a custom metadata XML file, you can configure it at compile time:
+
+```elixir
+config :ex_phone_number, :metadata_file, "path/to/custom/PhoneNumberMetadata.xml"
+```
+
+After changing the configuration, recompile the dependency:
+
+```sh
+mix deps.compile ex_phone_number --force
+```
+
 ## LLM Integration
 
 This package includes a `usage-rules.md` file that provides comprehensive guidance for LLM assistants (like Claude, ChatGPT, etc.) on how to use ExPhoneNumber correctly. The file includes common usage patterns, best practices, and helps prevent typical mistakes when working with phone number parsing and validation.
