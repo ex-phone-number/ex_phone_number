@@ -10,8 +10,8 @@ defmodule ExPhoneNumber.Metadata do
   alias ExPhoneNumber.Model.PhoneNumber
 
   @default_metadata_path if Mix.env() == :test,
-                           do: "./resources/PhoneNumberMetadataForTesting.xml",
-                           else: "./resources/PhoneNumberMetadata.xml"
+                           do: Path.join("resources", "PhoneNumberMetadataForTesting.xml"),
+                           else: Path.join("resources", "PhoneNumberMetadata.xml")
 
   @document_path Application.compile_env(:ex_phone_number, :metadata_file, @default_metadata_path)
   @external_resource @document_path
