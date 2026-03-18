@@ -9,11 +9,11 @@ defmodule ExPhoneNumber.Metadata do
   alias ExPhoneNumber.Metadata.PhoneMetadata
   alias ExPhoneNumber.Model.PhoneNumber
 
-  @resources_dir "./resources"
-  @xml_file if Mix.env() == :test,
-              do: "PhoneNumberMetadataForTesting.xml",
-              else: "PhoneNumberMetadata.xml"
-  @document_path Path.join([@resources_dir, @xml_file])
+  @default_metadata_path if Mix.env() == :test,
+                           do: "./resources/PhoneNumberMetadataForTesting.xml",
+                           else: "./resources/PhoneNumberMetadata.xml"
+
+  @document_path Application.compile_env(:ex_phone_number, :metadata_file, @default_metadata_path)
   @external_resource @document_path
 
   document = File.read!(@document_path)
