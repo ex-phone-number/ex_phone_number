@@ -7,6 +7,8 @@ and this project aims to adhere to [Semantic Versioning](https://semver.org/spec
 
 ## [Unreleased]
 
+## [0.4.11] - 2026-03-18
+
 ### Added
 
 - Allow configuring a custom metadata XML file path via `config :ex_phone_number, :metadata_file`
@@ -14,6 +16,7 @@ and this project aims to adhere to [Semantic Versioning](https://semver.org/spec
 ### Changed
 
 - Updated metadata source file to v9.0.26
+- Updated ex_doc to 0.40.1
 
 ## [0.4.10] - 2025-10-18
 
@@ -100,7 +103,8 @@ Require Elixir v1.10+.
 
 - Changed `sweet_xml` version requirement to `~> 0.7`
 
-[unreleased]: https://github.com/ex-phone-number/ex_phone_number/compare/v0.4.10...HEAD
+[unreleased]: https://github.com/ex-phone-number/ex_phone_number/compare/v0.4.11...HEAD
+[0.4.11]: https://github.com/ex-phone-number/ex_phone_number/compare/v0.4.10..v0.4.11
 [0.4.10]: https://github.com/ex-phone-number/ex_phone_number/compare/v0.4.9..v0.4.10
 [0.4.9]: https://github.com/ex-phone-number/ex_phone_number/compare/v0.4.8..v0.4.9
 [0.4.8]: https://github.com/ex-phone-number/ex_phone_number/compare/v0.4.7..v0.4.8
