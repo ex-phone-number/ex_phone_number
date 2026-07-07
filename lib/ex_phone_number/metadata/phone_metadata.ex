@@ -70,7 +70,6 @@ defmodule ExPhoneNumber.Metadata.PhoneMetadata do
   alias ExPhoneNumber.Metadata.PhoneNumberDescription
 
   require Logger
-  Logger.configure(level: Application.compile_env(:ex_phone_number, :log_level, :warning))
 
   def from_xpath_node(xpath_node) do
     kwlist =
@@ -242,23 +241,27 @@ defmodule ExPhoneNumber.Metadata.PhoneMetadata do
   end
 
   def put_default_values(phone_metadata = %PhoneMetadata{}) do
-    Logger.debug("----- Territory -----")
-    Logger.debug("#{inspect(phone_metadata)}")
-    Logger.debug("region_code: #{inspect(phone_metadata.id)}")
+    log_debug("----- Territory -----")
+    log_debug(fn -> "#{inspect(phone_metadata)}" end)
+    log_debug(fn -> "region_code: #{inspect(phone_metadata.id)}" end)
 
     phone_metadata =
       if has_national_prefix?(phone_metadata) do
-        Logger.debug("has national_prefix")
+        log_debug("has national_prefix")
 
         if not has_national_prefix_for_parsing?(phone_metadata) do
-          Logger.debug("has not national_prefix_for_parsing")
-          Logger.debug("national_prefix_for_parsing: #{inspect(phone_metadata.national_prefix)}")
+          log_debug("has not national_prefix_for_parsing")
+
+          log_debug(fn ->
+            "national_prefix_for_parsing: #{inspect(phone_metadata.national_prefix)}"
+          end)
+
           %{phone_metadata | national_prefix_for_parsing: phone_metadata.national_prefix}
         else
           phone_metadata
         end
       else
-        Logger.debug("has not national_prefix")
+        log_debug("has not national_prefix")
         phone_metadata
       end
 
@@ -267,16 +270,23 @@ defmodule ExPhoneNumber.Metadata.PhoneMetadata do
       | national_prefix_formatting_rule: get_national_prefix_formatting_rule(phone_metadata)
     }
 
-    Logger.debug("national_prefix_formatting_rule: #{inspect(phone_metadata.national_prefix_formatting_rule)}")
+    log_debug(fn ->
+      "national_prefix_formatting_rule: #{inspect(phone_metadata.national_prefix_formatting_rule)}"
+    end)
 
     phone_metadata = %{
       phone_metadata
       | carrier_code_formatting_rule: get_domestic_carrier_code_formatting_rule(phone_metadata)
     }
 
-    Logger.debug("carrier_code_formatting_rule: #{inspect(phone_metadata.carrier_code_formatting_rule)}")
+    log_debug(fn ->
+      "carrier_code_formatting_rule: #{inspect(phone_metadata.carrier_code_formatting_rule)}"
+    end)
 
-    Logger.debug("available_formats count: #{inspect(length(phone_metadata.available_formats))}")
+    log_debug(fn ->
+      "available_formats count: #{inspect(length(phone_metadata.available_formats))}"
+    end)
+
     formats = get_number_format(phone_metadata)
 
     number_format =
@@ -285,7 +295,7 @@ defmodule ExPhoneNumber.Metadata.PhoneMetadata do
         if is_nil(ele), do: acc, else: acc ++ [ele]
       end)
 
-    Logger.debug("number_format count: #{inspect(length(number_format))}")
+    log_debug(fn -> "number_format count: #{inspect(length(number_format))}" end)
 
     intl_number_format =
       List.foldl(formats, [], fn x, acc ->
@@ -293,7 +303,7 @@ defmodule ExPhoneNumber.Metadata.PhoneMetadata do
         if is_nil(ele), do: acc, else: acc ++ [ele]
       end)
 
-    Logger.debug("intl_number_format count: #{inspect(length(intl_number_format))}")
+    log_debug(fn -> "intl_number_format count: #{inspect(length(intl_number_format))}" end)
 
     phone_metadata = %{
       phone_metadata
@@ -417,8 +427,8 @@ defmodule ExPhoneNumber.Metadata.PhoneMetadata do
   end
 
   def get_number_format(%{number_format: number_format}, %PhoneMetadata{} = phone_metadata) do
-    Logger.debug("---> number_format")
-    Logger.debug("\t#{inspect(number_format)}")
+    log_debug("---> number_format")
+    log_debug(fn -> "\t#{inspect(number_format)}" end)
 
     number_format =
       Map.merge(
@@ -432,7 +442,7 @@ defmodule ExPhoneNumber.Metadata.PhoneMetadata do
         end
       )
 
-    Logger.debug("\tnational_prefix_formatting_rule: #{inspect(number_format.national_prefix_formatting_rule)}")
+    log_debug(fn -> "\tnational_prefix_formatting_rule: #{inspect(number_format.national_prefix_formatting_rule)}" end)
 
     number_format =
       Map.merge(
@@ -446,7 +456,9 @@ defmodule ExPhoneNumber.Metadata.PhoneMetadata do
         end
       )
 
-    Logger.debug(~s"\tnational_prefix_optional_when_formatting: #{inspect(number_format.national_prefix_optional_when_formatting)}")
+    log_debug(fn ->
+      ~s"\tnational_prefix_optional_when_formatting: #{inspect(number_format.national_prefix_optional_when_formatting)}"
+    end)
 
     number_format =
       Map.merge(
@@ -464,7 +476,9 @@ defmodule ExPhoneNumber.Metadata.PhoneMetadata do
         end
       )
 
-    Logger.debug(~s"\tdomestic_carrier_code_formatting_rule: #{inspect(number_format.domestic_carrier_code_formatting_rule)}")
+    log_debug(fn ->
+      ~s"\tdomestic_carrier_code_formatting_rule: #{inspect(number_format.domestic_carrier_code_formatting_rule)}"
+    end)
 
     number_format =
       Map.merge(
@@ -479,11 +493,13 @@ defmodule ExPhoneNumber.Metadata.PhoneMetadata do
         }
       )
 
-    Logger.debug(~s"\tleading_digits_pattern: #{inspect(number_format.leading_digits_pattern)}")
+    log_debug(fn ->
+      ~s"\tleading_digits_pattern: #{inspect(number_format.leading_digits_pattern)}"
+    end)
 
     intl_number_format = get_intl_format(number_format)
-    Logger.debug("---> intl_number_format")
-    Logger.debug("\t#{inspect(intl_number_format)}")
+    log_debug("---> intl_number_format")
+    log_debug(fn -> "\t#{inspect(intl_number_format)}" end)
     %{number_format: number_format, intl_number_format: intl_number_format}
   end
 
@@ -572,6 +588,14 @@ defmodule ExPhoneNumber.Metadata.PhoneMetadata do
       }
     else
       process_phone_number_description(description, general)
+    end
+  end
+
+  defp log_debug(message_or_func, metadata \\ []) do
+    if Application.get_env(:ex_phone_number, :debug_log) do
+      Logger.debug(message_or_func, metadata)
+    else
+      :ok
     end
   end
 end
