@@ -10,7 +10,7 @@
 Elixir library for parsing, formatting, and validating international phone numbers.
 Based on Google's [libphonenumber](https://github.com/googlei18n/libphonenumber).
 
-**Current metadata version: v8.13.31.**
+**Current metadata version: v9.0.26.**
 
 ## Installation
 
@@ -19,7 +19,7 @@ Add `:ex_phone_number` to your list of dependencies in `mix.exs`:
 ```elixir
 def deps do
   [
-    {:ex_phone_number, "~> 0.4.4"}
+    {:ex_phone_number, "~> 0.4.11"}
   ]
 end
 ```
@@ -81,13 +81,42 @@ iex> ExPhoneNumber.parse("+977123456789", "")
  }}
 ```
 
+## Configuration
+
+By default, ExPhoneNumber uses the bundled Google [libphonenumber metadata](https://github.com/google/libphonenumber/blob/master/resources/PhoneNumberMetadata.xml). If you need to use a custom metadata XML file, you can configure it at compile time:
+
+```elixir
+config :ex_phone_number, :metadata_file, Path.join(File.cwd!(), "path/to/custom/PhoneNumberMetadata.xml")
+```
+
+Note: the path is resolved relative to the dependency directory (`deps/ex_phone_number/`), not your project root. Use an absolute path as shown above to point to a file in your project.
+
+After changing the configuration, recompile the dependency:
+
+```sh
+mix deps.compile ex_phone_number --force
+```
+
+## LLM Integration
+
+This package includes a `usage-rules.md` file that provides comprehensive guidance for LLM assistants (like Claude, ChatGPT, etc.) on how to use ExPhoneNumber correctly. The file includes common usage patterns, best practices, and helps prevent typical mistakes when working with phone number parsing and validation.
+
+For more information about usage rules files, see:
+- [Usage Rules package documentation](https://hexdocs.pm/usage_rules)
+- [Ash Framework's LLM working guide](https://hexdocs.pm/ash/working-with-llms.html)
+- [Usage Rules GitHub repository](https://github.com/ash-project/usage_rules)
+
 ## Development
 
 There is a `mix update_metadata` task that downloads the latest `libphonenumber` metadata.
 
+## Maintenance
+
+For maintainers, see [maintenance.md](maintenance.md) for procedures on updating metadata and releasing new versions.
+
 ## Copyright and License
 
-Copyright (c) 2023-2024 ExPhoneNumber
+Copyright (c) 2023-2025 ExPhoneNumber
 
 Copyright (c) 2016-2022 NLCollect B.V.
 

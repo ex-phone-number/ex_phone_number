@@ -2,14 +2,14 @@ defmodule ExPhoneNumber.Mixfile do
   use Mix.Project
 
   @source_url "https://github.com/ex-phone-number/ex_phone_number"
-  @version "0.4.4"
+  @version "0.4.11"
 
   def project do
     [
       app: :ex_phone_number,
       version: @version,
       name: "ExPhoneNumber",
-      elixir: "~> 1.11",
+      elixir: "~> 1.14",
       build_embedded: Mix.env() == :prod,
       start_permanent: Mix.env() == :prod,
       deps: deps(),
@@ -40,7 +40,7 @@ defmodule ExPhoneNumber.Mixfile do
 
   defp package do
     [
-      files: ["lib", "config", "resources", "LICENSE*", "README*", "mix.exs"],
+      files: ["lib", "config", "resources", "LICENSE*", "README*", "mix.exs", "usage-rules.md"],
       licenses: ["MIT"],
       links: %{"GitHub" => @source_url},
       maintainers: [

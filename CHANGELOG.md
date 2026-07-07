@@ -7,11 +7,68 @@ and this project aims to adhere to [Semantic Versioning](https://semver.org/spec
 
 ## [Unreleased]
 
+## [0.4.11] - 2026-03-18
+
+### Added
+
+- Allow configuring a custom metadata XML file path via `config :ex_phone_number, :metadata_file`
+
+### Changed
+
+- Updated metadata source file to v9.0.26
+- Updated ex_doc to 0.40.1
+
+## [0.4.10] - 2025-10-18
+
+### Added
+
+- LLM integration support with usage-rules.md
+- Maintenance guide for library maintainers
+
+## [0.4.9] - 2025-10-18
+
+### Changed
+
+- Updated metadata source file to v9.0.16
+
+## [0.4.8] - 2025-06-28
+
+### Changed
+
+- No longer store regexes in module attributes for compatibility with OTP 28
+
+## [0.4.7] - 2025-06-24
+
+### Changed
+
+- Updated metadata source file to v9.0.8
+
+## [0.4.6] - 2025-06-22
+
+### Removed
+
+- Drop support for Elixir < 1.14
+
+### Added
+
+- Make `country_code_to_region_code_map` public
+- Add type to PhoneNumber model
+
+### Changed
+
+- Spec phone number types
+
+## [0.4.5] - 2024-09-16
+
+### Changed
+
+- Updated metadata source file to v8.13.45
+
 ## [0.4.4] - 2024-03-09
 
 ### Changed
 
- - Updated metadata source file to v8.13.31
+- Updated metadata source file to v8.13.31
 
 ## [0.4.3] - 2023-08-25
 
@@ -46,8 +103,15 @@ Require Elixir v1.10+.
 
 - Changed `sweet_xml` version requirement to `~> 0.7`
 
-[unreleased]: https://github.com/ex-phone-number/ex_phone_number/compare/v0.4.4...HEAD
-[0.4.4]: https://github.com/ex-phone-number/ex_phone_number/compare/v0.4.2...v0.4.4
+[unreleased]: https://github.com/ex-phone-number/ex_phone_number/compare/v0.4.11...HEAD
+[0.4.11]: https://github.com/ex-phone-number/ex_phone_number/compare/v0.4.10..v0.4.11
+[0.4.10]: https://github.com/ex-phone-number/ex_phone_number/compare/v0.4.9..v0.4.10
+[0.4.9]: https://github.com/ex-phone-number/ex_phone_number/compare/v0.4.8..v0.4.9
+[0.4.8]: https://github.com/ex-phone-number/ex_phone_number/compare/v0.4.7..v0.4.8
+[0.4.7]: https://github.com/ex-phone-number/ex_phone_number/compare/v0.4.6..v0.4.7
+[0.4.6]: https://github.com/ex-phone-number/ex_phone_number/compare/v0.4.5..v0.4.6
+[0.4.5]: https://github.com/ex-phone-number/ex_phone_number/compare/v0.4.4...v0.4.5
+[0.4.4]: https://github.com/ex-phone-number/ex_phone_number/compare/v0.4.3...v0.4.4
 [0.4.3]: https://github.com/ex-phone-number/ex_phone_number/compare/v0.4.2...v0.4.3
 [0.4.2]: https://github.com/ex-phone-number/ex_phone_number/compare/v0.4.1...v0.4.2
 [0.4.1]: https://github.com/ex-phone-number/ex_phone_number/compare/v0.4.0...v0.4.1

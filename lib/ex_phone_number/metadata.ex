@@ -9,11 +9,11 @@ defmodule ExPhoneNumber.Metadata do
   alias ExPhoneNumber.Metadata.PhoneMetadata
   alias ExPhoneNumber.Model.PhoneNumber
 
-  @resources_dir "./resources"
-  @xml_file if Mix.env() == :test,
-              do: "PhoneNumberMetadataForTesting.xml",
-              else: "PhoneNumberMetadata.xml"
-  @document_path Path.join([@resources_dir, @xml_file])
+  @default_metadata_path if Mix.env() == :test,
+                           do: Path.join("resources", "PhoneNumberMetadataForTesting.xml"),
+                           else: Path.join("resources", "PhoneNumberMetadata.xml")
+
+  @document_path Application.compile_env(:ex_phone_number, :metadata_file, @default_metadata_path)
   @external_resource @document_path
 
   document = File.read!(@document_path)
@@ -53,7 +53,8 @@ defmodule ExPhoneNumber.Metadata do
       Map.put(acc, new_key, Keyword.get_values(list_cctrc, key))
     end)
 
-  defp country_code_to_region_code_map() do
+  @doc false
+  def country_code_to_region_code_map() do
     unquote(Macro.escape(map_cctrc))
   end
 

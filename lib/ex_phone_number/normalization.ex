@@ -9,6 +9,11 @@ defmodule ExPhoneNumber.Normalization do
     normalize_helper(number, Mappings.all_normalization_mappings(), false)
   end
 
+  def match_at_start?(string, pattern) when is_binary(string) and is_binary(pattern) do
+    pattern = Regex.compile!(pattern)
+    match_at_start?(string, pattern)
+  end
+
   def match_at_start?(string, pattern) when is_binary(string) and is_map(pattern) do
     case Regex.run(pattern, string, return: :index) do
       [{index, _length} | _tail] -> index == 0

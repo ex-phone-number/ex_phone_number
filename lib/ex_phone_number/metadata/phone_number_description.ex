@@ -52,7 +52,6 @@ defmodule ExPhoneNumber.Metadata.PhoneNumberDescription do
     char_list
     |> List.to_string()
     |> clean_string
-    |> Regex.compile!()
   end
 
   defp normalize_range(nil), do: nil
