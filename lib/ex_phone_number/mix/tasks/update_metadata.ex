@@ -9,7 +9,8 @@ if Code.ensure_loaded?(Req) do
     @raw_files_url "https://raw.githubusercontent.com/google/libphonenumber"
     @files_to_download [
       "resources/PhoneNumberMetadata.xml",
-      "resources/PhoneNumberMetadataForTesting.xml"
+      "resources/PhoneNumberMetadataForTesting.xml",
+      "resources/ShortNumberMetadata.xml"
     ]
     @resources_directory "resources"
 
