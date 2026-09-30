@@ -7,6 +7,10 @@ and this project aims to adhere to [Semantic Versioning](https://semver.org/spec
 
 ## [Unreleased]
 
+### Added
+
+- `ExPhoneNumber.ShortNumberInfo` with `is_valid_short_number?/1,2` and `is_possible_short_number?/1,2`, backed by libphonenumber's `ShortNumberMetadata.xml` (#69)
+
 ## [0.4.11] - 2026-03-18
 
 ### Added
