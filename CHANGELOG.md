@@ -7,6 +7,10 @@ and this project aims to adhere to [Semantic Versioning](https://semver.org/spec
 
 ## [Unreleased]
 
+### Fixed
+
+- Exclude dev only mix task from package
+
 ## [0.4.12] - 2026-10-25
 
 ### Added
