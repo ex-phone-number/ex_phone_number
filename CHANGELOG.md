@@ -7,6 +7,14 @@ and this project aims to adhere to [Semantic Versioning](https://semver.org/spec
 
 ## [Unreleased]
 
+### Changed
+
+- Updated metadata source file to v9.0.41
+
+### Removed
+
+- Drop support for Elixir < 1.15
+
 ## [0.4.11] - 2026-03-18
 
 ### Added
@@ -17,10 +25,6 @@ and this project aims to adhere to [Semantic Versioning](https://semver.org/spec
 
 - Updated metadata source file to v9.0.26
 - Updated ex_doc to 0.40.1
-
-### Removed
-
-- Drop support for Elixir < 1.15
 
 ## [0.4.10] - 2025-10-18
 
