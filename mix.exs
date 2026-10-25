@@ -9,7 +9,7 @@ defmodule ExPhoneNumber.Mixfile do
       app: :ex_phone_number,
       version: @version,
       name: "ExPhoneNumber",
-      elixir: "~> 1.14",
+      elixir: "~> 1.15",
       build_embedded: Mix.env() == :prod,
       start_permanent: Mix.env() == :prod,
       deps: deps(),

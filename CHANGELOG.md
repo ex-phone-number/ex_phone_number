@@ -18,6 +18,10 @@ and this project aims to adhere to [Semantic Versioning](https://semver.org/spec
 - Updated metadata source file to v9.0.26
 - Updated ex_doc to 0.40.1
 
+### Removed
+
+- Drop support for Elixir < 1.15
+
 ## [0.4.10] - 2025-10-18
 
 ### Added
