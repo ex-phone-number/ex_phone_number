@@ -9,6 +9,10 @@ and this project aims to adhere to [Semantic Versioning](https://semver.org/spec
 
 ## [0.4.12] - 2026-10-25
 
+### Added
+
+- Make debug logging configurable
+
 ### Changed
 
 - Updated metadata source file to v9.0.41
