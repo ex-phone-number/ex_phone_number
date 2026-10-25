@@ -116,7 +116,7 @@ For maintainers, see [maintenance.md](maintenance.md) for procedures on updating
 
 ## Copyright and License
 
-Copyright (c) 2023-2025 ExPhoneNumber
+Copyright (c) 2023-2026 ExPhoneNumber
 
 Copyright (c) 2016-2022 NLCollect B.V.
 
