@@ -28,6 +28,7 @@ defmodule ExPhoneNumber.ShortNumberInfoTest do
       assert is_valid_short_number?(%PhoneNumber{country_code: 33, national_number: 1010})
       {:ok, number} = ExPhoneNumber.parse("1010", "FR")
       assert is_valid_short_number?(number, "FR")
+      assert is_valid_short_number?(number, "fr")
     end
 
     it "rejects a possible but invalid FR short number" do
@@ -43,6 +44,14 @@ defmodule ExPhoneNumber.ShortNumberInfoTest do
     it "rejects a region that does not match the country code" do
       {:ok, number} = ExPhoneNumber.parse("1010", "FR")
       refute is_valid_short_number?(number, "US")
+    end
+
+    it "accepts a lowercase region code and rejects a missing region code" do
+      {:ok, number} = ExPhoneNumber.parse("1010", "FR")
+      assert is_valid_short_number?(number, "fr")
+      assert is_possible_short_number?(number, "fr")
+      refute is_valid_short_number?(number, nil)
+      refute is_possible_short_number?(number, nil)
     end
 
     it "accepts the US short code from issue #69" do

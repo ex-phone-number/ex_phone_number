@@ -29,20 +29,14 @@ defmodule ExPhoneNumber.ShortNumberInfo do
       ~x"//phoneNumberMetadata/territories/territory"el,
       id: ~x"./@id"s,
       general: ~x"./generalDesc"e |> transform_by(&PhoneNumberDescription.from_xpath_node/1),
-      short_code: ~x"./shortCode"eo |> transform_by(&PhoneNumberDescription.from_xpath_node/1),
-      descs: ~x"./*"el |> transform_by(&Enum.map(&1, fn node -> PhoneNumberDescription.from_xpath_node(node) end))
+      short_code: ~x"./shortCode"eo |> transform_by(&PhoneNumberDescription.from_xpath_node/1)
     )
 
-  # generalDesc carries no possibleLengths in the XML; like libphonenumber's build step,
-  # it gets the union of the lengths of all the other descriptions.
+  # generalDesc carries no possibleLengths in the XML. Like libphonenumber's build step for
+  # short number metadata, it takes the lengths of the shortCode description.
   @metadata Map.new(territories, fn territory ->
-              lengths =
-                territory.descs
-                |> Enum.flat_map(& &1.possible_lengths)
-                |> Enum.sort()
-                |> Enum.uniq()
-
-              {territory.id, %{general: %{territory.general | possible_lengths: lengths}, short_code: territory.short_code}}
+              general = %{territory.general | possible_lengths: territory.short_code.possible_lengths}
+              {territory.id, %{general: general, short_code: territory.short_code}}
             end)
 
   @doc """
@@ -51,7 +45,7 @@ defmodule ExPhoneNumber.ShortNumberInfo do
 
   More lenient than `is_valid_short_number?/1`.
   """
-  @spec is_possible_short_number?(%PhoneNumber{}) :: boolean()
+  @spec is_possible_short_number?(PhoneNumber.t()) :: boolean()
   def is_possible_short_number?(%PhoneNumber{} = number) do
     length = number |> PhoneNumber.get_national_significant_number() |> String.length()
 
@@ -68,9 +62,11 @@ defmodule ExPhoneNumber.ShortNumberInfo do
   @doc """
   Checks whether a short number is possible when dialed from `region_dialing_from`.
   """
-  @spec is_possible_short_number?(%PhoneNumber{}, String.t()) :: boolean()
+  @spec is_possible_short_number?(PhoneNumber.t(), String.t() | nil) :: boolean()
   def is_possible_short_number?(%PhoneNumber{} = number, region_dialing_from) do
-    with true <- region_dialing_from in region_codes(number.country_code),
+    with true <- is_binary(region_dialing_from),
+         region_dialing_from = String.upcase(region_dialing_from),
+         true <- region_dialing_from in region_codes(number.country_code),
          %{} = metadata <- @metadata[region_dialing_from] do
       length = number |> PhoneNumber.get_national_significant_number() |> String.length()
       length in metadata.general.possible_lengths
@@ -85,7 +81,7 @@ defmodule ExPhoneNumber.ShortNumberInfo do
 
   This does not verify that the number is actually in use.
   """
-  @spec is_valid_short_number?(%PhoneNumber{}) :: boolean()
+  @spec is_valid_short_number?(PhoneNumber.t()) :: boolean()
   def is_valid_short_number?(%PhoneNumber{} = number) do
     number.country_code
     |> region_codes()
@@ -95,9 +91,11 @@ defmodule ExPhoneNumber.ShortNumberInfo do
   @doc """
   Checks whether a short number matches a valid pattern when dialed from `region_dialing_from`.
   """
-  @spec is_valid_short_number?(%PhoneNumber{}, String.t()) :: boolean()
+  @spec is_valid_short_number?(PhoneNumber.t(), String.t() | nil) :: boolean()
   def is_valid_short_number?(%PhoneNumber{} = number, region_dialing_from) do
-    with true <- region_dialing_from in region_codes(number.country_code),
+    with true <- is_binary(region_dialing_from),
+         region_dialing_from = String.upcase(region_dialing_from),
+         true <- region_dialing_from in region_codes(number.country_code),
          %{} = metadata <- @metadata[region_dialing_from] do
       short_number = PhoneNumber.get_national_significant_number(number)
       matches?(short_number, metadata.general) and matches?(short_number, metadata.short_code)
