@@ -24,23 +24,31 @@ jobs:
     runs-on: ubuntu-24.04
     strategy:
       matrix:
-        otp: ["26", "25"]
-        elixir: ["1.18", "1.17", "1.16", "1.15", "1.14"]
+        otp: ["27", "26", "25"]
+        elixir: ["1.18", "1.17", "1.16"]
         include:
+          - otp: "29"
+            elixir: "1.20"
+          - otp: "28"
+            elixir: "1.20"
+          - otp: "27"
+            elixir: "1.20"
+          - otp: "28"
+            elixir: "1.19"
+          - otp: "27"
+            elixir: "1.19"
+          - otp: "26"
+            elixir: "1.19"
           - otp: "28"
             elixir: "1.18"
-          - otp: "27"
-            elixir: "1.18"
-          - otp: "27"
-            elixir: "1.17"
           - otp: "24"
+            elixir: "1.16"
+          - otp: "26"
+            elixir: "1.15"
+          - otp: "25"
             elixir: "1.15"
           - otp: "24"
-            elixir: "1.14"
-          # Elixir 1.14 still supports OTP 23, but it requires ubuntu-20.04
-          # which is no longer supported in GH Actions
-          # - otp: "23.3.4.20"
-          #  elixir: "1.14.5"
+            elixir: "1.15"
     steps:
       - uses: actions/checkout@v4
       - uses: erlef/setup-beam@v1

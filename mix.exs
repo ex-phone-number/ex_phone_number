@@ -2,14 +2,14 @@ defmodule ExPhoneNumber.Mixfile do
   use Mix.Project
 
   @source_url "https://github.com/ex-phone-number/ex_phone_number"
-  @version "0.4.11"
+  @version "0.4.12"
 
   def project do
     [
       app: :ex_phone_number,
       version: @version,
       name: "ExPhoneNumber",
-      elixir: "~> 1.14",
+      elixir: "~> 1.15",
       build_embedded: Mix.env() == :prod,
       start_permanent: Mix.env() == :prod,
       deps: deps(),
@@ -28,7 +28,7 @@ defmodule ExPhoneNumber.Mixfile do
       {:sweet_xml, "~> 0.7"},
       {:ex_doc, ">= 0.0.0", only: :dev, runtime: false},
       {:ex_spec, "~> 2.0", only: :test},
-      {:req, "~> 0.3.6", only: :dev, optional: true}
+      {:req, "~> 0.3", only: :dev, optional: true}
     ]
   end
 

@@ -10,7 +10,7 @@
 Elixir library for parsing, formatting, and validating international phone numbers.
 Based on Google's [libphonenumber](https://github.com/googlei18n/libphonenumber).
 
-**Current metadata version: v9.0.26.**
+**Current metadata version: v9.0.41.**
 
 ## Installation
 
@@ -19,7 +19,7 @@ Add `:ex_phone_number` to your list of dependencies in `mix.exs`:
 ```elixir
 def deps do
   [
-    {:ex_phone_number, "~> 0.4.11"}
+    {:ex_phone_number, "~> 0.4.12"}
   ]
 end
 ```
@@ -116,7 +116,7 @@ For maintainers, see [maintenance.md](maintenance.md) for procedures on updating
 
 ## Copyright and License
 
-Copyright (c) 2023-2025 ExPhoneNumber
+Copyright (c) 2023-2026 ExPhoneNumber
 
 Copyright (c) 2016-2022 NLCollect B.V.
 

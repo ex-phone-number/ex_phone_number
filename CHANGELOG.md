@@ -11,6 +11,24 @@ and this project aims to adhere to [Semantic Versioning](https://semver.org/spec
 
 - `ExPhoneNumber.ShortNumberInfo` with `is_valid_short_number?/1,2` and `is_possible_short_number?/1,2`, backed by libphonenumber's `ShortNumberMetadata.xml`
 
+### Fixed
+
+- Exclude dev only mix task from package
+
+## [0.4.12] - 2026-10-25
+
+### Added
+
+- Make debug logging configurable
+
+### Changed
+
+- Updated metadata source file to v9.0.41
+
+### Removed
+
+- Drop support for Elixir < 1.15
+
 ## [0.4.11] - 2026-03-18
 
 ### Added
@@ -107,7 +125,8 @@ Require Elixir v1.10+.
 
 - Changed `sweet_xml` version requirement to `~> 0.7`
 
-[unreleased]: https://github.com/ex-phone-number/ex_phone_number/compare/v0.4.11...HEAD
+[unreleased]: https://github.com/ex-phone-number/ex_phone_number/compare/v0.4.12...HEAD
+[0.4.12]: https://github.com/ex-phone-number/ex_phone_number/compare/v0.4.11..v0.4.12
 [0.4.11]: https://github.com/ex-phone-number/ex_phone_number/compare/v0.4.10..v0.4.11
 [0.4.10]: https://github.com/ex-phone-number/ex_phone_number/compare/v0.4.9..v0.4.10
 [0.4.9]: https://github.com/ex-phone-number/ex_phone_number/compare/v0.4.8..v0.4.9
