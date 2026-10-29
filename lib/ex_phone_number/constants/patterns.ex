@@ -1,6 +1,8 @@
 defmodule ExPhoneNumber.Constants.Patterns do
   @moduledoc false
 
+  import ExPhoneNumber.Utilities, only: [compile_regex!: 2]
+
   alias ExPhoneNumber.Constants.Values
 
   def unique_international_prefix() do
@@ -18,19 +20,21 @@ defmodule ExPhoneNumber.Constants.Patterns do
 
   def plus_chars(), do: "+\uFF0B"
 
-  def plus_chars_pattern(), do: ~r/[#{plus_chars()}]+/u
+  def plus_chars_pattern(), do: compile_regex!("[" <> plus_chars() <> "]+", "u")
 
-  def leading_plus_chars_pattern(), do: ~r/^[#{plus_chars()}]+/u
+  def leading_plus_chars_pattern(), do: compile_regex!("^[" <> plus_chars() <> "]+", "u")
 
-  def separator_pattern(), do: ~r/[#{valid_punctuation()}]+/u
+  def separator_pattern(), do: compile_regex!("[" <> valid_punctuation() <> "]+", "u")
 
-  def capturing_digit_pattern(), do: ~r/([#{valid_digits()}])/u
+  def capturing_digit_pattern(), do: compile_regex!("([" <> valid_digits() <> "])", "u")
 
-  def valid_start_char_pattern(), do: ~r/[#{plus_chars()}#{valid_digits()}]/u
+  def valid_start_char_pattern(),
+    do: compile_regex!("[" <> plus_chars() <> valid_digits() <> "]", "u")
 
   def second_number_start_pattern(), do: ~r/[\\\/] *x/u
 
-  def unwanted_end_char_pattern(), do: ~r/[^#{valid_digits()}#{valid_alpha()}#]+$/u
+  def unwanted_end_char_pattern(),
+    do: compile_regex!("[^" <> valid_digits() <> valid_alpha() <> "#]+$", "u")
 
   def valid_alpha_phone_pattern(), do: ~r/(?:.*?[A-Za-z]){3}.*/u
 
@@ -69,10 +73,15 @@ defmodule ExPhoneNumber.Constants.Patterns do
       "[- ]+([" <> valid_digits() <> "]{1,5})#"
   end
 
-  def extn_pattern(), do: ~r/(?:#{extn_patterns_for_parsing()})$/iu
+  def extn_pattern(), do: compile_regex!("(?:" <> extn_patterns_for_parsing() <> ")$", "iu")
 
   def valid_phone_number_pattern() do
-    ~r/^#{min_length_phone_number_pattern()}$|^#{valid_phone_number()}(?:#{extn_patterns_for_parsing()})?$/iu
+    compile_regex!(
+      "^" <>
+        min_length_phone_number_pattern() <>
+        "$|^" <> valid_phone_number() <> "(?:" <> extn_patterns_for_parsing() <> ")?$",
+      "iu"
+    )
   end
 
   def non_digits_pattern(), do: ~r/\D+/u
