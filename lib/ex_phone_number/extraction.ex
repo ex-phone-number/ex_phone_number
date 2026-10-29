@@ -158,7 +158,7 @@ defmodule ExPhoneNumber.Extraction do
       stripped_plus_sign = Regex.replace(Patterns.leading_plus_chars_pattern(), number, "")
       {CountryCodeSource.from_number_with_plus_sign(), normalize(stripped_plus_sign)}
     else
-      case Regex.compile(possible_country_idd_prefix) do
+      case compile_regex(possible_country_idd_prefix) do
         {:error, _} ->
           {CountryCodeSource.from_default_country(), ""}
 
@@ -198,7 +198,7 @@ defmodule ExPhoneNumber.Extraction do
         general_national_number_pattern
       )
       when is_binary(number) and is_binary(national_prefix_for_parsing) do
-    prefix_pattern = ~r/^(?:#{national_prefix_for_parsing})/
+    prefix_pattern = compile_regex!("^(?:" <> national_prefix_for_parsing <> ")")
 
     case Regex.run(prefix_pattern, number) do
       nil ->

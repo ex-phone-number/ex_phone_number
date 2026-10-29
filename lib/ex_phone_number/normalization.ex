@@ -10,8 +10,7 @@ defmodule ExPhoneNumber.Normalization do
   end
 
   def match_at_start?(string, pattern) when is_binary(string) and is_binary(pattern) do
-    pattern = Regex.compile!(pattern)
-    match_at_start?(string, pattern)
+    match_at_start?(string, compile_regex!(pattern))
   end
 
   def match_at_start?(string, pattern) when is_binary(string) and is_map(pattern) do

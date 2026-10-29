@@ -10,6 +10,9 @@ and this project aims to adhere to [Semantic Versioning](https://semver.org/spec
 ### Fixed
 
 - Exclude dev only mix task from package
+- Compile each metadata and constant pattern once instead of on every use. Since the OTP 28
+  change that keeps patterns as strings, compilation was most of the cost of parsing, formatting
+  and validating a number
 
 ## [0.4.12] - 2026-10-25
 
