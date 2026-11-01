@@ -274,6 +274,18 @@ defmodule ExPhoneNumber.ParsingTest do
     end
 
     context "AR numbers" do
+      it "preserves valid numbers when reparsing national format" do
+        for input <- ["+54 11 4321-1200", "+54 9 11 2345-6789"] do
+          assert {:ok, phone_number} = parse(input, RegionCodeFixture.ar())
+          assert ExPhoneNumber.is_valid_number?(phone_number)
+
+          national = ExPhoneNumber.format(phone_number, :national)
+          assert {:ok, reparsed} = parse(national, RegionCodeFixture.ar())
+          assert ExPhoneNumber.is_valid_number?(reparsed)
+          assert reparsed == phone_number
+        end
+      end
+
       it "should return correct value #1" do
         {result, phone_number} = parse("+54 9 343 555 1212", RegionCodeFixture.ar())
         assert :ok == result
