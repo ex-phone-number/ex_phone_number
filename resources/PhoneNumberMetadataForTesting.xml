@@ -94,7 +94,11 @@
     <!-- Argentina -->
     <territory id="AR" countryCode="54" internationalPrefix="00"
                nationalPrefix="0" nationalPrefixFormattingRule="$NP$FG"
-               nationalPrefixForParsing="0(?:(11|343|3715)15)?"
+               nationalPrefixForParsing="
+                 0(?:
+                   (11|343|3715)15
+                 )?
+               "
                nationalPrefixTransformRule="9$1">
       <!-- Note in nationalPrefixForParsing, the areacode (such as 11, 343, etc.), when present in
            front of carrier selection code 15, is captured to replace $1 in

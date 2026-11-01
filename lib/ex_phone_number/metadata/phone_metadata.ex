@@ -81,7 +81,7 @@ defmodule ExPhoneNumber.Metadata.PhoneMetadata do
         international_prefix: ~x"./@internationalPrefix"s,
         preferred_international_prefix: ~x"./@preferredInternationalPrefix"o |> transform_by(&normalize_string/1),
         national_prefix: ~x"./@nationalPrefix"s,
-        national_prefix_for_parsing: ~x"./@nationalPrefixForParsing"o |> transform_by(&normalize_string/1),
+        national_prefix_for_parsing: ~x"./@nationalPrefixForParsing"o |> transform_by(&normalize_pattern/1),
         national_prefix_transform_rule: ~x"./@nationalPrefixTransformRule"o |> transform_by(&normalize_rule/1),
         national_prefix_formatting_rule: ~x"./@nationalPrefixFormattingRule"s,
         preferred_extn_prefix: ~x"./@preferredExtnPrefix"o |> transform_by(&normalize_string/1),
